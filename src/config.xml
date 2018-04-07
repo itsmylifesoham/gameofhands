@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.mytemplate.rename" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
-    <name>mytemplate</name>
+    <name>Game of Hands</name>
     <description>
-        A blank PhoneGap app.
+        Game of Hands mobile game
     </description>
     <author email="support@phonegap.com" href="http://phonegap.com">
-        PhoneGap Team
+        Snehal Kardale
     </author>
     <content src="index.html" />
     <preference name="DisallowOverscroll" value="true" />

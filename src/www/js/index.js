@@ -1,3 +1,29 @@
+'use strict';
+
+require.config({
+    baseUrl: 'lib',
+    paths: {
+        app: '../app',
+    },
+    shim: {}
+});
+
+/* obtained from https://stackoverflow.com/questions/11581611/load-files-in-specific-order-with-requirejs */
+var requireQueue = function (modules, callback) {
+    function load(queue, results) {
+        if (queue.length) {
+            require([queue.shift()], function (result) {
+                results.push(result);
+                load(queue, results);
+            });
+        } else {
+            callback.apply(null, results);
+        }
+    }
+
+    load(modules, []);
+};
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,34 +42,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var app = {
-    // Application Constructor
-    initialize: function() {
+
+var phonegapApp = {
+    initialize: function () {
         this.bindEvents();
     },
-    // Bind Event Listeners
-    //
-    // Bind any events that are required on startup. Common events are:
-    // 'load', 'deviceready', 'offline', and 'online'.
-    bindEvents: function() {
+    bindEvents: function () {
         document.addEventListener('deviceready', this.onDeviceReady, false);
     },
-    // deviceready Event Handler
-    //
-    // The scope of 'this' is the event. In order to call the 'receivedEvent'
-    // function, we must explicitly call 'app.receivedEvent(...);'
-    onDeviceReady: function() {
-        app.receivedEvent('deviceready');
+    onDeviceReady: function () {
+
+        require(['app/main', 'app/globals'], function (AppView, globals) {
+            var appView = new AppView('#app');
+            globals.appView = appView;
+            appView.start();
+        });
     },
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
 
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
-        console.log('Received Event: ' + id);
-    }
 };
+
+
+phonegapApp.initialize();
+
