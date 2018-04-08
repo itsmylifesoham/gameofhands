@@ -9,3 +9,9 @@ Important: in facebookconnect.xml file inside cordova-plugin-facebook4 we need t
 this shud have typically got added when we passed variables while running the plugin but does not take from config-xml.
 
 see more details here : http://ngcordova.com/docs/plugins/facebook/
+
+also if nothing works do to D:\MyData\startups\gameofhands\src\platforms\android\app\src\main\res\values and put facebookconnect.xml there with the two keys .
+copy this file from plugin directory of cordova-plugin-facebook4
+
+see this too : https://github.com/jeduan/cordova-plugin-facebook4/issues/599 for the fb_app_id and db_app_name not getting copied over. chris has a solution to do this without
+modifying any platform files.
