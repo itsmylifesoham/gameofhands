@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.mytemplate.rename" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="com.gameofhands.game" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>Game of Hands</name>
     <description>
         Game of Hands mobile game
@@ -95,6 +95,10 @@
         <allow-intent href="itms-apps:*" />
     </platform>
     <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
-    <engine name="android" spec="7.0.0" />
+    <plugin name="cordova-plugin-facebook4" spec="^1.9.1">
+        <variable name="APP_ID" value="2038250216397632" />
+        <variable name="APP_NAME" value="gameofhands" />
+    </plugin>
     <engine name="browser" spec="5.0.3" />
+    <engine name="android" spec="^7.0.0" />
 </widget>

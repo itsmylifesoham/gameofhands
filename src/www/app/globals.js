@@ -1,3 +1,5 @@
 define(function (require) {
-    return {};
+    return {
+        facebookAppId: '2038250216397632'
+    };
 });

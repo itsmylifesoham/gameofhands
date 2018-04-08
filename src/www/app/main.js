@@ -1,6 +1,7 @@
 define(function (require, exports, module) {
 
     var router = require('app/router');
+    var homeController = require('app/home/controller');
 
     var AppView = Backbone.View.extend({
         constructor: function (parent) {
@@ -20,7 +21,7 @@ define(function (require, exports, module) {
 
     AppView.prototype.start = function () {
         Backbone.history.start();
-        // delegate to the homeView controller here to append to the appView
+        homeController.displayHomeView();
     };
 
     return AppView;
