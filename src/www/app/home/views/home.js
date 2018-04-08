@@ -8,7 +8,6 @@ define(function (require, exports, module) {
             'click #fb-login': 'onConnectWithFb',
         },
         onConnectWithFb: function () {
-            alert("clicked login");
             if (window.cordova.platformId == "browser") {
                 facebookConnectPlugin.browserInit(globals.facebookAppId);
             }
