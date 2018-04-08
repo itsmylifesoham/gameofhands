@@ -17,3 +17,6 @@ see this too : https://github.com/jeduan/cordova-plugin-facebook4/issues/599 for
 modifying any platform files.
 
 - if you want to change app id and app name uninstall and reinstall the plugin.
+
+- when we run cordova-facebook4 plugin , the tag added inside fb-root is not proper, tht is it does not wait for the fb js sdk to load and goes on to load a nonexistent
+fbsdk.js and puts it in dom. luckily the previously adding script tag for the online version of sdk loads and FB is set on the window object.
