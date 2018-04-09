@@ -1,1 +1,1 @@
-echo ^<?xml version='1.0' encoding='utf-8'?^>^<resources^>^<string name="fb_app_id"^>2038250216397632^</string^>^<string name="fb_app_name"^>gameofhands^</string^>^</resources^> > "platforms\android\app\src\main\res\values\facebookconnect.xml"
+IF EXIST "platforms\android" echo ^<?xml version='1.0' encoding='utf-8'?^>^<resources^>^<string name="fb_app_id"^>2038250216397632^</string^>^<string name="fb_app_name"^>gameofhands^</string^>^</resources^> > "platforms\android\app\src\main\res\values\facebookconnect.xml"
