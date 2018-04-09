@@ -57,3 +57,8 @@ so android is the password for debug.keystore file. https://stackoverflow.com/qu
 
 
 - if sometime cordova says launch success and app doesnt show up on phone then just reinstall the platform and add those 2 keys to facebook connect file and then run phonegap build android --verbose and then phonegap run android --verbose and it wrks.
+
+
+-------------------------------------------------
+
+always run from windows command line as the echo command in one of the hooks requires cmd not git-bash.
