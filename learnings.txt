@@ -20,3 +20,40 @@ modifying any platform files.
 
 - when we run cordova-facebook4 plugin , the tag added inside fb-root is not proper, tht is it does not wait for the fb js sdk to load and goes on to load a nonexistent
 fbsdk.js and puts it in dom. luckily the previously adding script tag for the online version of sdk loads and FB is set on the window object.
+
+---------------------\to get android key hash-----------
+
+This is how i solved this problem
+
+Download your APK to your PC in java jdk\bin folder
+
+in my case C:\Program Files\Java\jdk1.7.0_121\bin
+
+go to java jdk\bin folder and run cmd then
+copy the following command in your cmd
+
+keytool -list -printcert -jarfile app-debug.apk
+
+Copy the SHA1 value to your clip board
+like this CD:A1:EA:A3:5C:5C:68:FB:FA:0A:6B:E5:5A:72:64:DD:26:8D:44:84
+and open http://tomeko.net/online_tools/hex_to_base64.php to convert your SHA1 value to base64.
+This is what Facebook requires
+get the generated hash " ********************= " and copy the key hash to the facebook app.
+
+-------------------------------------------------
+
+generate signing keys :
+keytool -exportcert -alias androiddebugkey -keystore "C:\Users\Soham\.android\debug.keystore" | "D:\MyData\ssl\openssl-0.9.8e_X64\bin\openssl" sha1 -binary | "D:\MyData\ssl\openssl-0.9.8e_X64\bin\openssl" base64
+
+This is the default keystore for debug mode set by android build tools:
+
+Keystore name: "debug.keystore"
+Keystore password: "android"
+Key alias: "androiddebugkey"
+Key password: "android"
+CN: "CN=Android Debug,O=Android,C=US"
+
+so android is the password for debug.keystore file. https://stackoverflow.com/questions/18589694/i-have-never-set-any-passwords-to-my-keystore-and-alias-so-how-are-they-created
+
+
+- if sometime cordova says launch success and app doesnt show up on phone then just reinstall the platform and add those 2 keys to facebook connect file and then run phonegap build android --verbose and then phonegap run android --verbose and it wrks.
