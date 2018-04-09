@@ -62,3 +62,7 @@ so android is the password for debug.keystore file. https://stackoverflow.com/qu
 -------------------------------------------------
 
 always run from windows command line as the echo command in one of the hooks requires cmd not git-bash.
+
+------------------------------------------------
+
+hook run order: https://stackoverflow.com/questions/33647483/cordova-hooks-order
