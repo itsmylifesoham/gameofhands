@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace GameOfHands.Web.Models.facebook
+namespace GameOfHands.Web.Models.Facebook
 {
 
     public static class FacebookLoginConfiguration

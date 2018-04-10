@@ -1,4 +1,6 @@
-﻿using GameOfHands.Web.Models.facebook;
+﻿using GameOfHands.Web.Models.Facebook;
+using GameOfHands.Web.Models.User;
+using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -22,6 +24,11 @@ namespace GameOfHands.Web.Controllers
         private static HttpClient httpClient = new HttpClient();
 
         private static string FacebookApiEndpoint = "https://graph.facebook.com/v2.12";
+
+        private static string GetUserLoginIdFromFacebookUserId(string facebookUserId)
+        {
+            return $"facebook:{facebookUserId}";
+        }
 
         public async Task<JsonResult> Facebook(string access_token)
         {
@@ -60,15 +67,76 @@ namespace GameOfHands.Web.Controllers
                     }
                 }
 
+
+                CreateNewSessionForUser(GetUserLoginIdFromFacebookUserId(debugTokenData.user_id), newToken);
                 return GetSuccessJsonResult(newToken);
             }
-            catch (Exception)
+            catch (Exception exp)
             {
                 return GetErrorJsonResult("Server Error occured while logging in. Please try again in some time.");
             }
 
-            //PersistDataForFacebookUser(debugTokenData.user_id, newToken);
 
+        }
+
+        private string GetSQLFormattedDateTime(DateTime dateTime)
+        {
+            return dateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
+        }
+
+        private void CreateNewSessionForUser(string userLoginId, string newToken)
+        {
+            var connection = new MySqlConnection(WebConfigurationManager.ConnectionStrings["testMysqlServer"].ConnectionString);
+            connection.Open();
+
+            User matchedExistingUser = GetUser(userLoginId, connection);
+
+            if (matchedExistingUser != null && !matchedExistingUser.BasicUserInfo.IsRecent())
+            {
+                UpdateUserBasicInfo(userLoginId, newToken, connection);
+            }
+            
+            AddNewSession(userLoginId, connection);
+            connection.Close();
+        }
+
+        private void UpdateUserBasicInfo(string userLoginId, string newToken, MySqlConnection connection)
+        {
+            throw new NotImplementedException();
+        }
+
+        private User GetUser(string userLoginId, MySqlConnection connection)
+        {           
+            string stm = "SELECT * FROM users WHERE user_login_id = @userLoginId";
+            MySqlCommand cmd = new MySqlCommand(stm, connection);
+            cmd.Parameters.AddWithValue("@userLoginId", userLoginId);
+            
+            var reader = cmd.ExecuteReader();
+            Models.User.User matchedExistingUser = null;
+
+            while (reader.Read())
+            {
+                matchedExistingUser = Models.User.User.CreateUserFromReadRow(reader);
+                break;
+            }
+
+            reader.Close();
+            cmd.Dispose();
+            return matchedExistingUser;
+        }
+
+        private void AddNewSession(string userLoginId, MySqlConnection connection)
+        {
+            string cmdText = $"INSERT INTO user_sessions (user_login_id, consume_once_token, token_consumed, ip_address, date_created) VALUES ('{userLoginId}', '{Guid.NewGuid().ToString()}', 0 , '{Request.UserHostAddress}', '{GetSQLFormattedDateTime(DateTime.Now)}')";
+            var cmd = new MySqlCommand(cmdText, connection);            
+            //cmd.Parameters.AddWithValue("@user_login_id",userLoginId);
+            //cmd.Parameters.AddWithValue("@consume_once_token", Guid.NewGuid().ToString());
+            //cmd.Parameters.AddWithValue("@token_consumed", "0");
+            //cmd.Parameters.AddWithValue("@ip_address", Request.UserHostAddress);
+            //cmd.Parameters.AddWithValue("@date_created", DateTime.Now.ToString());
+
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
         }
 
         private JsonResult GetSuccessJsonResult(string newToken)
