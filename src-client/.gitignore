@@ -95,6 +95,10 @@ bower_components
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
+#ignore the whole .idea folder as iml files were not being ignored and we dont want anything ide specific. we want 
+# ide agnostic java project
+.idea/
+
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
