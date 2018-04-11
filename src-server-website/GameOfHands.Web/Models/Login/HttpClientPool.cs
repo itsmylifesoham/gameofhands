@@ -21,7 +21,7 @@ namespace GameOfHands.Web.Models.Login
         {
             get
             {
-                if (_dateTimeRandomSeed == null)
+                if (_dateTimeRandomSeed == DateTime.MinValue)
                 {
                     _dateTimeRandomSeed = new DateTime();
                 }
