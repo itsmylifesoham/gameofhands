@@ -10,18 +10,18 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using GameOfHands.Web.Models.Login;
 
 namespace GameOfHands.Web.Controllers
 {
-    public static class LoginStatus
-    {
-        public static string Fail = "fail";
-        public static string Success = "success";
-    }
-
     public class LoginController : Controller
     {
-        private static HttpClient httpClient = new HttpClient();
+        private HttpClient _httpClient;
+
+        public LoginController()
+        {
+            _httpClient = HttpClientPool.GetHttpClient();
+        }
 
         private static string FacebookApiEndpoint = "https://graph.facebook.com/v2.12";
 
@@ -150,7 +150,7 @@ namespace GameOfHands.Web.Controllers
 
         private async Task<string> ExchangeTokenForLongLivedToken(string access_token)
         {
-            var response = await httpClient.GetAsync($"{FacebookApiEndpoint}/oauth/access_token?access_token={WebConfigurationManager.AppSettings["facebookAppAccessToken"]}&grant_type=fb_exchange_token&client_id={WebConfigurationManager.AppSettings["facebookAppId"]}&client_secret={WebConfigurationManager.AppSettings["facebookAppSecret"]}&fb_exchange_token={access_token}");
+            var response = await _httpClient.GetAsync($"{FacebookApiEndpoint}/oauth/access_token?access_token={WebConfigurationManager.AppSettings["facebookAppAccessToken"]}&grant_type=fb_exchange_token&client_id={WebConfigurationManager.AppSettings["facebookAppId"]}&client_secret={WebConfigurationManager.AppSettings["facebookAppSecret"]}&fb_exchange_token={access_token}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -215,7 +215,7 @@ namespace GameOfHands.Web.Controllers
 
         private async Task<DebugTokenData> GetFacebookAccessTokenDebugInfo(string inputToken)
         {
-            var response = await httpClient.GetAsync($"{FacebookApiEndpoint}/debug_token?access_token={WebConfigurationManager.AppSettings["facebookAppAccessToken"]}&input_token={inputToken}");
+            var response = await _httpClient.GetAsync($"{FacebookApiEndpoint}/debug_token?access_token={WebConfigurationManager.AppSettings["facebookAppAccessToken"]}&input_token={inputToken}");
 
             if (response.IsSuccessStatusCode)
             {
