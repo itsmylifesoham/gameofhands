@@ -17,5 +17,11 @@ namespace GameOfHands.Web.Models.Facebook
             return
                 $"{FacebookApiEndpoint}/debug_token?access_token={WebConfigurationManager.AppSettings["facebookAppAccessToken"]}&input_token={inputToken}";
         }
+
+        public static string GetExchangeTokenUrl(string tokenToExchange)
+        {
+            return
+                $"{FacebookApiEndpoint}/oauth/access_token?access_token={WebConfigurationManager.AppSettings["facebookAppAccessToken"]}&grant_type=fb_exchange_token&client_id={WebConfigurationManager.AppSettings["facebookAppId"]}&client_secret={WebConfigurationManager.AppSettings["facebookAppSecret"]}&fb_exchange_token={tokenToExchange}";
+        }
     }
 }

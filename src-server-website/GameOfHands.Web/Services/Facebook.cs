@@ -7,14 +7,16 @@ using System.Web.Configuration;
 using GameOfHands.Web.Models.Facebook;
 using GameOfHands.Web.Models.Login;
 using Newtonsoft.Json;
+using GameOfHands.Web.Models;
+using System.Net.Http;
 
 namespace GameOfHands.Web.Services
 {
     public class Facebook
     {
-        private async Task<DebugTokenData> GetFacebookAccessTokenDebugInfo(string inputToken)
+        public static async Task<DebugTokenData> GetFacebookAccessTokenDebugInfo(string inputToken)
         {
-            var response = await HttpClientPool.GetHttpClient().GetAsync();
+            var response = await HttpClientPool.GetHttpClient().GetAsync(FacebookApi.GetDebugTokenUrl(inputToken));
 
             if (response.IsSuccessStatusCode)
             {
@@ -24,18 +26,18 @@ namespace GameOfHands.Web.Services
             }
             else
             {
-                throw new Exception("Could not get facebook access token debug info");
+                throw new Exception("Could not retrieve facebook access token debug info from facebook");
             }
         }
 
-        private async Task<string> ExchangeTokenForLongLivedToken(string access_token)
-        {
-            var response = await HttpClientPool.GetHttpClient().GetAsync($"{FacebookConfiguration.FacebookApiEndpoint}/oauth/access_token?access_token={WebConfigurationManager.AppSettings["facebookAppAccessToken"]}&grant_type=fb_exchange_token&client_id={WebConfigurationManager.AppSettings["facebookAppId"]}&client_secret={WebConfigurationManager.AppSettings["facebookAppSecret"]}&fb_exchange_token={access_token}");
+        public static async Task<string> ExchangeTokenForLongLivedToken(string tokenToExchange)
+        {            
+            var response = await HttpClientPool.GetHttpClient().GetAsync(FacebookApi.GetExchangeTokenUrl(tokenToExchange)).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
                 var responseJson = await response.Content.ReadAsStringAsync();
-                var exchangeTokenData = JsonConvert.DeserializeObject<ExchangeTokenData>(responseJson);
+                var exchangeTokenData = JsonConvert.DeserializeObject<ExchangeTokenData>(responseJson);                
                 return exchangeTokenData.access_token;
             }
             else

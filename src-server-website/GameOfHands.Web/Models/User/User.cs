@@ -9,26 +9,39 @@ namespace GameOfHands.Web.Models.User
 {
     public class BasicUserInfo
     {
-        public string profile_pic { get; set; }
-        public string country { get; set; }
-        public string display_name { get; set; }
-        public string last_updated_date_string { get; set; }
+        private static TimeSpan OneDaySpan = TimeSpan.FromDays(1);
+        public string Country { get; set; }
 
-        public DateTime LastUpdated()
-        {
-            return Convert.ToDateTime(this.last_updated_date_string);
-        }
+        public string EmailId { get; set; }
+
+        public string ProfilePicUrl { get; set; }
+
+        public string DisplayName { get; set; }
+
+        public DateTime UserInfoUpdateDate { get; set; }
 
         public bool IsRecent()
         {
-            return DateTime.Now - LastUpdated() < TimeSpan.FromDays(1);
+            return DateTime.Now - UserInfoUpdateDate < OneDaySpan;
+        }
+
+        public static BasicUserInfo CreateFromReadRow(MySqlDataReader reader)
+        {
+            return new BasicUserInfo()
+            {
+                Country = reader.GetString("country"),
+                EmailId = reader.GetString("email_id"),
+                ProfilePicUrl = reader.GetString("profile_pic_url"),
+                DisplayName = reader.GetString("display_name"),
+                UserInfoUpdateDate = reader.GetDateTime("info_updated_date")
+            };
         }
     }
 
     public class User
     {
         public int Id { get; set; }
-        public string UserId { get; set; }
+        public string UserLoginId { get; set; }        
 
         public BasicUserInfo BasicUserInfo { get; set; }
 
@@ -37,8 +50,8 @@ namespace GameOfHands.Web.Models.User
             return new User
             {
                 Id = reader.GetInt32("id"),
-                UserId = reader.GetString("user_login_id"),
-                BasicUserInfo = JsonConvert.DeserializeObject<BasicUserInfo>(reader.GetString("basic_user_info"))
+                UserLoginId = reader.GetString("user_login_id"),
+                BasicUserInfo = BasicUserInfo.CreateFromReadRow(reader)
             };
         }   
 

@@ -13,12 +13,11 @@ namespace GameOfHands.Web.Models.Login
         private static List<HttpClient> _httpClients = new List<HttpClient>();
 
         private static int _maxHttpClientCount = 10;
-
        
         private static int RandomIndex
         {
             get
-            {
+            {                
                 return (int)(new DateTime().Ticks % _maxHttpClientCount);
             }
         }
