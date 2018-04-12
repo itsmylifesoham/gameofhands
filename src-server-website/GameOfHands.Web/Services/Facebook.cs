@@ -32,7 +32,7 @@ namespace GameOfHands.Web.Services
 
         public static async Task<string> ExchangeTokenForLongLivedToken(string tokenToExchange)
         {            
-            var response = await HttpClientPool.GetHttpClient().GetAsync(FacebookApi.GetExchangeTokenUrl(tokenToExchange)).ConfigureAwait(false);
+            var response = await HttpClientPool.GetHttpClient().GetAsync(FacebookApi.GetExchangeTokenUrl(tokenToExchange));
 
             if (response.IsSuccessStatusCode)
             {

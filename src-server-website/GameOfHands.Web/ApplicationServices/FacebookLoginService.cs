@@ -12,6 +12,14 @@ namespace GameOfHands.Web.ApplicationServices
 {
     public class FacebookLoginService
     {
+        /// <summary>
+        /// Provides facebook login functionality
+        /// </summary>
+        /// <param name="accessToken"></param>
+        /// <param name="userId"></param>
+        /// <param name="deviceId">Identifies the operating system and unique id for the device. Is helpful to see how many devices the user is logging in from or how many installs we have</param>
+        /// <param name="ipAddress"></param>
+        /// <returns></returns>
         public static async Task<LoginResult> Login(string accessToken, string userId, string deviceId, string ipAddress)
         {
             try
@@ -22,17 +30,21 @@ namespace GameOfHands.Web.ApplicationServices
                 if (!tokenDebugInfo.IsValid() || tokenDebugInfo.user_id != userId)
                     return LoginResult.CreateFailed("Invalid Access Token. " + tokenDebugInfo.GetErrorMessage());
 
-                var tokenToReturn = tokenDebugInfo.IsTokenExpiringInLessThanOneDay() ? Facebook.ExchangeTokenForLongLivedToken(accessToken).Result : accessToken;
+                string tokenToReturn = accessToken;
+                if (tokenDebugInfo.IsTokenExpiringInLessThanOneDay())
+                    tokenToReturn = await Facebook.ExchangeTokenForLongLivedToken(accessToken);
+                
                 await Database.CreateSfsSession(LoginIdGenerator.GetFacebookLoginId(userId), deviceId, ipAddress);
 
                 return LoginResult.CreateSuccess(new
                 {
                     newToken = tokenToReturn,
                     userLoginId = LoginIdGenerator.GetFacebookLoginId(userId),
-                    userId = userId
+                    deviceId = deviceId,
+                    userId = userId,                    
                 });
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return LoginResult.CreateFailed("Unable to login.");                
             }            
@@ -57,11 +69,5 @@ namespace GameOfHands.Web.ApplicationServices
                 throw new Exception("Got empty access token.");
             }
         }
-
-
-
-
-
-
     }
 }
