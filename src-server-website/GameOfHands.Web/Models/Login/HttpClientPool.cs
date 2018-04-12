@@ -14,19 +14,12 @@ namespace GameOfHands.Web.Models.Login
 
         private static int _maxHttpClientCount = 10;
 
-        [ThreadStatic]
-        private static DateTime _dateTimeRandomSeed;
-
-        public static int RandomIndex
+       
+        private static int RandomIndex
         {
             get
             {
-                if (_dateTimeRandomSeed == DateTime.MinValue)
-                {
-                    _dateTimeRandomSeed = new DateTime();
-                }
-
-                return (int)_dateTimeRandomSeed.Millisecond % _maxHttpClientCount;
+                return (int)(new DateTime().Ticks % _maxHttpClientCount);
             }
         }
 
