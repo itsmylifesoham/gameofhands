@@ -4,12 +4,12 @@ define(function (require, exports, module) {
     var homeController = require('app/home/controller');
 
     var AppView = Backbone.View.extend({
-        constructor: function (parent) {
-            if (!parent)
+        constructor: function (rootElement) {
+            if (!rootElement)
                 throw new Error("Please provide a parent element for the app");
 
             Backbone.View.call(this, {
-                el: parent
+                el: rootElement
             });
         },
         initialize: function(){
