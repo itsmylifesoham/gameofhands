@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
 namespace GameOfHands.Web.Models.Login
 {
-    public enum LoginType
+    public enum AppName
     {
-        fb, // facebook
+        goh, //Game of Hands
     }
 }

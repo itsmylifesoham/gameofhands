@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using GameOfHands.Web.Models.Website;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace GameOfHands.Web.Models.Login
@@ -23,7 +24,7 @@ namespace GameOfHands.Web.Models.Login
 
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(this);
+            return JsonConvert.SerializeObject(this, AppConfiguration.jsonSerializationSettings);
         }
 
         public static LoginResult CreateFailed(string message)

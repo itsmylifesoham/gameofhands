@@ -87,29 +87,29 @@ namespace GameOfHands.Web.Services
             }
         }
 
-        public static async Task<string> CreateSfsSession(string userId, string deviceId, string ipAddress,  LoginType loginType, string userAccessToken)
+        public static async Task<string> CreateSfsSession(LoginSource loginSource, string ipAddress, string userAccessToken)
         {
             using (var connection = GetMysqlConnection())
             {
-                var userLoginId = LoginIdGenerator.GetLoginId(userId, loginType);
+                var userLoginId = loginSource.GenerateAppScopedLoginId();
                 User matchedExistingUser = await GetUser(userLoginId);
 
                 if (matchedExistingUser == null || !matchedExistingUser.BasicUserInfo.IsRecent())
                 {
-                    var userInfoFacebook = await Facebook.GetUserProfileInfo(userId, userAccessToken);
+                    var userInfoFacebook = await Facebook.GetUserProfileInfo(loginSource.UserId, userAccessToken);
                     var basicUserInfo = BasicUserInfo.CreateFromUserProfileInfo(userInfoFacebook);
                     
                     await UpdateBasicUserInfo(basicUserInfo, userLoginId, userAccessToken, matchedExistingUser==null);
                 }
 
-                string cmdText = $"INSERT INTO user_sessions (user_login_id, consume_once_token, token_consumed, ip_address, device_id, date_created) VALUES (@userLoginId, @consumeOnceToken, 0 , @ipAddress, @deviceId, @dateCreated)";
+                string cmdText = $"INSERT INTO user_sessions (user_login_id, consume_once_token, token_consumed, ip_address, date_created) VALUES (@userLoginId, @consumeOnceToken, 0 , @ipAddress,  @dateCreated)";
                 var cmd = new MySqlCommand(cmdText, connection);
                 cmd.Parameters.AddWithValue("@userLoginId", userLoginId);
                 var sfsToken = Guid.NewGuid().ToString();
                 cmd.Parameters.AddWithValue("@consumeOnceToken", sfsToken);
                 cmd.Parameters.AddWithValue("@ipAddress", ipAddress);
                 cmd.Parameters.AddWithValue("@dateCreated", Utilities.GetSQLFormattedDateTime(DateTime.Now));
-                cmd.Parameters.AddWithValue("@deviceId", deviceId);
+                
 
                 var affectedRows = await cmd.ExecuteNonQueryAsync();
                 if (affectedRows == 0)

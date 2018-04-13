@@ -156,10 +156,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationServices\FacebookLoginService.cs" />
+    <Compile Include="Models\Website\AppConfiguration.cs" />
     <Compile Include="Models\Facebook\DebugToken.cs" />
     <Compile Include="Models\Facebook\FacebookApi.cs" />
     <Compile Include="Models\Facebook\UserProfileInfo.cs" />
-    <Compile Include="Models\Login\LoginIdGenerator.cs" />
+    <Compile Include="Models\Login\AppType.cs" />
     <Compile Include="Models\Login\LoginResult.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -171,6 +172,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Facebook\Models.cs" />
+    <Compile Include="Models\Login\LoginSource.cs" />
     <Compile Include="Models\Login\LoginType.cs" />
     <Compile Include="Models\User\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
