@@ -8,7 +8,7 @@ namespace GameOfHands.Web.Models.Facebook
 
     public static class FacebookLoginConfiguration
     {
-        public static string[] RequiredPermissions = new string[]{ "email", "public_profile" };
+        public static string[] RequiredPermissions = new string[]{ "email", "public_profile", "user_location" };
     }
 
     

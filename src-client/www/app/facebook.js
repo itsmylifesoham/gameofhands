@@ -22,7 +22,7 @@ define(function (require) {
         if (window.cordova.platformId == "browser") {
             facebookConnectPlugin.browserInit(globals.facebookAppId);
         }
-        facebookConnectPlugin.login(["email", "public_profile"],
+        facebookConnectPlugin.login(["email", "public_profile", "user_location"],
             function onResponse(response) {
                 if (response.status === 'connected') {
                     success({

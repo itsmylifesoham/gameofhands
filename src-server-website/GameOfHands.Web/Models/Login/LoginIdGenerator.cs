@@ -7,9 +7,14 @@ namespace GameOfHands.Web.Models.Login
 {
     public class LoginIdGenerator
     {
-        public static string GetFacebookLoginId(string userId)
+        public static string GetLoginId(string userId, LoginType loginType)
         {
-            return $"facebook:{userId}";
+            if (loginType == LoginType.Facebook)
+            {
+                return $"facebook:{userId}";
+            }
+            
+            throw new Exception("This login type is not supported");
         }
     }
 }

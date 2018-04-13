@@ -24,6 +24,7 @@ namespace GameOfHands.Web.ApplicationServices
         {
             try
             {
+                var userLoginId = LoginIdGenerator.GetLoginId(userId, LoginType.Facebook);
                 EnsureAccessTokenNotEmpty(accessToken);
                 var tokenDebugInfo = await Facebook.GetFacebookAccessTokenDebugInfo(accessToken);
 
@@ -32,34 +33,27 @@ namespace GameOfHands.Web.ApplicationServices
 
                 string tokenToReturn = accessToken;
                 if (tokenDebugInfo.IsTokenExpiringInLessThanOneDay())
+                {
                     tokenToReturn = await Facebook.ExchangeTokenForLongLivedToken(accessToken);
-                
-                await Database.CreateSfsSession(LoginIdGenerator.GetFacebookLoginId(userId), deviceId, ipAddress);
+                    await Database.UpdateUserAccessToken(userLoginId, tokenToReturn);
+                }
+
+
+                var sfsToken = await Database.CreateSfsSession(userId, deviceId, ipAddress, LoginType.Facebook, tokenToReturn);
 
                 return LoginResult.CreateSuccess(new
                 {
                     newToken = tokenToReturn,
-                    userLoginId = LoginIdGenerator.GetFacebookLoginId(userId),
+                    userLoginId = LoginIdGenerator.GetLoginId(userId, Models.Login.LoginType.Facebook),
                     deviceId = deviceId,
-                    userId = userId,                    
+                    userId = userId,
+                    sfsToken = sfsToken
                 });
             }
             catch (Exception)
             {
-                return LoginResult.CreateFailed("Unable to login.");                
-            }            
-        }
-
-        private async Task<string> GetExchangedToken(string accessToken)
-        {
-            var newToken = accessToken;
-            newToken = await Facebook.ExchangeTokenForLongLivedToken(accessToken);
-            if (newToken == null)
-            {
-                newToken = accessToken;
+                return LoginResult.CreateFailed("Unable to login.");
             }
-
-            return newToken;
         }
 
         private static void EnsureAccessTokenNotEmpty(string accessToken)

@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.ModelBinding;
+using GameOfHands.Web.Models.Facebook;
 
 namespace GameOfHands.Web.Models.User
 {
@@ -36,6 +38,18 @@ namespace GameOfHands.Web.Models.User
                 UserInfoUpdateDate = reader.GetDateTime("info_updated_date")
             };
         }
+
+        public static BasicUserInfo CreateFromUserProfileInfo(UserProfileInfo userProfileInfo)
+        {
+            return new BasicUserInfo()
+            {
+                Country = userProfileInfo.Country,
+                EmailId = userProfileInfo.email,
+                ProfilePicUrl = userProfileInfo.ProfilePictureUrl,
+                DisplayName = userProfileInfo.first_name,
+                UserInfoUpdateDate = DateTime.Now
+            };
+        }
     }
 
     public class User
@@ -45,13 +59,16 @@ namespace GameOfHands.Web.Models.User
 
         public BasicUserInfo BasicUserInfo { get; set; }
 
+        public string UserAccessToken { get; set; }
+
         public static User CreateUserFromReadRow(MySqlDataReader reader)
         {
             return new User
             {
                 Id = reader.GetInt32("id"),
                 UserLoginId = reader.GetString("user_login_id"),
-                BasicUserInfo = BasicUserInfo.CreateFromReadRow(reader)
+                BasicUserInfo = BasicUserInfo.CreateFromReadRow(reader),
+                UserAccessToken = reader.GetString("user_access_token"),
             };
         }   
 

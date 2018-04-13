@@ -9,6 +9,7 @@ using GameOfHands.Web.Models.Login;
 using Newtonsoft.Json;
 using GameOfHands.Web.Models;
 using System.Net.Http;
+using GameOfHands.Web.Models.User;
 
 namespace GameOfHands.Web.Services
 {
@@ -39,6 +40,22 @@ namespace GameOfHands.Web.Services
                 var responseJson = await response.Content.ReadAsStringAsync();
                 var exchangeTokenData = JsonConvert.DeserializeObject<ExchangeTokenData>(responseJson);                
                 return exchangeTokenData.access_token;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public static async Task<UserProfileInfo> GetUserProfileInfo(string userId, string userAccessToken)
+        {
+            var response = await HttpClientPool.GetHttpClient().GetAsync(FacebookApi.GetBasicUserInfoUrl(userId, userAccessToken));
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseJson = await response.Content.ReadAsStringAsync();
+                var userProfileInfo = JsonConvert.DeserializeObject<UserProfileInfo>(responseJson);
+                return userProfileInfo;
             }
             else
             {
