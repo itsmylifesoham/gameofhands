@@ -5,7 +5,8 @@ define(function (require) {
         websiteEndPoint: 'https://localhost:44367/',
         sfs: {
             host: '127.0.0.1',
-            port: '8080'
+            port: '8080',
+            zone: 'BasicExamples'
         }
     };
 });

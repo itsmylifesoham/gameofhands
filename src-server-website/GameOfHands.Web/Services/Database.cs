@@ -101,11 +101,11 @@ namespace GameOfHands.Web.Services
                     await UpdateBasicUserInfo(basicUserInfo, userLoginId, userAccessToken, matchedExistingUser==null);
                 }
 
-                string cmdText = $"INSERT INTO user_sessions (user_login_id, consume_once_token, token_consumed, ip_address, date_created) VALUES (@userLoginId, @consumeOnceToken, 0 , @ipAddress,  @dateCreated)";
+                string cmdText = $"INSERT INTO user_sessions (user_login_id, consume_once_token, ip_address, date_created) VALUES (@userLoginId, @consumeOnceToken, @ipAddress,  @dateCreated)";
                 var cmd = new MySqlCommand(cmdText, connection);
                 cmd.Parameters.AddWithValue("@userLoginId", userLoginId);
-                var sfsToken = Guid.NewGuid().ToString();
-                cmd.Parameters.AddWithValue("@consumeOnceToken", sfsToken);
+                var sessionToken = Guid.NewGuid().ToString();
+                cmd.Parameters.AddWithValue("@consumeOnceToken", sessionToken);
                 cmd.Parameters.AddWithValue("@ipAddress", ipAddress);
                 cmd.Parameters.AddWithValue("@dateCreated", Utilities.GetSQLFormattedDateTime(DateTime.Now));
                 
@@ -116,7 +116,7 @@ namespace GameOfHands.Web.Services
                     throw new Exception("Could not create a game session. Please try again.");
                 }
 
-                return sfsToken;
+                return sessionToken;
             }
         }
 

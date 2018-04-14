@@ -24,7 +24,7 @@ namespace GameOfHands.Web.ApplicationServices
                 if (!tokenDebugInfo.IsValid() || tokenDebugInfo.user_id != loginContext.UserId)
                     throw new Exception("Invalid Access Token. " + tokenDebugInfo.GetErrorMessage());
 
-                var sfsToken = await Database.CreateSfsSession(loginContext, ipAddress, accessToken);
+                var sessionToken = await Database.CreateSfsSession(loginContext, ipAddress, accessToken);
 
                 string tokenToReturn = accessToken;
 
@@ -46,8 +46,8 @@ namespace GameOfHands.Web.ApplicationServices
                 return LoginResult.CreateSuccess(new
                 {
                     newAccessToken = tokenToReturn == accessToken ? null : tokenToReturn,
-                    userLoginId = loginContext.GenerateAppScopedLoginId(),         
-                    sfsToken = sfsToken
+                    userLoginId = loginContext.GenerateAppScopedLoginId(),
+                    sessionToken = sessionToken
                 });
             }
             catch (Exception e)

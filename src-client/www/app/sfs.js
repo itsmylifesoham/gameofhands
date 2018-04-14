@@ -20,6 +20,9 @@ define(function(require){
                 SFS2X.SmartFox.prototype.connect.call(sfsInstance, ip, port);
             });
         },
+        login: function(zone, userId, ){
+
+        },
         connectionLost: function(){
             var sfsInstance = this;
 
