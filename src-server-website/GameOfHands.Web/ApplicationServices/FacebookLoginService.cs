@@ -27,19 +27,21 @@ namespace GameOfHands.Web.ApplicationServices
                 var sfsToken = await Database.CreateSfsSession(loginContext, ipAddress, accessToken);
 
                 string tokenToReturn = accessToken;
-                if (tokenDebugInfo.IsTokenExpiringInLessThanOneDay())
-                {
-                    try
-                    {
-                        tokenToReturn = await Facebook.ExchangeTokenForLongLivedToken(accessToken);
-                        await Database.UpdateUserAccessToken(userLoginId, tokenToReturn);
-                    }
-                    catch (Exception e)
-                    {
-                        // do nothing let go as exchanging token or saving it is not important to stop user login flow. it can be done 
-                        // at a later login.
-                    }
-                }
+
+                // not doing this for now. let the user renew his 2 hr token 
+                //if (tokenDebugInfo.IsTokenExpiringInLessThanOneDay())
+                //{
+                //    try
+                //    {
+                //        tokenToReturn = await Facebook.ExchangeTokenForLongLivedToken(accessToken);
+                //        await Database.UpdateUserAccessToken(userLoginId, tokenToReturn);
+                //    }
+                //    catch (Exception e)
+                //    {
+                //        // do nothing let go as exchanging token or saving it is not important to stop user login flow. it can be done 
+                //        // at a later login.
+                //    }
+                //}
 
                 return LoginResult.CreateSuccess(new
                 {
