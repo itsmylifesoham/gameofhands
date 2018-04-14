@@ -11,12 +11,10 @@ define(function (require, exports, module) {
             var homeView = this;
 
             facebook.login().then(function(userData){
-                console.log(userData);
                 homeView.hideConnectButton();
                 homeView.addLog('logged in as: ' + userData.userId);
                 homeView.addLog('can connect to website now.');
             }).catch(function(error){
-                console.log(error);
                 homeView.addLog(error);
                 homeView.showConnectButton();
             });
@@ -40,7 +38,6 @@ define(function (require, exports, module) {
                 homeView.addLog('logged in as: ' + userData.userId);
                 homeView.addLog('can connect to website now.');
             }).catch(function(error){
-                console.log(error);
                 homeView.addLog(error);
                 homeView.showConnectButton();
             });

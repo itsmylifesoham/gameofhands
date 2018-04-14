@@ -1,13 +1,17 @@
 define(function (require) {
     var globals = require('app/globals');
+    var permissions = ["email", "public_profile"];
 
     if (window.cordova.platformId == "browser") {
         facebookConnectPlugin.browserInit(globals.facebookAppId);
+        permissions.push("rerequest");
     }
 
     var login = function () {
         return new Promise(function (resolve, reject) {
-            facebookConnectPlugin.login(["email", "public_profile", "rerequest"], function onResponse(response) {
+
+
+            facebookConnectPlugin.login(permissions, function onResponse(response) {
                 if (response.status === 'connected') {
                     resolve({
                         userId: response.authResponse.userID,
