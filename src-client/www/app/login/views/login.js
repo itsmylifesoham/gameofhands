@@ -12,20 +12,7 @@ define(function (require, exports, module) {
         onConnectWithFb: function () {
             var view = this;
             view.hideConnectButton();
-            facebook.login()
-                .then(function (userData) {
-                    return website.login(userData.userId, userData.accessToken);
-                })
-                .then(function (loginResultPayload) {
-                    return globals.app.sfs.connect(globals.sfs.host, globals.sfs.port);
-                })
-                .then(function(msg){
-                    view.addLog(msg);
-                })
-                .catch(function (error) {
-                    view.addLog(JSON.stringify(error));
-                    view.showConnectButton();
-                });
+            view.assignloginFlow(facebook.login());
         },
         hideConnectButton: function () {
             this.$("#fb-login").addClass("d-none");
@@ -41,22 +28,25 @@ define(function (require, exports, module) {
             this.$el.html(content);
             var view = this;
             view.hideConnectButton();
-            facebook.loginStatus()
+            view.assignloginFlow(facebook.loginStatus());
+            return this;
+        },
+        assignloginFlow: function (loginPromise) {
+            var view = this;
+            loginPromise
                 .then(function (userData) {
                     return website.login(userData.userId, userData.accessToken);
                 })
                 .then(function (loginResultPayload) {
                     return globals.app.sfs.connect(globals.sfs.host, globals.sfs.port);
                 })
-                .then(function(msg){
+                .then(function (msg) {
                     view.addLog(msg);
                 })
                 .catch(function (error) {
                     view.showConnectButton();
                 });
-
-            return this;
-        }
+        },
     });
 
 
