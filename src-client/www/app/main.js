@@ -2,7 +2,7 @@ define(function (require, exports, module) {
 
     var router = require('app/router');
     var sfs = require('app/sfs');
-    var homeController = require('app/home/controller');
+    var loginController = require('app/login/controller');
 
     var AppView = Backbone.View.extend({
         constructor: function (rootElement) {
@@ -18,7 +18,7 @@ define(function (require, exports, module) {
             this.sfs = new sfs.SmartFox();
             this.sfs.connectionLost().then(function(reason){
                 alert(reason);
-                homeController.displayHomeView();
+                loginController.displayLoginView();
             })
         }
     });

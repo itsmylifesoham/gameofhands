@@ -71,9 +71,4 @@ hook run order: https://stackoverflow.com/questions/33647483/cordova-hooks-order
 enabled cors as per this : http://www.melvinswebstuff.com/blog/2015/01/02/enable-cors-iisexpress/ so that local browser client can access local website.
 disable this later on.
 
-
-add mimeMap for .hbs inside the web.config of VS project, it works then.
-
-see later about the content security polocy in html meta tag. we need the way it is ryt now for handle bars to work.
-
-at runtime see how to use handlebars.runtime instead of the full version that we have ryt now.
+disable too much loggin level on sfs later for more performance.

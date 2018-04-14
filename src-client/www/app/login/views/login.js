@@ -1,18 +1,17 @@
 define(function (require, exports, module) {
-    var homeTemplate = require('hbs!app/home/templates/home');
+    var loginTemplate = require('hbs!app/login/templates/login');
     var facebook = require('app/facebook');
     var website = require('app/website');
     var globals = require('app/globals');
-    var errors = require('app/errors');
 
-    var HomeView = Backbone.View.extend({
+    var LoginView = Backbone.View.extend({
         className: 'd-flex justify-content-center align-middle align-items-center flex-column h-100 w-100',
         events: {
             'click #fb-login': 'onConnectWithFb',
         },
         onConnectWithFb: function () {
-            var homeView = this;
-            homeView.hideConnectButton();
+            var view = this;
+            view.hideConnectButton();
             facebook.login()
                 .then(function (userData) {
                     return website.login(userData.userId, userData.accessToken);
@@ -21,11 +20,11 @@ define(function (require, exports, module) {
                     return globals.app.sfs.connect(globals.sfs.host, globals.sfs.port);
                 })
                 .then(function(msg){
-                    homeView.addLog(msg);
+                    view.addLog(msg);
                 })
                 .catch(function (error) {
-                    homeView.addLog(JSON.stringify(error));
-                    homeView.showConnectButton();
+                    view.addLog(JSON.stringify(error));
+                    view.showConnectButton();
                 });
         },
         hideConnectButton: function () {
@@ -38,10 +37,10 @@ define(function (require, exports, module) {
             this.$("#log").html(this.$("#log").html() + "<br>" + newLog);
         },
         render: function () {
-            var content = homeTemplate();
+            var content = loginTemplate();
             this.$el.html(content);
-            var homeView = this;
-            homeView.hideConnectButton();
+            var view = this;
+            view.hideConnectButton();
             facebook.loginStatus()
                 .then(function (userData) {
                     return website.login(userData.userId, userData.accessToken);
@@ -50,10 +49,10 @@ define(function (require, exports, module) {
                     return globals.app.sfs.connect(globals.sfs.host, globals.sfs.port);
                 })
                 .then(function(msg){
-                    homeView.addLog(msg);
+                    view.addLog(msg);
                 })
                 .catch(function (error) {
-                    homeView.showConnectButton();
+                    view.showConnectButton();
                 });
 
             return this;
@@ -61,5 +60,5 @@ define(function (require, exports, module) {
     });
 
 
-    return HomeView;
+    return LoginView;
 });
