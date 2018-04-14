@@ -6,7 +6,7 @@ define(function (require, exports, module) {
     var _homeController = {};
     _homeController.displayHomeView = function () {
         globals.appView.$el.html((new HomeView()).render().el);
-        globals.appView.router.navigate('home');
+        globals.appView.router.navigate('');
     }
 
     return _homeController;

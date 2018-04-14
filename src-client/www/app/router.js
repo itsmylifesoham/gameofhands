@@ -4,7 +4,7 @@ define(function(require, exports, module){
 
     var _router = new Backbone.Router({
         routes: {
-            'home': homeController.displayHomeView
+            '': homeController.displayHomeView
         }
     });
 

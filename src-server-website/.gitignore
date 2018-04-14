@@ -300,7 +300,7 @@ __pycache__/
 
 # End of https://www.gitignore.io/api/visualstudio
 
-/mainapp
+/GameOfHands.Web/mainapp
 
 #ignore the copied folders during run
 
