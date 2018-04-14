@@ -12,7 +12,7 @@ define(function (require) {
                         resolve(loginResultJson.Payload);
                     }
                     else{
-                        reject(loginResultJson.Payload)
+                        reject(loginResultJson.Payload);
                     }
                 }).catch(function(){
                     reject({

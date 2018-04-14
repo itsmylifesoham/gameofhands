@@ -1,6 +1,7 @@
 define(function (require, exports, module) {
 
     var router = require('app/router');
+    var sfs = require('app/sfs');
 
     var AppView = Backbone.View.extend({
         constructor: function (rootElement) {
@@ -13,6 +14,7 @@ define(function (require, exports, module) {
         },
         initialize: function(){
             this.router = router
+            this.sfs = new sfs.SmartFox()
         }
     });
 
@@ -20,7 +22,6 @@ define(function (require, exports, module) {
 
     AppView.prototype.start = function () {
         Backbone.history.start();
-
     };
 
     return AppView;

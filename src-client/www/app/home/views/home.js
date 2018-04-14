@@ -2,6 +2,7 @@ define(function (require, exports, module) {
     var homeTemplate = require('hbs!app/home/templates/home');
     var facebook = require('app/facebook');
     var website = require('app/website');
+    var globals = require('app/globals');
     var errors = require('app/errors');
 
     var HomeView = Backbone.View.extend({
@@ -22,6 +23,10 @@ define(function (require, exports, module) {
                 })
                 .then(function (loginResultPayload) {
                     homeView.addLog(JSON.stringify(loginResultPayload));
+                    return globals.app.sfs.connect(globals.sfs.host, globals.sfs.port);
+                })
+                .then(function(msg){
+                    homeView.addLog(msg);
                 })
                 .catch(function (error) {
                     homeView.addLog(JSON.stringify(error));
@@ -53,6 +58,10 @@ define(function (require, exports, module) {
                 })
                 .then(function (loginResultPayload) {
                     homeView.addLog(JSON.stringify(loginResultPayload));
+                    return globals.app.sfs.connect(globals.sfs.host, globals.sfs.port);
+                })
+                .then(function(msg){
+                    homeView.addLog(msg);
                 })
                 .catch(function (error) {
                     homeView.addLog(JSON.stringify(error));

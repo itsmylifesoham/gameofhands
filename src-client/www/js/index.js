@@ -53,9 +53,9 @@ var phonegapApp = {
     onDeviceReady: function () {
 
         require(['app/main', 'app/globals'], function (AppView, globals) {
-            var appView = new AppView('#app');
-            globals.appView = appView;
-            appView.start();
+            var app = new AppView('#app');
+            globals.app = app;
+            app.start();
         });
     },
 

@@ -9,8 +9,6 @@ define(function (require) {
 
     var login = function () {
         return new Promise(function (resolve, reject) {
-
-
             facebookConnectPlugin.login(permissions, function onResponse(response) {
                 if (response.status === 'connected') {
                     resolve({
