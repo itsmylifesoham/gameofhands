@@ -1,6 +1,6 @@
 define(function (require) {
     var globals = require('app/globals');
-    var permissions = ["email", "public_profile"];
+    var permissions = ["email", "public_profile", "user_location"];
 
     if (window.cordova.platformId == "browser") {
         facebookConnectPlugin.browserInit(globals.facebookAppId);

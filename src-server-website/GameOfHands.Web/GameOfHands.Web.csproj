@@ -19,7 +19,7 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>44367</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -203,6 +203,100 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="www\app\errors.js" />
+    <Content Include="www\app\facebook.js" />
+    <Content Include="www\app\globals.js" />
+    <Content Include="www\app\home\controller.js" />
+    <Content Include="www\app\home\views\home.js" />
+    <Content Include="www\app\main.js" />
+    <Content Include="www\app\router.js" />
+    <Content Include="www\app\website.js" />
+    <Content Include="www\config.xml" />
+    <Content Include="www\cordova-js-src\confighelper.js" />
+    <Content Include="www\cordova-js-src\exec.js" />
+    <Content Include="www\cordova-js-src\platform.js" />
+    <Content Include="www\cordova.js" />
+    <Content Include="www\cordova_plugins.js" />
+    <Content Include="www\css\bootstrap.css" />
+    <Content Include="www\css\index.css" />
+    <Content Include="www\favicon.ico" />
+    <Content Include="www\img\logo.png" />
+    <Content Include="www\index.html" />
+    <Content Include="www\js\index.js" />
+    <Content Include="www\lib\anime.js" />
+    <Content Include="www\lib\backbone.js" />
+    <Content Include="www\lib\bootstrap.bundle.js" />
+    <Content Include="www\lib\hbs.js" />
+    <Content Include="www\lib\hbs\handlebars.js" />
+    <Content Include="www\lib\hbs\handlebars.runtime.js" />
+    <Content Include="www\lib\hbs\json2.js" />
+    <Content Include="www\lib\jquery.slim.js" />
+    <Content Include="www\lib\r.js" />
+    <Content Include="www\lib\require.js" />
+    <Content Include="www\lib\underscore.js" />
+    <Content Include="www\plugins\cordova-plugin-facebook4\www\facebook-browser.js" />
+    <Content Include="www\res\icon\android\drawable-hdpi-icon.png" />
+    <Content Include="www\res\icon\android\drawable-ldpi-icon.png" />
+    <Content Include="www\res\icon\android\drawable-mdpi-icon.png" />
+    <Content Include="www\res\icon\android\drawable-xhdpi-icon.png" />
+    <Content Include="www\res\icon\android\drawable-xxhdpi-icon.png" />
+    <Content Include="www\res\icon\android\drawable-xxxhdpi-icon.png" />
+    <Content Include="www\res\icon\ios\icon%402x.png" />
+    <Content Include="www\res\icon\ios\icon-40%402x.png" />
+    <Content Include="www\res\icon\ios\icon-40.png" />
+    <Content Include="www\res\icon\ios\icon-50%402x.png" />
+    <Content Include="www\res\icon\ios\icon-50.png" />
+    <Content Include="www\res\icon\ios\icon-60%402x.png" />
+    <Content Include="www\res\icon\ios\icon-60%403x.png" />
+    <Content Include="www\res\icon\ios\icon-60.png" />
+    <Content Include="www\res\icon\ios\icon-72%402x.png" />
+    <Content Include="www\res\icon\ios\icon-72.png" />
+    <Content Include="www\res\icon\ios\icon-76%402x.png" />
+    <Content Include="www\res\icon\ios\icon-76.png" />
+    <Content Include="www\res\icon\ios\icon-small%402x.png" />
+    <Content Include="www\res\icon\ios\icon-small%403x.png" />
+    <Content Include="www\res\icon\ios\icon-small.png" />
+    <Content Include="www\res\icon\ios\icon.png" />
+    <Content Include="www\res\icon\windows\Square150x150Logo.scale-100.png" />
+    <Content Include="www\res\icon\windows\Square150x150Logo.scale-240.png" />
+    <Content Include="www\res\icon\windows\Square30x30Logo.scale-100.png" />
+    <Content Include="www\res\icon\windows\Square310x310Logo.scale-100.png" />
+    <Content Include="www\res\icon\windows\Square44x44Logo.scale-100.png" />
+    <Content Include="www\res\icon\windows\Square44x44Logo.scale-240.png" />
+    <Content Include="www\res\icon\windows\Square70x70Logo.scale-100.png" />
+    <Content Include="www\res\icon\windows\Square71x71Logo.scale-100.png" />
+    <Content Include="www\res\icon\windows\Square71x71Logo.scale-240.png" />
+    <Content Include="www\res\icon\windows\StoreLogo.scale-100.png" />
+    <Content Include="www\res\icon\windows\StoreLogo.scale-240.png" />
+    <Content Include="www\res\icon\windows\Wide310x150Logo.scale-100.png" />
+    <Content Include="www\res\icon\windows\Wide310x150Logo.scale-240.png" />
+    <Content Include="www\res\icon\wp8\ApplicationIcon.png" />
+    <Content Include="www\res\icon\wp8\Background.png" />
+    <Content Include="www\res\screen\android\drawable-land-hdpi-screen.png" />
+    <Content Include="www\res\screen\android\drawable-land-ldpi-screen.png" />
+    <Content Include="www\res\screen\android\drawable-land-mdpi-screen.png" />
+    <Content Include="www\res\screen\android\drawable-land-xhdpi-screen.png" />
+    <Content Include="www\res\screen\android\drawable-land-xxhdpi-screen.png" />
+    <Content Include="www\res\screen\android\drawable-land-xxxhdpi-screen.png" />
+    <Content Include="www\res\screen\android\drawable-port-hdpi-screen.png" />
+    <Content Include="www\res\screen\android\drawable-port-ldpi-screen.png" />
+    <Content Include="www\res\screen\android\drawable-port-mdpi-screen.png" />
+    <Content Include="www\res\screen\android\drawable-port-xhdpi-screen.png" />
+    <Content Include="www\res\screen\android\drawable-port-xxhdpi-screen.png" />
+    <Content Include="www\res\screen\android\drawable-port-xxxhdpi-screen.png" />
+    <Content Include="www\res\screen\ios\Default%402x~iphone.png" />
+    <Content Include="www\res\screen\ios\Default-568h%402x~iphone.png" />
+    <Content Include="www\res\screen\ios\Default-667h.png" />
+    <Content Include="www\res\screen\ios\Default-736h.png" />
+    <Content Include="www\res\screen\ios\Default-Landscape%402x~ipad.png" />
+    <Content Include="www\res\screen\ios\Default-Landscape-736h.png" />
+    <Content Include="www\res\screen\ios\Default-Landscape~ipad.png" />
+    <Content Include="www\res\screen\ios\Default-Portrait%402x~ipad.png" />
+    <Content Include="www\res\screen\ios\Default-Portrait~ipad.png" />
+    <Content Include="www\res\screen\ios\Default~iphone.png" />
+    <Content Include="www\res\screen\windows\SplashScreen.scale-100.png" />
+    <Content Include="www\res\screen\windows\SplashScreenPhone.scale-240.png" />
+    <Content Include="www\res\screen\wp8\screen-portrait.jpg" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -228,6 +322,9 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="www\app\home\templates\home.hbs" />
+    <Content Include="www\manifest.json" />
+    <Content Include="www\res\.pgbomit" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

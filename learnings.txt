@@ -66,3 +66,10 @@ always run from windows command line as the echo command in one of the hooks req
 ------------------------------------------------
 
 hook run order: https://stackoverflow.com/questions/33647483/cordova-hooks-order
+
+
+enabled cors as per this : http://www.melvinswebstuff.com/blog/2015/01/02/enable-cors-iisexpress/ so that local browser client can access local website.
+disable this later on.
+
+
+add mimeMap for .hbs inside the web.config of VS project, it works then.

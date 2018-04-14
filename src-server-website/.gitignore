@@ -299,3 +299,10 @@ __pycache__/
 
 
 # End of https://www.gitignore.io/api/visualstudio
+
+/mainapp
+
+#ignore the copied folders during run
+
+
+#end of ignore copied folders during run

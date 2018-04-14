@@ -28,7 +28,7 @@ namespace GameOfHands.Web.Models.Login
         }
 
         public static LoginResult CreateFailed(string message)
-        {
+        {   
             return new LoginResult(Login.LoginStatus.fail, new
             {
                 error = message
