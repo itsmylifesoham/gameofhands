@@ -1,46 +1,51 @@
 define(function (require) {
     var globals = require('app/globals');
 
-    var getLoggedInUser = function (success, error) {
-        facebookConnectPlugin.getLoginStatus(
-            function onResponse(response) {
+    if (window.cordova.platformId == "browser") {
+        facebookConnectPlugin.browserInit(globals.facebookAppId);
+    }
+
+    var login = function () {
+        return new Promise(function (resolve, reject) {
+            facebookConnectPlugin.login(["email", "public_profile", "rerequest"], function onResponse(response) {
                 if (response.status === 'connected') {
-                    success({
+                    resolve({
                         userId: response.authResponse.userID,
                         accessToken: response.authResponse.accessToken
                     });
                 }
                 else {
-                    error();
+                    reject(response);
                 }
-            }, function onFailure() {
-                error();
+            }, function onError(response) {
+                reject(response)
             });
+        });
     };
 
-    var login = function (success, error) {
-        if (window.cordova.platformId == "browser") {
-            facebookConnectPlugin.browserInit(globals.facebookAppId);
-        }
-        facebookConnectPlugin.login(["email", "public_profile", "user_location"],
-            function onResponse(response) {
+
+    var loginStatus = function () {
+        return new Promise(function (resolve, reject) {
+            facebookConnectPlugin.getLoginStatus(function onResponse(response) {
                 if (response.status === 'connected') {
-                    success({
+                    resolve({
                         userId: response.authResponse.userID,
                         accessToken: response.authResponse.accessToken
                     });
                 }
                 else {
-                    error();
+                    reject(response);
                 }
-            },
-            error);
-    }
+            }, function onError(response) {
+                reject(response);
+            });
+        });
+    };
+
 
     return {
-        getLoggedInUser: getLoggedInUser,
+        loginStatus: loginStatus,
         login: login
     }
-
 });
 

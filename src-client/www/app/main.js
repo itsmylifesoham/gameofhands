@@ -22,6 +22,7 @@ define(function (require, exports, module) {
     AppView.prototype.start = function () {
         Backbone.history.start();
         homeController.displayHomeView();
+
     };
 
     return AppView;
