@@ -4,7 +4,7 @@ define(function (require) {
 
     if (window.cordova.platformId == "browser") {
         facebookConnectPlugin.browserInit(globals.facebookAppId);
-        permissions.push("rerequest");
+        permissions.push("rerequest"); // this is required for browser platform alone for permission rerequest to occur :/
     }
 
     var login = function () {

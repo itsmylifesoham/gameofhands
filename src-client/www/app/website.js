@@ -15,9 +15,7 @@ define(function (require) {
                         reject(loginResultJson.Payload);
                     }
                 }).catch(function(){
-                    reject({
-                        error: "oops! problem logging in. try again."
-                    });
+                    reject("oops! problem logging in. try again.");
             });
         });
     };

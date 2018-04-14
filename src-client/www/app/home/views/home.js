@@ -12,17 +12,12 @@ define(function (require, exports, module) {
         },
         onConnectWithFb: function () {
             var homeView = this;
-
+            homeView.hideConnectButton();
             facebook.login()
                 .then(function (userData) {
-                    homeView.hideConnectButton();
-                    homeView.addLog('logged in as: ' + userData.userId);
-                    homeView.addLog('connecting to website now...');
                     return website.login(userData.userId, userData.accessToken);
-
                 })
                 .then(function (loginResultPayload) {
-                    homeView.addLog(JSON.stringify(loginResultPayload));
                     return globals.app.sfs.connect(globals.sfs.host, globals.sfs.port);
                 })
                 .then(function(msg){
@@ -46,25 +41,18 @@ define(function (require, exports, module) {
             var content = homeTemplate();
             this.$el.html(content);
             var homeView = this;
-
+            homeView.hideConnectButton();
             facebook.loginStatus()
                 .then(function (userData) {
-                    homeView.hideConnectButton();
-                    homeView.addLog('logged in as: ' + userData.userId);
-                    homeView.addLog('loggin in to website now...');
-
                     return website.login(userData.userId, userData.accessToken);
-
                 })
                 .then(function (loginResultPayload) {
-                    homeView.addLog(JSON.stringify(loginResultPayload));
                     return globals.app.sfs.connect(globals.sfs.host, globals.sfs.port);
                 })
                 .then(function(msg){
                     homeView.addLog(msg);
                 })
                 .catch(function (error) {
-                    homeView.addLog(JSON.stringify(error));
                     homeView.showConnectButton();
                 });
 
