@@ -53,7 +53,7 @@ namespace GameOfHands.Web.Services
 
                 var cmd = new MySqlCommand(cmdText, connection);
                 cmd.Parameters.AddWithValue("@userLoginId", userLoginId);
-                cmd.Parameters.AddWithValue("@country", basicUserInfo.Country??"");
+                cmd.Parameters.AddWithValue("@country", basicUserInfo.Country);
                 cmd.Parameters.AddWithValue("@emailId", basicUserInfo.EmailId);
                 cmd.Parameters.AddWithValue("@profilePicUrl", basicUserInfo.ProfilePicUrl);
                 cmd.Parameters.AddWithValue("@displayName", basicUserInfo.DisplayName);
@@ -87,18 +87,17 @@ namespace GameOfHands.Web.Services
             }
         }
 
-        public static async Task<string> CreateSfsSession(LoginSource loginSource, string ipAddress, string userAccessToken)
+        public static async Task<string> CreateSfsSession(LoginContext loginContext, string ipAddress, string userAccessToken)
         {
             using (var connection = GetMysqlConnection())
             {
-                var userLoginId = loginSource.GenerateAppScopedLoginId();
+                var userLoginId = loginContext.GenerateAppScopedLoginId();
                 User matchedExistingUser = await GetUser(userLoginId);
 
                 if (matchedExistingUser == null || !matchedExistingUser.BasicUserInfo.IsRecent())
                 {
-                    var userInfoFacebook = await Facebook.GetUserProfileInfo(loginSource.UserId, userAccessToken);
+                    var userInfoFacebook = await Facebook.GetUserProfileInfo(loginContext.UserId, userAccessToken);
                     var basicUserInfo = BasicUserInfo.CreateFromUserProfileInfo(userInfoFacebook);
-                    
                     await UpdateBasicUserInfo(basicUserInfo, userLoginId, userAccessToken, matchedExistingUser==null);
                 }
 
@@ -114,7 +113,7 @@ namespace GameOfHands.Web.Services
                 var affectedRows = await cmd.ExecuteNonQueryAsync();
                 if (affectedRows == 0)
                 {
-                    throw new Exception("Could not create a game session.");
+                    throw new Exception("Could not create a game session. Please try again.");
                 }
 
                 return sfsToken;

@@ -43,7 +43,7 @@ namespace GameOfHands.Web.Models.User
         {
             return new BasicUserInfo()
             {
-                Country = userProfileInfo.Country,
+                Country = userProfileInfo.Country??string.Empty,
                 EmailId = userProfileInfo.email,
                 ProfilePicUrl = userProfileInfo.ProfilePictureUrl,
                 DisplayName = userProfileInfo.first_name,

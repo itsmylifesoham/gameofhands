@@ -172,7 +172,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Facebook\Models.cs" />
-    <Compile Include="Models\Login\LoginSource.cs" />
+    <Compile Include="Models\Login\LoginContext.cs" />
     <Compile Include="Models\Login\LoginType.cs" />
     <Compile Include="Models\User\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

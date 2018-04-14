@@ -49,7 +49,7 @@ namespace GameOfHands.Web.Models.Facebook
         private bool AreAllRequiredFacebookPermissionsPresentInAccessToken()
         {
             var scopesInAccessToken = new HashSet<string>(this.scopes);
-            foreach (var requiredPermission in FacebookLoginConfiguration.RequiredPermissions)
+            foreach (var requiredPermission in FacebookLoginConfiguration.MandatoryPermissions)
             {
                 if (!scopesInAccessToken.Contains(requiredPermission))
                 {

@@ -20,7 +20,7 @@ namespace GameOfHands.Web.Controllers
     {       
         public async Task<ContentResult> Facebook(string access_token, string user_id, AppName app_name)
         {
-            var loginResult = await FacebookLoginService.Login(access_token, Request.UserHostAddress, new LoginSource() {
+            var loginResult = await FacebookLoginService.Login(access_token, Request.UserHostAddress, new LoginContext() {
 
                 AppName = app_name,
                 LoginType = LoginType.fb,

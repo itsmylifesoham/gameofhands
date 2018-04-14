@@ -31,6 +31,17 @@
 
         public string ProfilePictureUrl => picture.data.url;
 
-        public string Country => location.location.country;
+        public string Country
+        {
+            get
+            {
+                if (location == null || location.location == null || string.IsNullOrEmpty(location.location.country))
+                {
+                    return null;
+                }
+
+                return location.location.country;
+            }
+        }
     }
 }

@@ -5,7 +5,7 @@ using System.Web;
 
 namespace GameOfHands.Web.Models.Login
 {
-    public class LoginSource
+    public class LoginContext
     {
         public AppName AppName { get; set; }
 
