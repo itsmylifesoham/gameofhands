@@ -72,3 +72,17 @@ enabled cors as per this : http://www.melvinswebstuff.com/blog/2015/01/02/enable
 disable this later on.
 
 disable too much loggin level on sfs later for more performance.
+
+
+for sfs2x enable debug from admin, it adds jvm flags to sfs2x.bat.
+
+
+if published website does not load due to module tag not permitted do this :
+Go to IIS Manager. Select the Server and then Feature Delegation (in IIS 7.5 under Management Section). Go to Modules and set it as Read/Write.
+
+also open inbound http ports and also 8080 sfs port
+
+most important : add website to iis . point it to the published folder and add binding https : hostname.com : port num . and at the same time go to etc/hosts and map the private ip with the hostname.com to get the site running with a domain name.
+
+remember: we have added a merges folder now to change the endpoints on localhost and android due to browser cors policies. use publish folder method 
+to deploy site and copy mainapp into it.

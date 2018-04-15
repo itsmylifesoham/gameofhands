@@ -2,9 +2,9 @@ define(function (require) {
     return {
         facebookAppId: '2038250216397632',
         appName: 'goh',
-        websiteEndPoint: 'https://192.168.0.102/',
+        websiteEndPoint: 'https://localhost/',
         sfsConfig: {
-            host: '192.168.0.102',
+            host: '127.0.0.1',
             port: 8080,
             zone: 'BasicExamples',
             useSSL: false,
