@@ -50,6 +50,19 @@ namespace GameOfHands.Web.Models.User
                 UserInfoUpdateDate = DateTime.Now
             };
         }
+
+        public static BasicUserInfo CreateGuestBasicUserInfo()
+        {
+            var displayNameGuid = Guid.NewGuid().ToString();
+            return new BasicUserInfo()
+            {
+                Country = "",
+                DisplayName = "guest-" + displayNameGuid.Substring(displayNameGuid.Length - 4),
+                EmailId = "",
+                ProfilePicUrl = "",
+                UserInfoUpdateDate = DateTime.Now
+            };
+        }
     }
 
     public class User

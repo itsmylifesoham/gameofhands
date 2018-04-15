@@ -156,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationServices\FacebookLoginService.cs" />
+    <Compile Include="ApplicationServices\GuestLoginService.cs" />
     <Compile Include="Models\Website\AppConfiguration.cs" />
     <Compile Include="Models\Facebook\DebugToken.cs" />
     <Compile Include="Models\Facebook\FacebookApi.cs" />

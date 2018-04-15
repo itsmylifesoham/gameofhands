@@ -15,7 +15,13 @@ define(function (require) {
                         resolve("connected to sfs!");
                     else
                         reject("unable to connect to sfs");
+
+                    removeSfsEventHandlers();
                 };
+
+                function removeSfsEventHandlers(){
+                    sfsInstance.removeEventListener(SFS2X.SFSEvent.CONNECTION, onConnection);
+                }
 
                 SFS2X.SmartFox.prototype.connect.call(sfsInstance);
             });
@@ -29,10 +35,17 @@ define(function (require) {
 
                 function onLogin(evtParams) {
                     resolve(evtParams);
+                    removeSfsEventHandlers();
                 }
 
                 function onLoginError(evtParams) {
                     reject(evtParams.errorMessage);
+                    removeSfsEventHandlers();
+                }
+
+                function removeSfsEventHandlers(){
+                    sfsInstance.removeEventListener(SFS2X.SFSEvent.LOGIN, onLogin);
+                    sfsInstance.removeEventListener(SFS2X.SFSEvent.LOGIN_ERROR, onLoginError);
                 }
 
                 var loginData = new SFS2X.SFSObject();

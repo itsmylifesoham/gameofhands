@@ -9,5 +9,6 @@ namespace GameOfHands.Web.Models.Login
     public enum LoginType
     {
         fb, // facebook
+        guest
     }
 }

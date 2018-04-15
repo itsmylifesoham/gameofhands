@@ -36,7 +36,7 @@ namespace GameOfHands.Web.Services
             }
         }
 
-        public static async Task UpdateBasicUserInfo(BasicUserInfo basicUserInfo, string userLoginId,  string userAccessToken, bool isNewUser)
+        public static async Task UpdateBasicUserInfo(BasicUserInfo basicUserInfo, string userLoginId, string userAccessToken, bool isNewUser)
         {
             using (var connection = GetMysqlConnection())
             {
@@ -59,7 +59,7 @@ namespace GameOfHands.Web.Services
                 cmd.Parameters.AddWithValue("@displayName", basicUserInfo.DisplayName);
                 cmd.Parameters.AddWithValue("@userAccessToken", userAccessToken);
                 cmd.Parameters.AddWithValue("@infoUpdatedDate", Utilities.GetSQLFormattedDateTime(DateTime.Now));
-               
+
 
                 var affectedRows = await cmd.ExecuteNonQueryAsync();
                 if (affectedRows == 0)
@@ -98,7 +98,7 @@ namespace GameOfHands.Web.Services
                 {
                     var userInfoFacebook = await Facebook.GetUserProfileInfo(loginContext.UserId, userAccessToken);
                     var basicUserInfo = BasicUserInfo.CreateFromUserProfileInfo(userInfoFacebook);
-                    await UpdateBasicUserInfo(basicUserInfo, userLoginId, userAccessToken, matchedExistingUser==null);
+                    await UpdateBasicUserInfo(basicUserInfo, userLoginId, userAccessToken, matchedExistingUser == null);
                 }
 
                 string cmdText = $"INSERT INTO user_sessions (user_login_id, session_token, ip_address, date_created) VALUES (@userLoginId, @sessionToken, @ipAddress,  @dateCreated)";
@@ -108,7 +108,7 @@ namespace GameOfHands.Web.Services
                 cmd.Parameters.AddWithValue("@sessionToken", sessionToken);
                 cmd.Parameters.AddWithValue("@ipAddress", ipAddress);
                 cmd.Parameters.AddWithValue("@dateCreated", Utilities.GetSQLFormattedDateTime(DateTime.Now));
-                
+
 
                 var affectedRows = await cmd.ExecuteNonQueryAsync();
                 if (affectedRows == 0)
@@ -120,6 +120,33 @@ namespace GameOfHands.Web.Services
             }
         }
 
-        
+        public static async Task<string> CreateGuestSfsSession(LoginContext loginContext, string ipAddress)
+        {
+            using (var connection = GetMysqlConnection())
+            {
+                var userLoginId = loginContext.GenerateAppScopedLoginId();
+                var basicUserInfo = BasicUserInfo.CreateGuestBasicUserInfo();
+                await UpdateBasicUserInfo(basicUserInfo, userLoginId, string.Empty, true);
+
+                string cmdText = $"INSERT INTO user_sessions (user_login_id, session_token, ip_address, date_created) VALUES (@userLoginId, @sessionToken, @ipAddress,  @dateCreated)";
+                var cmd = new MySqlCommand(cmdText, connection);
+                cmd.Parameters.AddWithValue("@userLoginId", userLoginId);
+                var sessionToken = Guid.NewGuid().ToString();
+                cmd.Parameters.AddWithValue("@sessionToken", sessionToken);
+                cmd.Parameters.AddWithValue("@ipAddress", ipAddress);
+                cmd.Parameters.AddWithValue("@dateCreated", Utilities.GetSQLFormattedDateTime(DateTime.Now));
+
+
+                var affectedRows = await cmd.ExecuteNonQueryAsync();
+                if (affectedRows == 0)
+                {
+                    throw new Exception("Could not create a game session. Please try again.");
+                }
+
+                return sessionToken;
+            }
+        }
+
+
     }
 }

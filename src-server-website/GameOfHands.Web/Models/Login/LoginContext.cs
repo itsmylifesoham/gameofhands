@@ -18,6 +18,7 @@ namespace GameOfHands.Web.Models.Login
             return $"{AppName.ToString()}:{LoginType.ToString()}:{UserId}";
         }
 
+
         
     }
 }
