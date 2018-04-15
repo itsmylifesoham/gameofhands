@@ -11,8 +11,6 @@ namespace GameOfHands.Web.ApplicationServices
         {
             try
             {
-                var userLoginId = loginContext.GenerateAppScopedLoginId();
-
                 var sessionToken = await Database.CreateGuestSfsSession(loginContext, requestUserHostAddress);
                 
                 return LoginResult.CreateSuccess(new
