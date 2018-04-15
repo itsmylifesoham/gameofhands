@@ -38,10 +38,16 @@ define(function (require, exports, module) {
                     return website.login(userData.userId, userData.accessToken);
                 })
                 .then(function (loginResultPayload) {
-                    return globals.app.sfs.connect(globals.sfs.host, globals.sfs.port);
-                })
-                .then(function (msg) {
-                    view.addLog(msg);
+                    return globals.app.sfs.connect()
+                        .then(function (msg) {
+                            return globals.app.sfs.login(loginResultPayload.userLoginId, loginResultPayload.sessionToken);
+                        })
+                        .then(function(){
+                            console.log('user logged in!');
+                        })
+                        .catch(function(error){
+                            return Promise.reject(error);
+                        });
                 })
                 .catch(function (error) {
                     view.showConnectButton();

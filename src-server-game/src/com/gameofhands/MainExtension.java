@@ -1,5 +1,6 @@
 package com.gameofhands;
 
+import com.smartfoxserver.v2.core.SFSEventType;
 import com.smartfoxserver.v2.entities.User;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
@@ -12,7 +13,8 @@ public class MainExtension extends SFSExtension {
     public void init()
     {
         trace("Hello, this is my first SFS2X Extension!");
-      
+        
+        addEventHandler(SFSEventType.USER_LOGIN, LoginEventHandler.class);
         // Add a new Request Handler
         addRequestHandler("sum", SumReqHandler.class);
     }

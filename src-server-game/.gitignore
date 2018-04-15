@@ -88,3 +88,10 @@ hs_err_pid*
 
 
 # End of https://www.gitignore.io/api/java,eclipse
+
+
+# excluding temp extension jar file folder #
+
+/temp
+
+# end of excluding temp extension jar file folder #

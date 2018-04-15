@@ -101,11 +101,11 @@ namespace GameOfHands.Web.Services
                     await UpdateBasicUserInfo(basicUserInfo, userLoginId, userAccessToken, matchedExistingUser==null);
                 }
 
-                string cmdText = $"INSERT INTO user_sessions (user_login_id, consume_once_token, ip_address, date_created) VALUES (@userLoginId, @consumeOnceToken, @ipAddress,  @dateCreated)";
+                string cmdText = $"INSERT INTO user_sessions (user_login_id, session_token, ip_address, date_created) VALUES (@userLoginId, @sessionToken, @ipAddress,  @dateCreated)";
                 var cmd = new MySqlCommand(cmdText, connection);
                 cmd.Parameters.AddWithValue("@userLoginId", userLoginId);
                 var sessionToken = Guid.NewGuid().ToString();
-                cmd.Parameters.AddWithValue("@consumeOnceToken", sessionToken);
+                cmd.Parameters.AddWithValue("@sessionToken", sessionToken);
                 cmd.Parameters.AddWithValue("@ipAddress", ipAddress);
                 cmd.Parameters.AddWithValue("@dateCreated", Utilities.GetSQLFormattedDateTime(DateTime.Now));
                 

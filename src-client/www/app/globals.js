@@ -3,10 +3,15 @@ define(function (require) {
         facebookAppId: '2038250216397632',
         appName: 'goh',
         websiteEndPoint: 'https://localhost:44367/',
-        sfs: {
+        sfsConfig: {
             host: '127.0.0.1',
-            port: '8080',
-            zone: 'BasicExamples'
-        }
-    };
+            port: 8080,
+            zone: 'BasicExamples',
+            useSSL: false,
+            debug: false
+        },
+
+
+
+};
 });
