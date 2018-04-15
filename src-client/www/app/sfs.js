@@ -40,7 +40,10 @@ define(function (require) {
                 sfsInstance.addEventListener(SFS2X.SFSEvent.LOGIN_ERROR, onLoginError, sfsInstance);
 
                 function onLogin(evtParams) {
-                    resolve(evtParams);
+                    evtParams.user.loginData = evtParams.data;
+                    resolve({
+                        user: evtParams.user
+                    });
                     removeSfsEventHandlers();
                 }
 
