@@ -5,7 +5,8 @@ define(function (require, exports, module) {
 
     var _loginController = {};
     _loginController.displayLoginView = function () {
-        globals.app.$el.html((new LoginView()).render().el);
+        globals.app.currentView = new LoginView();
+        globals.app.$el.html(globals.app.currentView.render().el);
         globals.app.router.navigate('');
     }
 

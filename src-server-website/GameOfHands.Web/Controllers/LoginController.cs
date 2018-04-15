@@ -20,7 +20,7 @@ namespace GameOfHands.Web.Controllers
     {
         public async Task<ContentResult> Facebook(string access_token, string user_id, AppName app_name)
         {
-            var loginResult = await FacebookLoginService.Login(access_token, Request.UserHostAddress, new LoginContext()
+            var loginResult = await FacebookLoginService.Login(access_token, GetRequestIpAddress(), new LoginContext()
             {
 
                 AppName = app_name,
@@ -32,13 +32,18 @@ namespace GameOfHands.Web.Controllers
 
         public async Task<ContentResult> Guest(AppName app_name)
         {
-            var loginResult = await GuestLoginService.Login(Request.UserHostAddress, new LoginContext()
+            var loginResult = await GuestLoginService.Login(GetRequestIpAddress(), new LoginContext()
             {
                 AppName = app_name,
                 LoginType = LoginType.guest,
                 UserId = Guid.NewGuid().ToString(),
             });
             return Content(loginResult.ToJson(), "application/json");
+        }
+
+        private string GetRequestIpAddress()
+        {
+            return Request.UserHostAddress == "::1" ? "127.0.0.1" : Request.UserHostAddress;
         }
 
     }

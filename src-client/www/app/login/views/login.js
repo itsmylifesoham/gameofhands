@@ -3,6 +3,7 @@ define(function (require, exports, module) {
     var facebook = require('app/facebook');
     var website = require('app/website');
     var globals = require('app/globals');
+    var homeController = require('app/home/controller');
 
     var LoginView = Backbone.View.extend({
         className: 'd-flex justify-content-center align-middle align-items-center flex-column h-100 w-100',
@@ -13,7 +14,7 @@ define(function (require, exports, module) {
         onConnectWithFb: function () {
             var view = this;
             view.hideConnectButtons();
-            view.assignloginFbFlow(facebook.login());
+            view.assignWebsiteFbLoginFlow(facebook.login());
         },
         onPlayAsGuest: function () {
             var view = this;
@@ -31,10 +32,10 @@ define(function (require, exports, module) {
             this.$el.html(content);
             var view = this;
             view.hideConnectButtons();
-            view.assignloginFbFlow(facebook.loginStatus());
+            view.assignWebsiteFbLoginFlow(facebook.loginStatus());
             return this;
         },
-        assignloginFbFlow: function (fbLoginPromise) {
+        assignWebsiteFbLoginFlow: function (fbLoginPromise) {
             var view = this;
             var websiteLoginPromise = fbLoginPromise
                 .then(function (userData) {
@@ -51,8 +52,9 @@ define(function (require, exports, module) {
                         .then(function (msg) {
                             return globals.app.sfs.login(loginResultPayload.userLoginId, loginResultPayload.sessionToken);
                         })
-                        .then(function () {
+                        .then(function (evtParams) {
                             console.log('user logged in!');
+                            homeController.displayHomeView();
                         })
                         .catch(function (error) {
                             return Promise.reject(error);
