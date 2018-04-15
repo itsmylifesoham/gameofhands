@@ -6,6 +6,8 @@ define(function (require) {
         connect: function () {
 
             var sfsInstance = this;
+            if (sfsInstance.isConnected)
+                return Promise.resolve("already connected to sfs!");
 
             return new Promise(function (resolve, reject) {
                 sfsInstance.addEventListener(SFS2X.SFSEvent.CONNECTION, onConnection, sfsInstance);
@@ -28,6 +30,10 @@ define(function (require) {
         },
         login: function (userLoginId, sessionToken) {
             var sfsInstance = this;
+            if(sfsInstance.mySelf != null)
+                return Promise.resolve({
+                   user: sfsInstance.mySelf
+                });
 
             return new Promise(function (resolve, reject) {
                 sfsInstance.addEventListener(SFS2X.SFSEvent.LOGIN, onLogin, sfsInstance);
