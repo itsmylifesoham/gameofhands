@@ -86,3 +86,19 @@ most important : add website to iis . point it to the published folder and add b
 
 remember: we have added a merges folder now to change the endpoints on localhost and android due to browser cors policies. use publish folder method 
 to deploy site and copy mainapp into it.
+
+
+- For iis website from published folder folow this exact procedure then remove application and add a website to get it to work. https://msdn.microsoft.com/en-us/library/1y1404zt.aspx
+
+-see this for ssl ports firewall configs etc : http://docs2x.smartfoxserver.com/GettingStarted/cryptography
+http://docs2x.smartfoxserver.com/GettingStarted/migration-213
+
+very important config option is useSSL in sfsconfig. if set true protocol used is wss: , else it is ws: . for wss port number has to be 8443. Also we cannot use ws and wss enabled on the 
+webserver together. see here :
+http://www.smartfoxserver.com/forums/viewtopic.php?f=18&t=19201
+websockets can be run in encrypted or unencrypted mode, but not both at the same time.
+
+also when you disable http in sfs admin, then we have to use https://localhost:8443 to login to sfs. 8080 wont work.
+
+enable ssl for sfs only in browser as its a browser specific thing. in webview all the https and stuff is not enforced by fb or the webview when it connects to ws:// 
+but see if sfs can have both ws:// and wss:// as previously it is mentioned in this file that it cannot be done together.
