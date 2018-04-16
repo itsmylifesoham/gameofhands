@@ -102,3 +102,9 @@ also when you disable http in sfs admin, then we have to use https://localhost:8
 
 enable ssl for sfs only in browser as its a browser specific thing. in webview all the https and stuff is not enforced by fb or the webview when it connects to ws:// 
 but see if sfs can have both ws:// and wss:// as previously it is mentioned in this file that it cannot be done together.
+
+
+add iis website, open ports 8443/8080/443/80 and also add entries to etc/hosts to point gameofhands.com
+to the 127.0.0.1 . Also on any other computer on network add gameofhands.com to hosts file and
+point it to private ip of server computer. this is for facebook app to get the correct domain 
+as well as the other computer on network to be able to find our computer by ip during dns probe.
