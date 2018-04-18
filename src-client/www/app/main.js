@@ -22,13 +22,13 @@ define(function (require, exports, module) {
 
         },
         _initNetworkPlugin: function(){
-
+            var app = this;
             // add events for internet connectivity
             document.addEventListener("offline", function () {
-                this._setDisconnected("Not connected to internet!");
+                app._setDisconnected("Not connected to internet!");
             }, false);
             document.addEventListener("online", function () {
-                this._setConnected();
+                app._setConnected();
             }, false);
 
         },
