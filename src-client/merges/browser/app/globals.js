@@ -4,7 +4,7 @@ define(function (require) {
         appName: 'goh',
         websiteEndPoint: 'https://gameofhands.com/',
         sfsConfig: {
-            host: '192.168.0.102',
+            host: '127.0.0.1',
             port: 8080,
             zone: 'BasicExamples',
             useSSL: false,

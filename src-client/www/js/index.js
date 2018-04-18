@@ -52,7 +52,9 @@ var phonegapApp = {
     },
     onDeviceReady: function () {
 
-        StatusBar.hide();
+        // hide status bar if its not a browser
+        if (cordova.platformId !== "browser")
+            StatusBar.hide();
 
         // init app
         require(['app/main', 'app/globals'], function (AppView, globals) {
