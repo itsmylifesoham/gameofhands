@@ -62,14 +62,6 @@ var phonegapApp = {
             globals.app = app;
             app.start();
         });
-
-        // add events for internet connectivity
-        document.addEventListener("offline", function () {
-            Backbone.trigger("appoffline");
-        }, false);
-        document.addEventListener("online", function () {
-            Backbone.trigger("apponline");
-        }, false);
     },
 
 

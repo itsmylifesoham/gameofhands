@@ -18,10 +18,19 @@ define(function (require, exports, module) {
             this.isOnline = true;
             this.router = router;
             this._initSFS();
+            this._initNetworkPlugin();
 
-            var app = this;
-            this.listenTo(Backbone, "apponline", _.bind(app.onOnline, app));
-            this.listenTo(Backbone, "appoffline", _.bind(app.onOffline, app));
+        },
+        _initNetworkPlugin: function(){
+
+            // add events for internet connectivity
+            document.addEventListener("offline", function () {
+                this._setDisconnected("Not connected to internet!");
+            }, false);
+            document.addEventListener("online", function () {
+                this._setConnected();
+            }, false);
+
         },
         _setDisconnected(reasonOffline){
             if (!this.isOnline)
@@ -40,6 +49,10 @@ define(function (require, exports, module) {
         },
         _initSFS: function () {
             this.sfs = new sfs.SmartFox(globals.sfsConfig);
+            this._initSFSConnectionLostHandler();
+
+        },
+        _initSFSConnectionLostHandler: function(){
             var app = this;
             // init CONNECTION_LOST event
             this.sfs.addEventListener(SFS2X.SFSEvent.CONNECTION_LOST, function (evtParams) {
@@ -66,16 +79,11 @@ define(function (require, exports, module) {
                 app._setDisconnected(displayReason);
 
             }, app);
-
-        },
-        onOnline: function () {
-            this._setConnected();
-        },
-        onOffline: function () {
-            this._setDisconnected("Not connected to internet!");
         },
         start: function () {
+            
             Backbone.history.start();
+
         }
     });
 
