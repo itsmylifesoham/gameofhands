@@ -1,5 +1,7 @@
 define(function (require) {
     var globals = require('app/globals');
+    var helpers = require('app/helpers');
+    var websiteRequestTimeout = 10000;
 
     var assignWebsiteLoginFlow = function (fetchEndpointPromise, resolve, reject) {
         fetchEndpointPromise
@@ -29,7 +31,7 @@ define(function (require) {
 
     var loginFb = function (userId, accessToken) {
         return new Promise(function (resolve, reject) {
-            var fetchEndpointPromise = fetch(websiteEndpoints.getFbLoginEndpoint(userId, accessToken));
+            var fetchEndpointPromise = helpers.fetchTimeOut(websiteRequestTimeout, websiteEndpoints.getFbLoginEndpoint(userId, accessToken));
             assignWebsiteLoginFlow(fetchEndpointPromise, resolve, reject);
         });
     };
@@ -37,7 +39,7 @@ define(function (require) {
 
     var loginGuest = function () {
         return new Promise(function (resolve, reject) {
-            var fetchEndpointPromise = fetch(websiteEndpoints.getGuestLoginEndpoint());
+            var fetchEndpointPromise = helpers.fetchTimeOut(websiteRequestTimeout, websiteEndpoints.getGuestLoginEndpoint());
             assignWebsiteLoginFlow(fetchEndpointPromise, resolve, reject);
         });
     };

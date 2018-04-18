@@ -33,7 +33,36 @@ define(function(require){
         return child;
     };
 
+    function timeoutPromise(ms, promise) {
+        return new Promise((resolve, reject) => {
+            const timeoutId = setTimeout(() => {
+                reject(new Error("promise timeout"))
+            }, ms);
+            promise.then(
+                (res) => {
+                    clearTimeout(timeoutId);
+                    resolve(res);
+                },
+                (err) => {
+                    clearTimeout(timeoutId);
+                    reject(err);
+                }
+            );
+        })
+    };
+
+    function fetchTimeOut (ms,url, options) {
+        if (!ms)
+        {
+            throw new Error("please provide ms value for timeout")
+        }
+
+        return timeoutPromise(ms, fetch(url, options));
+    }
+
     return {
         extend: extend,
+        fetchTimeOut: fetchTimeOut,
+        timeoutPromise: timeoutPromise
     }
 });

@@ -52,12 +52,24 @@ var phonegapApp = {
     },
     onDeviceReady: function () {
 
+        StatusBar.hide();
+
+        // init app
         require(['app/main', 'app/globals'], function (AppView, globals) {
             var app = new AppView('#app');
             globals.app = app;
             app.start();
         });
+
+        // add events for internet connectivity
+        document.addEventListener("offline", function () {
+            Backbone.trigger("appoffline");
+        }, false);
+        document.addEventListener("online", function () {
+            Backbone.trigger("apponline");
+        }, false);
     },
+
 
 };
 

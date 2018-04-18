@@ -15,20 +15,36 @@ define(function (require, exports, module) {
             });
         },
         initialize: function(){
+            this.isOnline = true;
             this.router = router;
             this.sfs = new sfs.SmartFox(globals.sfsConfig);
             this.sfs.connectionLost().then(function(reason){
                 alert(reason);
                 loginController.displayLoginView();
-            })
+            });
+
+            var app = this;
+            this.listenTo(Backbone, "apponline", _.bind(app.onOnline, app));
+            this.listenTo(Backbone, "appoffline", _.bind(app.onOffline, app));
+        },
+
+        onOnline: function(){
+            this.isOnline = true;
+            alert("app online!");
+        },
+        onOffline: function(){
+            // handling multiple offline events
+            if (!this.isOnline)
+                return;
+
+            this.isOnline = false;
+            alert("app offline!");
+        },
+        start: function () {
+            Backbone.history.start();
         }
     });
 
-   
-
-    AppView.prototype.start = function () {
-        Backbone.history.start();
-    };
 
     return AppView;
 });
