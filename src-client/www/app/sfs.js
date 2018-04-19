@@ -20,7 +20,7 @@ define(function (require) {
                     if (evtParams.success)
                         resolve("connected to sfs!");
                     else
-                        reject(new errors.AppError(errors.errorTypes.SFS_CONNECTION_ERROR));
+                        reject(new errors.SFSConnectionError());
 
                     removeSfsEventHandlers();
                 };
@@ -66,7 +66,7 @@ define(function (require) {
                         }
 
                         function onLoginError(evtParams) {
-                            reject(new errors.AppError(errors.errorTypes.SFS_LOGIN_ERROR, evtParams.errorMessage));
+                            reject(new errors.SFSLoginError(evtParams.errorMessage));
                             removeSfsEventHandlers();
                         }
 
@@ -82,7 +82,7 @@ define(function (require) {
                     });
                 })
                 .catch(function () {
-                    return Promise.reject(new errors.AppError(errors.errorTypes.SFS_LOGIN_ERROR));
+                    return Promise.reject(new errors.SFSLoginError());
                 });
         },
 

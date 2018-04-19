@@ -27,7 +27,7 @@ define(function (require) {
     };
 
     function getFacebookLoginError(){
-        return new errors.AppError(errors.errorTypes.FACEBOOK_LOGIN_ERROR);
+        return new errors.FacebookLoginError();
     }
 
     var loginStatus = function () {

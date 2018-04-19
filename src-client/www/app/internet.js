@@ -20,7 +20,7 @@ define(function (require) {
             else
             {
                 internet.trigger("offline");
-                return Promise.reject(new errors.AppError(errors.errorTypes.INTERNET_DISCONNECTED));
+                return Promise.reject(new errors.InternetDisconnectedError());
             }
         }
 
@@ -38,7 +38,7 @@ define(function (require) {
                         resolve("connection exists!");
                     } else {
                         internet.trigger("offline");
-                        reject(new errors.AppError(errors.errorTypes.INTERNET_DISCONNECTED));
+                        reject(new errors.InternetDisconnectedError());
                     }
                     xhr.removeEventListener("readystatechange", processRequest);
                 }
@@ -78,6 +78,18 @@ define(function (require) {
 
         sendXHR();
     }
+
+    internet.getPromiseChainWithPriorInternetCheck = function (promiseChain) {
+        return internet.connected()
+            .then(function () {
+                return promiseChain;
+            })
+            .catch(function (error) {
+                return Promise.reject(error);
+            });
+    };
+
+
 
     // enable periodic checking for browser
     if (cordova.platformId === "browser")

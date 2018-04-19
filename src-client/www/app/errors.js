@@ -6,30 +6,62 @@ define(function(require){
         WEBSITE_LOGIN_ERROR: "WEBSITE_LOGIN_ERROR",
         SFS_CONNECTION_ERROR: "SFS_CONNECTION_ERROR",
         SFS_LOGIN_ERROR: "SFS_LOGIN_ERROR",
+        REQUEST_TIMEOUT_ERROR: "REQUEST_TIMEOUT_ERROR",
     };
 
-    var AppError = function(errorType, data){
+    var AppError = function(errorType, displayMessage, data){
         this.errorType = errorType;
+        this.displayMessage = displayMessage;
         this.data = data;
     }
 
-    AppError.prototype.displayMessage = function(){
-        if (this.errorType === errorTypes.INTERNET_DISCONNECTED)
-            return "Please check internet connectivity.";
-        else if(this.errorType === errorTypes.FACEBOOK_LOGIN_ERROR)
-            return "Problem logging into facebook.";
-        else if(this.errorType === errorTypes.WEBSITE_LOGIN_ERROR)
-            return "Problem while logging into app";
-        else if(this.errorType === errorTypes.SFS_CONNECTION_ERROR)
-            return "Problem connecting game server.";
-        else if(this.errorType === errorTypes.SFS_LOGIN_ERROR)
-            return "Problem logging into game.";
+    // using backbones extend method to avoid circular reference with helpers module
+    AppError.extend = Backbone.View.extend;
 
-        return "";
-    }
+    var InternetDisconnectedError = AppError.extend({
+        constructor: function(data){
+            AppError.call(this, errorTypes.INTERNET_DISCONNECTED, "Please check internet connectivity.", data);
+        }
+    });
+
+    var FacebookLoginError = AppError.extend({
+        constructor: function(data){
+            AppError.call(this, errorTypes.FACEBOOK_LOGIN_ERROR, "Problem logging into facebook.", data);
+        }
+    });
+
+    var WebsiteLoginError = AppError.extend({
+        constructor: function(data){
+            AppError.call(this, errorTypes.WEBSITE_LOGIN_ERROR, "Problem while logging into app. Please try again.", data);
+        }
+    });
+
+    var SFSConnectionError = AppError.extend({
+        constructor: function(data){
+            AppError.call(this, errorTypes.SFS_CONNECTION_ERROR, "Problem connecting game server.", data);
+        }
+    });
+
+    var SFSLoginError = AppError.extend({
+        constructor: function(data){
+            AppError.call(this, errorTypes.SFS_LOGIN_ERROR, "Problem logging into game.", data);
+        }
+    });
+
+    var RequestTimeoutError = AppError.extend({
+        constructor: function(data){
+            AppError.call(this, errorTypes.REQUEST_TIMEOUT_ERROR, "Request took too long to complete. Please check internet connectivity.", data);
+        }
+    });
+
 
     return {
-        AppError: AppError,
+        InternetDisconnectedError: InternetDisconnectedError,
+        FacebookLoginError: FacebookLoginError,
+        WebsiteLoginError: WebsiteLoginError,
+        SFSConnectionError: SFSConnectionError,
+        SFSLoginError: SFSLoginError,
+        RequestTimeoutError: RequestTimeoutError,
         errorTypes: errorTypes,
     }
 

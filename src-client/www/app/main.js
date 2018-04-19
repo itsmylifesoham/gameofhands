@@ -40,7 +40,7 @@ define(function (require, exports, module) {
 
             this._isOnline = false;
             alert(reasonOffline ? reasonOffline: "went offline");
-            connectingController.displayConnectingViewWithError(new errors.AppError(errors.errorTypes.INTERNET_DISCONNECTED));
+            connectingController.displayConnectingViewWithError(new errors.InternetDisconnectedError(reasonOffline));
         },
         setConnected() {
             if (this._isOnline)

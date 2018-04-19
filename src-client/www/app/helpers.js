@@ -1,6 +1,7 @@
 define(function(require){
 
     var errors = require('app/errors');
+
     // Helpers
     // -------
 
@@ -38,7 +39,7 @@ define(function(require){
     function timeoutPromise(ms, promise) {
         return new Promise((resolve, reject) => {
             const timeoutId = setTimeout(() => {
-                reject(new Error("promise timeout"))
+                reject(new errors.RequestTimeoutError())
             }, ms);
             promise.then(
                 (res) => {
@@ -47,13 +48,13 @@ define(function(require){
                 },
                 (err) => {
                     clearTimeout(timeoutId);
-                    reject(new errors.AppError(errors.errorTypes.INTERNET_DISCONNECTED));
+                    reject(err);
                 }
             );
         })
     };
 
-    function fetchTimeOut (ms,url, options) {
+    function fetchTimeOut (ms, url, options) {
         if (!ms)
         {
             throw new Error("please provide ms value for timeout")
@@ -61,6 +62,9 @@ define(function(require){
 
         return timeoutPromise(ms, fetch(url, options));
     }
+
+
+
 
     return {
         extend: extend,

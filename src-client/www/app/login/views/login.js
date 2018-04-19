@@ -22,15 +22,16 @@ define(function (require, exports, module) {
             view.assignSuccessfulLoginFlow(login.connectAsGuest());
             view.hideConnectButtons();
         },
-        assignSuccessfulLoginFlow(sfsLoginPromise){
+        assignSuccessfulLoginFlow(sfsLoginPromise) {
             var view = this;
             sfsLoginPromise
-                .then(function(loginEvtParams){
+                .then(function (loginEvtParams) {
                     console.log('user logged in!');
                     homeController.displayHomeView();
-                }).catch(function(){
-                view.showConnectButtons();
-            });
+                })
+                .catch(function () {
+                    view.showConnectButtons();
+                });
         },
         hideConnectButtons: function () {
             this.$("#connect-buttons").addClass("d-none");

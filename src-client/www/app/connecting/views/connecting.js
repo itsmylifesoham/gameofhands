@@ -6,25 +6,25 @@ define(function (require) {
     var errors = require('app/errors');
     var connectingInProcessTemplate = require('hbs!app/connecting/templates/connecting-in-process');
     var connectingErrorTemplate = require('hbs!app/connecting/templates/connecting-error');
-    var internet = require("app/internet");
+
 
     var ConnectingView = Backbone.View.extend({
         className: "d-flex justify-content-center align-middle align-items-center flex-column h-100 w-100",
         events: {
-            'click #retry-login': 'retryLogin'
+            'click #retry-login': 'render'
         },
-        retryLogin: function () {
-            this._displayConnectingMessage();
-
-            var view = this;
-            internet.connected()
-                .then(function () {
-                    view.startLogin();
-                })
-                .catch(function (error) {
-                    view.renderError(error);
-                });
-        },
+        // retryLogin: function () {
+        //     // this._displayConnectingMessage();
+        //     //
+        //     //
+        //     // internet.connected()
+        //     //     .then(function () {
+        //     //         view.startLogin();
+        //     //     })
+        //     //     .catch(function (error) {
+        //     //         view.renderError(error);
+        //     //     });
+        // },
         render: function () {
             this._displayConnectingMessage();
             this.startLogin();
@@ -45,10 +45,11 @@ define(function (require) {
 
             if (appError.errorType === errors.errorTypes.INTERNET_DISCONNECTED
                 || appError.errorType === errors.errorTypes.SFS_CONNECTION_ERROR
-                || appError.errorType === errors.errorTypes.SFS_LOGIN_ERROR)
-                this._displayErrorMessage(appError.displayMessage());
+                || appError.errorType === errors.errorTypes.SFS_LOGIN_ERROR
+                || appError.errorType === errors.errorTypes.REQUEST_TIMEOUT_ERROR)
+                this._displayErrorMessage(appError.displayMessage);
             else if (appError.errorType === errors.errorTypes.FACEBOOK_LOGIN_ERROR || appError.errorType === errors.errorTypes.WEBSITE_LOGIN_ERROR) {
-                alert(appError.displayMessage());
+                alert(appError.displayMessage);
                 loginController.displayLoginView();
             }
             else {

@@ -3,7 +3,7 @@ define(function (require) {
     var helpers = require('app/helpers');
     var errors = require('app/errors');
 
-    var websiteRequestTimeout = 10000;
+    var websiteRequestTimeout = 5000;
 
     var assignWebsiteLoginFlow = function (fetchEndpointPromise, resolve, reject) {
         fetchEndpointPromise
@@ -17,14 +17,16 @@ define(function (require) {
                 else {
                     reject(getWebsiteLoginError(loginResultJson.Payload));
                 }
-            }).catch(function () {
-            reject(getWebsiteLoginError());
-        });
+            })
+            .catch(function () {
+                reject(getWebsiteLoginError());
+            });
     };
 
-    function getWebsiteLoginError(data){
-        return new errors.AppError(errors.errorTypes.WEBSITE_LOGIN_ERROR, data);
+    function getWebsiteLoginError(data) {
+        return new errors.WebsiteLoginError(data);
     }
+
     var websiteEndpoints = {
         getFbLoginEndpoint: function (userId, accessToken) {
             return globals.websiteEndPoint + 'login/facebook?user_id=' + userId + '&access_token=' + accessToken + '&app_name=' + globals.appName;
@@ -48,8 +50,6 @@ define(function (require) {
             assignWebsiteLoginFlow(fetchEndpointPromise, resolve, reject);
         });
     };
-
-
 
 
     return {
