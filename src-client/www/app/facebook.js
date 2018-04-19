@@ -1,5 +1,6 @@
 define(function (require) {
     var globals = require('app/globals');
+    var errors = require('app/errors');
     var permissions = ["email", "public_profile", "user_location"];
 
     if (window.cordova.platformId == "browser") {
@@ -17,14 +18,17 @@ define(function (require) {
                     });
                 }
                 else {
-                    reject(response);
+                    reject(getFacebookLoginError());
                 }
             }, function onError(response) {
-                reject(response)
+                reject(getFacebookLoginError())
             });
         });
     };
 
+    function getFacebookLoginError(){
+        return new errors.AppError(errors.errorTypes.FACEBOOK_LOGIN_ERROR);
+    }
 
     var loginStatus = function () {
         return new Promise(function (resolve, reject) {
@@ -36,10 +40,10 @@ define(function (require) {
                     });
                 }
                 else {
-                    reject(response);
+                    reject(getFacebookLoginError());
                 }
             }, function onError(response) {
-                reject(response);
+                reject(getFacebookLoginError());
             });
         });
     };

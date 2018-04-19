@@ -1,6 +1,8 @@
 define(function (require) {
     var globals = require('app/globals');
     var helpers = require('app/helpers');
+    var errors = require('app/errors');
+
     var websiteRequestTimeout = 10000;
 
     var assignWebsiteLoginFlow = function (fetchEndpointPromise, resolve, reject) {
@@ -13,13 +15,16 @@ define(function (require) {
                     resolve(loginResultJson.Payload);
                 }
                 else {
-                    reject(loginResultJson.Payload);
+                    reject(getWebsiteLoginError(loginResultJson.Payload));
                 }
             }).catch(function () {
-            reject("oops! problem logging in. try again.");
+            reject(getWebsiteLoginError());
         });
     };
 
+    function getWebsiteLoginError(data){
+        return new errors.AppError(errors.errorTypes.WEBSITE_LOGIN_ERROR, data);
+    }
     var websiteEndpoints = {
         getFbLoginEndpoint: function (userId, accessToken) {
             return globals.websiteEndPoint + 'login/facebook?user_id=' + userId + '&access_token=' + accessToken + '&app_name=' + globals.appName;

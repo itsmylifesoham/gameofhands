@@ -1,12 +1,14 @@
-define(function(require, exports, module){
+define(function (require, exports, module) {
 
-    var loginController = require('app/login/controller');
+
     var homeController = require('app/home/controller');
+    var connectingController = require('app/connecting/controller');
 
     var _router = new Backbone.Router({
         routes: {
-            '': loginController.displayLoginView,
-            'home': homeController.displayHomeView        }
+            '': connectingController.displayConnectingView,
+            'home': homeController.displayHomeView
+        }
     });
 
     return _router;

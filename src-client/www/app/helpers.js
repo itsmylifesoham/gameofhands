@@ -1,4 +1,6 @@
 define(function(require){
+
+    var errors = require('app/errors');
     // Helpers
     // -------
 
@@ -45,7 +47,7 @@ define(function(require){
                 },
                 (err) => {
                     clearTimeout(timeoutId);
-                    reject(err);
+                    reject(new errors.AppError(errors.errorTypes.INTERNET_DISCONNECTED));
                 }
             );
         })

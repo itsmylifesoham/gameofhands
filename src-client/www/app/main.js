@@ -2,8 +2,10 @@ define(function (require, exports, module) {
 
     var router = require('app/router');
     var sfs = require('app/sfs');
-    var loginController = require('app/login/controller');
+    var connectingController = require('app/connecting/controller');
     var globals = require('app/globals');
+    var internet = require('app/internet');
+    var errors = require('app/errors');
 
     var AppView = Backbone.View.extend({
         constructor: function (rootElement) {
@@ -15,36 +17,36 @@ define(function (require, exports, module) {
             });
         },
         initialize: function () {
-            this.isOnline = true;
+            this._isOnline = true;
             this.router = router;
             this._initSFS();
-            this._initNetworkPlugin();
-
+            this._initNetworkMonitoring();
         },
-        _initNetworkPlugin: function(){
+        isConnected: function () {
+            return this._isOnline;
+        },
+        _initNetworkMonitoring: function () {
             var app = this;
-            // add events for internet connectivity
-            document.addEventListener("offline", function () {
-                app._setDisconnected("Not connected to internet!");
-            }, false);
-            document.addEventListener("online", function () {
-                app._setConnected();
-            }, false);
-
+            this.listenTo(internet, "online", function () {
+                app.setConnected();
+            });
+            this.listenTo(internet, "offline", function () {
+                app.setDisconnected("Not connected to internet!");
+            });
         },
-        _setDisconnected(reasonOffline){
-            if (!this.isOnline)
+        setDisconnected(reasonOffline) {
+            if (!this._isOnline)
                 return;
 
-            this.isOnline = false;
-            alert(reasonOffline);
-            loginController.displayLoginView();
+            this._isOnline = false;
+            alert(reasonOffline ? reasonOffline: "went offline");
+            connectingController.displayConnectingViewWithError(new errors.AppError(errors.errorTypes.INTERNET_DISCONNECTED));
         },
-        _setConnected(){
-            if (this.isOnline)
+        setConnected() {
+            if (this._isOnline)
                 return;
 
-            this.isOnline = true;
+            this._isOnline = true;
             alert("app online!");
         },
         _initSFS: function () {
@@ -52,7 +54,7 @@ define(function (require, exports, module) {
             this._initSFSConnectionLostHandler();
 
         },
-        _initSFSConnectionLostHandler: function(){
+        _initSFSConnectionLostHandler: function () {
             var app = this;
             // init CONNECTION_LOST event
             this.sfs.addEventListener(SFS2X.SFSEvent.CONNECTION_LOST, function (evtParams) {
@@ -76,14 +78,12 @@ define(function (require, exports, module) {
                 if (navigator.connection.type === Connection.NONE)
                     displayReason += "Not connected to internet!";
 
-                app._setDisconnected(displayReason);
+                app.setDisconnected(displayReason);
 
             }, app);
         },
         start: function () {
-            
             Backbone.history.start();
-
         }
     });
 

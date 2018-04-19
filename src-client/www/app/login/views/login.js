@@ -4,6 +4,7 @@ define(function (require, exports, module) {
     var website = require('app/website');
     var globals = require('app/globals');
     var homeController = require('app/home/controller');
+    var login = require('app/login');
 
     var LoginView = Backbone.View.extend({
         className: 'd-flex justify-content-center align-middle align-items-center flex-column h-100 w-100',
@@ -13,13 +14,23 @@ define(function (require, exports, module) {
         },
         onConnectWithFb: function () {
             var view = this;
+            view.assignSuccessfulLoginFlow(login.connectToFbByDialog());
             view.hideConnectButtons();
-            view.assignWebsiteFbLoginFlow(facebook.login());
         },
         onPlayAsGuest: function () {
             var view = this;
+            view.assignSuccessfulLoginFlow(login.connectAsGuest());
             view.hideConnectButtons();
-            view.assignSfsLoginFlow(website.loginGuest());
+        },
+        assignSuccessfulLoginFlow(sfsLoginPromise){
+            var view = this;
+            sfsLoginPromise
+                .then(function(loginEvtParams){
+                    console.log('user logged in!');
+                    homeController.displayHomeView();
+                }).catch(function(){
+                view.showConnectButtons();
+            });
         },
         hideConnectButtons: function () {
             this.$("#connect-buttons").addClass("d-none");
@@ -30,39 +41,7 @@ define(function (require, exports, module) {
         render: function () {
             var content = loginTemplate();
             this.$el.html(content);
-            var view = this;
-            view.hideConnectButtons();
-            view.assignWebsiteFbLoginFlow(facebook.loginStatus());
             return this;
-        },
-        assignWebsiteFbLoginFlow: function (fbLoginPromise) {
-            var view = this;
-            var websiteLoginPromise = fbLoginPromise
-                .then(function (userData) {
-                    return website.loginFb(userData.userId, userData.accessToken);
-                });
-            view.assignSfsLoginFlow(websiteLoginPromise);
-
-        },
-        assignSfsLoginFlow: function (websiteLoginPromise) {
-            var view = this;
-            websiteLoginPromise
-                .then(function (loginResultPayload) {
-                    return globals.app.sfs.connect()
-                        .then(function (msg) {
-                            return globals.app.sfs.login(loginResultPayload.userLoginId, loginResultPayload.sessionToken);
-                        })
-                        .then(function (evtParams) {
-                            console.log('user logged in!');
-                            homeController.displayHomeView();
-                        })
-                        .catch(function (error) {
-                            return Promise.reject(error);
-                        });
-                })
-                .catch(function (error) {
-                    view.showConnectButtons();
-                });
         },
 
     });
