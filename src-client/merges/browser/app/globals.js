@@ -9,9 +9,6 @@ define(function (require) {
             zone: 'BasicExamples',
             useSSL: false,
             debug: false
-        },
-
-
-
+        }
 };
 });

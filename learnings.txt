@@ -108,3 +108,9 @@ add iis website, open ports 8443/8080/443/80 and also add entries to etc/hosts t
 to the 127.0.0.1 . Also on any other computer on network add gameofhands.com to hosts file and
 point it to private ip of server computer. this is for facebook app to get the correct domain 
 as well as the other computer on network to be able to find our computer by ip during dns probe.
+
+
+circular dependency requirejs 
+------------------------------
+
+madge --circular --warning D:\MyData\startups\gameofhands\src-client\www

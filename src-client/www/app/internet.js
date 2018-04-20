@@ -1,8 +1,9 @@
 define(function (require) {
     var globals = require('app/globals');
+    var errors = require('app/errors');
+
     var _connectionCheckInterval = 10000;
     var internet = _.extend({}, Backbone.Events);
-    var errors = require('app/errors');
 
     document.addEventListener("offline", function () {
         internet.trigger("offline");

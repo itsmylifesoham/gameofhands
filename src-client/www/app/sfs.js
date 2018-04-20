@@ -1,6 +1,5 @@
 define(function (require) {
 
-
     var errors = require('app/errors');
     SFS2X.SmartFox.extend = Backbone.View.extend;
 

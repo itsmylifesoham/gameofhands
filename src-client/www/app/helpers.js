@@ -1,4 +1,4 @@
-define(function(require){
+define(function (require) {
 
     var errors = require('app/errors');
 
@@ -20,7 +20,8 @@ define(function(require){
         })
     };
 
+
     return {
-        timeoutPromise: timeoutPromise
+        timeoutPromise: timeoutPromise,
     }
 });

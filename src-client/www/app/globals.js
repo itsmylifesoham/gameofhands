@@ -10,5 +10,6 @@ define(function (require) {
             useSSL: false,
             debug: false
         },
+
     };
 });

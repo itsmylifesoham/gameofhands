@@ -2,10 +2,10 @@ define(function (require, exports, module) {
 
     var router = require('app/router');
     var sfs = require('app/sfs');
-    var connectingController = require('app/connecting/controller');
     var globals = require('app/globals');
     var internet = require('app/internet');
     var errors = require('app/errors');
+    var errorController = require('app/error/controller');
 
     var AppView = Backbone.View.extend({
         constructor: function (rootElement) {
@@ -18,16 +18,16 @@ define(function (require, exports, module) {
         },
         initialize: function () {
             this.router = router;
+            this.error = false;
             this._initSFS();
             this._initNetworkMonitoring();
         },
         _initNetworkMonitoring: function () {
-            var app = this;
             this.listenTo(internet, "online", function () {
 
             });
             this.listenTo(internet, "offline", function () {
-                connectingController.displayConnectingViewWithError(new errors.InternetDisconnectedError());
+                errorController.displayErrorView(new errors.InternetDisconnectedError());
             });
         },
         _initSFS: function () {
@@ -54,7 +54,7 @@ define(function (require, exports, module) {
                     displayReason = "You disconnected from the game server."
                 }
 
-                connectingController.displayConnectingViewWithError(new errors.SFSConnectionError(displayReason));
+                errorController.displayErrorView(new errors.SFSConnectionError(displayReason));
 
             }, app);
         },

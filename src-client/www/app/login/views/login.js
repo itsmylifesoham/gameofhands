@@ -1,9 +1,9 @@
-define(function (require, exports, module) {
+define(function (require) {
+
     var loginTemplate = require('hbs!app/login/templates/login');
-    var homeController = require('app/home/controller');
-    var connectingController = require('app/connecting/controller');
     var login = require('app/login');
-    var errors = require('app/errors');
+    var homeController = require('app/home/controller');
+    var errorController = require('app/error/controller');
 
     var LoginView = Backbone.View.extend({
         className: 'd-flex justify-content-center align-middle align-items-center flex-column h-100 w-100',
@@ -22,14 +22,13 @@ define(function (require, exports, module) {
             view.hideConnectButtons();
         },
         assignSuccessfulLoginFlow(sfsLoginPromise) {
-            var view = this;
             sfsLoginPromise
                 .then(function (loginEvtParams) {
                     console.log('user logged in!');
                     homeController.displayHomeView();
                 })
                 .catch(function (error) {
-                    connectingController.displayConnectingViewWithError(error);
+                    errorController.displayErrorView(error);
                 });
         },
         hideConnectButtons: function () {
