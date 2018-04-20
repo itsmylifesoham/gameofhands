@@ -39,6 +39,7 @@ define(function (require) {
                 || appError.errorType === errors.errorTypes.SFS_LOGIN_ERROR) {
                 alert(appError.displayMessage);
                 globals.app.router.navigate("login", true); // done this to break circular dependency between connecting and login controller. use madge to see
+                return null;
             }
             else {
                 throw new Error("appError's type is not recognized!");

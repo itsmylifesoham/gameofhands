@@ -15,8 +15,8 @@ define(function (require) {
     };
     _connectingController.displayConnectingViewWithError = function (appError) {
 
-        if (globals.app.currentView){
-            if(!(globals.app.currentView instanceof ConnectingView)){
+        if (globals.app.currentView) {
+            if (!(globals.app.currentView instanceof ConnectingView)) {
                 globals.app.currentView.remove();
             }
             else {
@@ -27,8 +27,11 @@ define(function (require) {
         }
 
         globals.app.currentView = new ConnectingView();
-        globals.app.$el.html(globals.app.currentView.renderError(appError).el);
-        globals.app.router.navigate('');
+        var toDisplayView = globals.app.currentView.renderError(appError);
+        if (toDisplayView) {
+            globals.app.$el.html(toDisplayView.el);
+            globals.app.router.navigate('');
+        }
     }
 
 
