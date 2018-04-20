@@ -32,10 +32,11 @@ define(function (require) {
         renderError: function (appError) {
             if (appError.errorType === errors.errorTypes.INTERNET_DISCONNECTED
                 || appError.errorType === errors.errorTypes.SFS_CONNECTION_ERROR
-                || appError.errorType === errors.errorTypes.SFS_LOGIN_ERROR
                 || appError.errorType === errors.errorTypes.REQUEST_TIMEOUT_ERROR)
                 this._displayErrorMessage(appError.displayMessage);
-            else if (appError.errorType === errors.errorTypes.FACEBOOK_LOGIN_ERROR || appError.errorType === errors.errorTypes.WEBSITE_LOGIN_ERROR) {
+            else if (appError.errorType === errors.errorTypes.FACEBOOK_LOGIN_ERROR
+                || appError.errorType === errors.errorTypes.WEBSITE_LOGIN_ERROR
+                || appError.errorType === errors.errorTypes.SFS_LOGIN_ERROR) {
                 alert(appError.displayMessage);
                 globals.app.router.navigate("login", true); // done this to break circular dependency between connecting and login controller. use madge to see
             }
