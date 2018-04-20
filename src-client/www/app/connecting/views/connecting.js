@@ -38,6 +38,7 @@ define(function (require) {
                 || appError.errorType === errors.errorTypes.WEBSITE_LOGIN_ERROR
                 || appError.errorType === errors.errorTypes.SFS_LOGIN_ERROR) {
                 alert(appError.displayMessage);
+                globals.app.router.navigate("somedeadroute_to_force_login");
                 globals.app.router.navigate("login", true); // done this to break circular dependency between connecting and login controller. use madge to see
                 return null;
             }
