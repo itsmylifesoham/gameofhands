@@ -1,10 +1,9 @@
 define(function (require, exports, module) {
     var loginTemplate = require('hbs!app/login/templates/login');
-    var facebook = require('app/facebook');
-    var website = require('app/website');
-    var globals = require('app/globals');
     var homeController = require('app/home/controller');
+    var connectingController = require('app/connecting/controller');
     var login = require('app/login');
+    var errors = require('app/errors');
 
     var LoginView = Backbone.View.extend({
         className: 'd-flex justify-content-center align-middle align-items-center flex-column h-100 w-100',
@@ -29,8 +28,8 @@ define(function (require, exports, module) {
                     console.log('user logged in!');
                     homeController.displayHomeView();
                 })
-                .catch(function () {
-                    view.showConnectButtons();
+                .catch(function (error) {
+                    connectingController.displayConnectingViewWithError(error);
                 });
         },
         hideConnectButtons: function () {

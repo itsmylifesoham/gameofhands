@@ -2,10 +2,10 @@ define(function (require) {
 
     var login = require('app/login');
     var homeController = require('app/home/controller');
-    var loginController = require('app/login/controller');
     var errors = require('app/errors');
     var connectingInProcessTemplate = require('hbs!app/connecting/templates/connecting-in-process');
     var connectingErrorTemplate = require('hbs!app/connecting/templates/connecting-error');
+    var globals = require('app/globals');
 
 
     var ConnectingView = Backbone.View.extend({
@@ -13,18 +13,6 @@ define(function (require) {
         events: {
             'click #retry-login': 'render'
         },
-        // retryLogin: function () {
-        //     // this._displayConnectingMessage();
-        //     //
-        //     //
-        //     // internet.connected()
-        //     //     .then(function () {
-        //     //         view.startLogin();
-        //     //     })
-        //     //     .catch(function (error) {
-        //     //         view.renderError(error);
-        //     //     });
-        // },
         render: function () {
             this._displayConnectingMessage();
             this.startLogin();
@@ -42,7 +30,6 @@ define(function (require) {
                 });
         },
         renderError: function (appError) {
-
             if (appError.errorType === errors.errorTypes.INTERNET_DISCONNECTED
                 || appError.errorType === errors.errorTypes.SFS_CONNECTION_ERROR
                 || appError.errorType === errors.errorTypes.SFS_LOGIN_ERROR
@@ -50,7 +37,7 @@ define(function (require) {
                 this._displayErrorMessage(appError.displayMessage);
             else if (appError.errorType === errors.errorTypes.FACEBOOK_LOGIN_ERROR || appError.errorType === errors.errorTypes.WEBSITE_LOGIN_ERROR) {
                 alert(appError.displayMessage);
-                loginController.displayLoginView();
+                globals.app.router.navigate("login", true); // done this to break circular dependency between connecting and login controller. use madge to see
             }
             else {
                 throw new Error("appError's type is not recognized!");
@@ -70,6 +57,7 @@ define(function (require) {
         }
 
     });
+
 
 
     return ConnectingView;

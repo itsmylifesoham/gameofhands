@@ -12,7 +12,7 @@ define(function (require) {
         globals.app.currentView = new HomeView();
         globals.app.$el.html(globals.app.currentView.render().el);
         globals.app.router.navigate('home');
-    }
+    };
 
     return _homeController;
 });

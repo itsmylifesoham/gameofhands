@@ -17,42 +17,22 @@ define(function (require, exports, module) {
             });
         },
         initialize: function () {
-            this._isOnline = true;
             this.router = router;
             this._initSFS();
             this._initNetworkMonitoring();
         },
-        isConnected: function () {
-            return this._isOnline;
-        },
         _initNetworkMonitoring: function () {
             var app = this;
             this.listenTo(internet, "online", function () {
-                app.setConnected();
+
             });
             this.listenTo(internet, "offline", function () {
-                app.setDisconnected("Not connected to internet!");
+                connectingController.displayConnectingViewWithError(new errors.InternetDisconnectedError());
             });
-        },
-        setDisconnected(reasonOffline) {
-            if (!this._isOnline)
-                return;
-
-            this._isOnline = false;
-            alert(reasonOffline ? reasonOffline: "went offline");
-            connectingController.displayConnectingViewWithError(new errors.InternetDisconnectedError(reasonOffline));
-        },
-        setConnected() {
-            if (this._isOnline)
-                return;
-
-            this._isOnline = true;
-            alert("app online!");
         },
         _initSFS: function () {
             this.sfs = new sfs.SmartFox(globals.sfsConfig);
             this._initSFSConnectionLostHandler();
-
         },
         _initSFSConnectionLostHandler: function () {
             var app = this;
@@ -71,14 +51,10 @@ define(function (require, exports, module) {
                         displayReason = "A disconnection occurred. Please try again in sometime.";
                 }
                 else {
-                    // Manual disconnection is usually ignored
+                    displayReason = "You disconnected from the game server."
                 }
 
-                // also check if connection was lost due to network error
-                if (navigator.connection.type === Connection.NONE)
-                    displayReason += "Not connected to internet!";
-
-                app.setDisconnected(displayReason);
+                connectingController.displayConnectingViewWithError(new errors.SFSConnectionError(displayReason));
 
             }, app);
         },

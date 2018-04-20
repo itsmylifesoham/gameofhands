@@ -1,25 +1,23 @@
 define(function (require) {
     var globals = require('app/globals');
-    var helpers = require('app/helpers');
     var errors = require('app/errors');
 
-    var websiteRequestTimeout = 5000;
 
-    var assignWebsiteLoginFlow = function (fetchEndpointPromise, resolve, reject) {
-        fetchEndpointPromise
+    var assignWebsiteLoginFlow = function (fetchEndpointPromise) {
+        return fetchEndpointPromise
             .then(function (response) {
                 return response.json();
             })
             .then(function (loginResultJson) {
                 if (loginResultJson.LoginStatus === 'success') {
-                    resolve(loginResultJson.Payload);
+                    return Promise.resolve(loginResultJson.Payload);
                 }
                 else {
-                    reject(getWebsiteLoginError(loginResultJson.Payload));
+                    return Promise.reject(getWebsiteLoginError(loginResultJson.Payload));
                 }
             })
             .catch(function () {
-                reject(getWebsiteLoginError());
+                return Promise.reject(getWebsiteLoginError());
             });
     };
 
@@ -37,18 +35,12 @@ define(function (require) {
     };
 
     var loginFb = function (userId, accessToken) {
-        return new Promise(function (resolve, reject) {
-            var fetchEndpointPromise = helpers.fetchTimeOut(websiteRequestTimeout, websiteEndpoints.getFbLoginEndpoint(userId, accessToken));
-            assignWebsiteLoginFlow(fetchEndpointPromise, resolve, reject);
-        });
+        return assignWebsiteLoginFlow(fetch( websiteEndpoints.getFbLoginEndpoint(userId, accessToken)));
     };
 
 
     var loginGuest = function () {
-        return new Promise(function (resolve, reject) {
-            var fetchEndpointPromise = helpers.fetchTimeOut(websiteRequestTimeout, websiteEndpoints.getGuestLoginEndpoint());
-            assignWebsiteLoginFlow(fetchEndpointPromise, resolve, reject);
-        });
+        return assignWebsiteLoginFlow(fetch( websiteEndpoints.getGuestLoginEndpoint()));
     };
 
 

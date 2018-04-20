@@ -38,7 +38,8 @@ define(function(require){
 
     var SFSConnectionError = AppError.extend({
         constructor: function(data){
-            AppError.call(this, errorTypes.SFS_CONNECTION_ERROR, "Problem connecting game server.", data);
+            var reason = data;
+            AppError.call(this, errorTypes.SFS_CONNECTION_ERROR, "Problem connecting game server." + reason? reason: "", data);
         }
     });
 

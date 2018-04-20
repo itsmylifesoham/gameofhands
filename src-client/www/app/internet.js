@@ -79,23 +79,9 @@ define(function (require) {
         sendXHR();
     }
 
-    internet.getPromiseChainWithPriorInternetCheck = function (promiseChain) {
-        return internet.connected()
-            .then(function () {
-                return promiseChain;
-            })
-            .catch(function (error) {
-                return Promise.reject(error);
-            });
-    };
-
-
-
     // enable periodic checking for browser
     if (cordova.platformId === "browser")
         checkConnectionAtInterval();
 
     return internet;
-
-
 });
