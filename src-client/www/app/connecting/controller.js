@@ -6,13 +6,7 @@ define(function (require) {
 
     var _connectingController = new AppController('connecting');
     _connectingController.displayConnectingView = function () {
-
-        if (globals.app.currentView)
-            globals.app.currentView.remove();
-
-        globals.app.currentView = new ConnectingView();
-        // prepending because there could be any errors thrown synchronusely like on mobile and we want to show them.
-        globals.app.$el.prepend(globals.app.currentView.render().el);
+        globals.app.setContent(new ConnectingView());
         globals.app.router.navigate('');
     };
 

@@ -16,6 +16,14 @@ define(function (require, exports, module) {
                 el: rootElement
             });
         },
+        setContent: function(topLevelView){
+            var app = this;
+            if (app.currentView)
+                app.currentView.remove();
+
+            app.currentView = topLevelView;
+            app.$el.prepend(app.currentView.render().el);
+        },
         initialize: function () {
             this._initSFS();
             this._initNetworkMonitoring();

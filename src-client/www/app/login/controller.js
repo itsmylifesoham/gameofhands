@@ -6,12 +6,7 @@ define(function (require, exports, module) {
 
     var _loginController = new AppController('login');
     _loginController.displayLoginView = function () {
-
-        if (globals.app.currentView)
-            globals.app.currentView.remove();
-
-        globals.app.currentView = new LoginView();
-        globals.app.$el.prepend(globals.app.currentView.render().el);
+        globals.app.setContent(new LoginView());
         globals.app.router.navigate('login');
     };
 

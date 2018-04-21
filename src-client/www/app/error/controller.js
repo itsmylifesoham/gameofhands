@@ -30,7 +30,6 @@ define(function (require) {
                 return;
 
             globals.app.error = true;
-
             if (appError.errorType === errors.errorTypes.INTERNET_DISCONNECTED
                 || appError.errorType === errors.errorTypes.SFS_CONNECTION_ERROR
                 || appError.errorType === errors.errorTypes.REQUEST_TIMEOUT_ERROR)

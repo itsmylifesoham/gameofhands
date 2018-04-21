@@ -7,12 +7,7 @@ define(function (require) {
     var _homeController = new AppController('home');
 
     _homeController.displayHomeView = function () {
-
-        if (globals.app.currentView)
-            globals.app.currentView.remove();
-
-        globals.app.currentView = new HomeView();
-        globals.app.$el.html(globals.app.currentView.render().el);
+        globals.app.setContent(new HomeView());
         globals.app.router.navigate('home');
     };
 
