@@ -3,7 +3,6 @@ define(function (require) {
         var globals = require('app/globals');
         var ErrorRetryView = require('app/error/views/error-retry');
         var ErrorOkView = require('app/error/views/error-ok');
-        var ErrorUnknownView = require('app/error/views/error-unknown');
         var errors = require('app/errors');
         var AppController = require('app/common/app-controller');
         var remote = require('app/remote');
@@ -17,11 +16,6 @@ define(function (require) {
         function _displayErrorOkView(appError, okAction) {
             globals.app.$el.append(new ErrorOkView(appError, okAction).render().el);
         }
-
-        function _displayErrorUnknownView() {
-            globals.app.$el.append(new ErrorUnknownView().render().el);
-        }
-
 
         _errorController.displayErrorView = function (appError) {
 
@@ -42,7 +36,9 @@ define(function (require) {
                 });
             }
             else {
-                _displayErrorUnknownView();
+                _displayErrorOkView(new errors.UnknownError(), function () {
+                    remote.invokeControllerMethod('connecting', 'displayConnectingView');
+                });
             }
 
 

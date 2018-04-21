@@ -7,6 +7,7 @@ define(function(require){
         SFS_CONNECTION_ERROR: "SFS_CONNECTION_ERROR",
         SFS_LOGIN_ERROR: "SFS_LOGIN_ERROR",
         REQUEST_TIMEOUT_ERROR: "REQUEST_TIMEOUT_ERROR",
+        UNKNOWN_ERROR: "UNKNOWN_ERROR",
     };
 
     var AppError = function(errorType, displayMessage, data){
@@ -17,6 +18,12 @@ define(function(require){
 
     // using backbones extend method to avoid circular reference with helpers module
     AppError.extend = Backbone.View.extend;
+
+    var UnknownError = AppError.extend({
+        constructor: function(data){
+            AppError.call(this, errorTypes.UNKNOWN_ERROR, "An unknown error occured. Lets reload the game.", data);
+        }
+    });
 
     var InternetDisconnectedError = AppError.extend({
         constructor: function(data){
@@ -57,6 +64,7 @@ define(function(require){
 
 
     return {
+        UnknownError: UnknownError,
         InternetDisconnectedError: InternetDisconnectedError,
         FacebookLoginError: FacebookLoginError,
         WebsiteLoginError: WebsiteLoginError,
