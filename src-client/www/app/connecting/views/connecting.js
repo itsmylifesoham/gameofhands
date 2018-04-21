@@ -2,11 +2,10 @@ define(function (require) {
 
     var login = require('app/login');
     var connectingTemplate = require('hbs!app/connecting/templates/connecting');
-    var homeController = require('app/home/controller');
-    var errorController = require('app/error/controller');
+    var remote = require('app/remote');
 
     var ConnectingView = Backbone.View.extend({
-        className: "d-flex justify-content-center align-middle align-items-center flex-column h-100 w-100",
+        className: "d-flex justify-content-center align-middle align-items-center flex-column h-50 w-100",
         events: {
             'click #retry-login': 'render'
         },
@@ -19,10 +18,10 @@ define(function (require) {
             login.connectToFbAutomatically()
                 .then(function (loginEvtParams) {
                     console.log("user logged in!");
-                    homeController.displayHomeView();
+                    remote.invokeControllerMethod('home','displayHomeView');
                 })
                 .catch(function (appError) {
-                    errorController.displayErrorView(appError);
+                    remote.invokeControllerMethod('error','displayErrorView', appError);
                 });
         },
         _displayConnectingMessage: function () {

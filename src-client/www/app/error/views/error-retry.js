@@ -2,13 +2,14 @@ define(function(require){
 
     var errorRetryTemplate = require('hbs!app/error/templates/error-retry');
     var globals =require('app/globals');
-    var connectingController = require('app/connecting/controller');
+    var remote = require('app/remote');
 
     var ErrorRetryView = Backbone.View.extend({
         initialize: function(appError){
             this.appError = appError;
         },
         className: "d-flex justify-content-center align-middle align-items-center flex-column h-100 w-100",
+
         events: {
             'click #retry-login' : 'retryLogin'
         },
@@ -23,7 +24,7 @@ define(function(require){
         },
         retryLogin: function(){
             globals.app.error = false;
-            connectingController.displayConnectingView();
+            remote.invokeControllerMethod('connecting', 'displayConnectingView');
         }
 
     });

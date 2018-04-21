@@ -1,9 +1,9 @@
 define(function (require) {
 
+    // below will be synchronous calls as we have dependency array
     var loginTemplate = require('hbs!app/login/templates/login');
     var login = require('app/login');
-    var homeController = require('app/home/controller');
-    var errorController = require('app/error/controller');
+    var remote = require('app/remote');
 
     var LoginView = Backbone.View.extend({
         className: 'd-flex justify-content-center align-middle align-items-center flex-column h-100 w-100',
@@ -22,13 +22,15 @@ define(function (require) {
             view.hideConnectButtons();
         },
         assignSuccessfulLoginFlow(sfsLoginPromise) {
+            var view = this;
             sfsLoginPromise
                 .then(function (loginEvtParams) {
                     console.log('user logged in!');
-                    homeController.displayHomeView();
+                    remote.invokeControllerMethod('home', 'displayHomeView');
                 })
                 .catch(function (error) {
-                    errorController.displayErrorView(error);
+                    view.showConnectButtons();
+                    remote.invokeControllerMethod('error', 'displayErrorView', error);
                 });
         },
         hideConnectButtons: function () {

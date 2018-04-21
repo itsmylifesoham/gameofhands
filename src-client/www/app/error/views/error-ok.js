@@ -14,7 +14,7 @@ define(function(require){
         },
         render: function(){
 
-            var content = errorRetryTemplate({
+            var content = errorOkTemplate({
                 errorMsg: this.appError.displayMessage
             });
 

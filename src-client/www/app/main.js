@@ -5,7 +5,7 @@ define(function (require, exports, module) {
     var globals = require('app/globals');
     var internet = require('app/internet');
     var errors = require('app/errors');
-    var errorController = require('app/error/controller');
+    var remote = require('app/remote');
 
     var AppView = Backbone.View.extend({
         constructor: function (rootElement) {
@@ -17,18 +17,26 @@ define(function (require, exports, module) {
             });
         },
         initialize: function () {
-            this.router = router;
-            this.error = false;
             this._initSFS();
             this._initNetworkMonitoring();
+            this._initControllers();
+            this.router = router;
+            this.error = false;
         },
         _initNetworkMonitoring: function () {
             this.listenTo(internet, "online", function () {
 
             });
             this.listenTo(internet, "offline", function () {
-                errorController.displayErrorView(new errors.InternetDisconnectedError());
+                remote.invokeControllerMethod('error','displayErrorView', new errors.InternetDisconnectedError());
             });
+        },
+        _initControllers: function(){
+            // this is to ensure all controllers have initialized their channels
+            require('app/connecting/controller');
+            require('app/error/controller');
+            require('app/home/controller');
+            require('app/login/controller');
         },
         _initSFS: function () {
             this.sfs = new sfs.SmartFox(globals.sfsConfig);
@@ -54,7 +62,7 @@ define(function (require, exports, module) {
                     displayReason = "You disconnected from the game server."
                 }
 
-                errorController.displayErrorView(new errors.SFSConnectionError(displayReason));
+                remote.invokeControllerMethod('error','displayErrorView',new errors.SFSConnectionError(displayReason));
 
             }, app);
         },

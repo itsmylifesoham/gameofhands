@@ -2,8 +2,9 @@ define(function (require) {
 
     var ConnectingView = require('app/connecting/views/connecting');
     var globals = require('app/globals');
+    var AppController = require('app/common/app-controller');
 
-    var _connectingController = {};
+    var _connectingController = new AppController('connecting');
     _connectingController.displayConnectingView = function () {
 
         if (globals.app.currentView)

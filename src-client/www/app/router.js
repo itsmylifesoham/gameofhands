@@ -1,14 +1,18 @@
 define(function (require) {
 
-    var connectingController = require('app/connecting/controller');
-    var loginController = require('app/login/controller');
-    var homeController = require('app/home/controller');
+    var remote = require('app/remote');
 
     var _router = new Backbone.Router({
         routes: {
-            '': connectingController.displayConnectingView,
-            'home': homeController.displayHomeView,
-            'login': loginController.displayLoginView,
+            '': function(){
+                remote.invokeControllerMethod('connecting', 'displayConnectingView');
+            },
+            'home': function(){
+                remote.invokeControllerMethod('home', 'displayHomeView');
+            },
+            'login': function(){
+                remote.invokeControllerMethod('login', 'displayLoginView');
+            },
 
         }
     });
