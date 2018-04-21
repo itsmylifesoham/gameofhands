@@ -6,7 +6,7 @@ define(function (require) {
         sfsConfig: {
             host: '192.168.0.102',
             port: 8080,
-            zone: 'BasicExamples',
+            zone: 'GameOfHands',
             useSSL: false,
             debug: false
         }

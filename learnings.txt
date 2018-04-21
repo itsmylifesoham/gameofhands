@@ -114,3 +114,9 @@ circular dependency requirejs
 ------------------------------
 
 madge --circular --warning D:\MyData\startups\gameofhands\src-client\www
+
+
+sfs2x production article (see last step for linux hosting)
+---------------------------
+
+http://smartfoxserver.com/blog/tips-for-a-successful-smartfoxserver-deployment/

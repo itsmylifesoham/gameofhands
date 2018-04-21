@@ -51,6 +51,12 @@ var phonegapApp = {
         document.addEventListener('deviceready', this.onDeviceReady, false);
     },
     onDeviceReady: function () {
+        document.addEventListener("pause", function onPause(){
+            Backbone.Radio.trigger('device', 'pause');
+        }, false);
+        document.addEventListener("resume", function onResume(){
+            Backbone.Radio.trigger('device', 'resume');
+        }, false);
 
         // hide status bar if its not a browser
         if (cordova.platformId !== "browser")

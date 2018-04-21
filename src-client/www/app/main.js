@@ -28,8 +28,21 @@ define(function (require, exports, module) {
             this._initSFS();
             this._initNetworkMonitoring();
             this._initControllers();
+            this._initDeviceEventHandlers();
             this.router = router;
             this.error = false;
+        },
+        _initDeviceEventHandlers: function(){
+            var app = this;
+            this.listenTo(Backbone.Radio.channel('device'), 'pause', function(){
+                // send pause signal to sfs if game was being played
+                // save the app state only if game was being played. because upon resume we only try to rejoin the game if game
+                // was being played on pause. else we just do the regular home screen on resume.
+            });
+
+            this.listenTo(Backbone.Radio.channel('device'), 'resume', function(){
+                // retrieve last saved state. if game was being played then try to rejoin the user here.
+            });
         },
         _initNetworkMonitoring: function () {
             this.listenTo(internet, "online", function () {

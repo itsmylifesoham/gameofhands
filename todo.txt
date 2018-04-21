@@ -1,5 +1,3 @@
 1. make a nice lively UI
 2. figure out the toon shading three.js part
 3. setup sfs2x with zone login and game room logic for various formats.
-4. setup a server for login using node.js https . let sfs only work on the game logic.
-5. build the whole login flow for facebook for multi device login with long lived tokens and localstorage.
