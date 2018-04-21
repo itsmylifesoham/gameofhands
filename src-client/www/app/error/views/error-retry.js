@@ -25,6 +25,7 @@ define(function(require){
         retryLogin: function(){
             globals.app.error = false;
             remote.invokeControllerMethod('connecting', 'displayConnectingView');
+            this.remove();
         }
 
     });

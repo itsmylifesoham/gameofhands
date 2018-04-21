@@ -24,6 +24,7 @@ define(function(require){
         ok: function(){
             globals.app.error = false;
             this.okAction();
+            this.remove();
         }
 
     });

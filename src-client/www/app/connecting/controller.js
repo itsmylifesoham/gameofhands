@@ -11,7 +11,7 @@ define(function (require) {
             globals.app.currentView.remove();
 
         globals.app.currentView = new ConnectingView();
-        globals.app.$el.html(globals.app.currentView.render().el);
+        globals.app.$el.prepend(globals.app.currentView.render().el);
         globals.app.router.navigate('');
     };
 
