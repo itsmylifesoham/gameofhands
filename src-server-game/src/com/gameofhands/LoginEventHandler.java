@@ -58,14 +58,14 @@ public class LoginEventHandler extends BaseServerEventHandler {
 
 		IDBManager dbManager = getParentExtension().getParentZone().getDBManager();
 		String sql = "SELECT * FROM user_sessions WHERE user_login_id = ? AND session_token = ? AND ip_address = ?";
-
+		
 		try {
 			// Obtain a resultset
 			ISFSArray res = dbManager.executeQuery(sql, new Object[] { userLoginId, sessionToken, ipAddress });
 			if (res.size() != 1) {
 				return false;
-			}
-
+			}		
+			
 		} catch (SQLException e) {
 			return false;
 		}

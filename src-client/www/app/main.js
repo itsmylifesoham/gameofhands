@@ -62,7 +62,9 @@ define(function (require, exports, module) {
         _initSFS: function () {
             this.sfs = new sfs.SmartFox(globals.sfsConfig);
             this._initSFSConnectionLostHandler();
+
         },
+
         _initSFSConnectionLostHandler: function () {
             var app = this;
             // init CONNECTION_LOST event
