@@ -6,8 +6,7 @@ define(function (require) {
     var extensionResponses = require('app/gaming/extension-responses');
 
     function handleGameExtensionResponse(evtParams) {
-        if (evtParams.cmd === extensionResponses.DISPLAY_MATCH)
-        {
+        if (evtParams.cmd === extensionResponses.DISPLAY_MATCH) {
             this.handleDisplayMatch(evtParams);
         }
     }
@@ -56,7 +55,7 @@ define(function (require) {
         var opponentUserLoginId = evtParams.params.getUtfString(sfsObjectKeys.USER_LOGIN_ID);
 
         this.trigger(extensionResponses.DISPLAY_MATCH, {
-           userLoginId: globals.app.sfs.mySelf.name
+            userLoginId: globals.app.sfs.mySelf.name
         }, {
             userLoginId: opponentUserLoginId
         })

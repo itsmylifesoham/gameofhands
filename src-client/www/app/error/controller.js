@@ -24,6 +24,11 @@ define(function (require) {
                 return;
 
             globals.app.error = true;
+
+            //destroy any game if its thr
+            if (globals.app.game)
+                globals.app.game.destroy();
+
             if (appError.errorType === errors.errorTypes.INTERNET_DISCONNECTED
                 || appError.errorType === errors.errorTypes.SFS_CONNECTION_ERROR
                 || appError.errorType === errors.errorTypes.REQUEST_TIMEOUT_ERROR)
