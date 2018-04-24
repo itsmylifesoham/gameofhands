@@ -29,7 +29,7 @@ public class UserJoinGameRoomHandler extends BaseServerEventHandler {
 			ISFSObject matchData2 = new SFSObject();
 			matchData2.putUtfString(SfsObjectKeys.USER_LOGIN_ID, usersInRoom.get(1).getName());
 			
-			send(ExtensionReponses.DISPLAY_MATCH, matchData1, usersInRoom.get(0));
+			send(ExtensionReponses.DISPLAY_MATCH, matchData2, usersInRoom.get(0));
 		}	
 	}
 	
