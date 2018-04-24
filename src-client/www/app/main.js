@@ -58,6 +58,7 @@ define(function (require, exports, module) {
             require('app/error/controller');
             require('app/home/controller');
             require('app/login/controller');
+            require('app/game-normal-1-v-1/match/controller');
         },
         _initSFS: function () {
             this.sfs = new sfs.SmartFox(globals.sfsConfig);

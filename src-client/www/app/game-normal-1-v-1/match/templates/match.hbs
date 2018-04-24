@@ -1,0 +1,10 @@
+{{#unless @root}}
+    <p id="finding-match">Finding Match...</p>
+{{/unless}}
+{{#if @root}}
+<div id="match">
+    <p>{{userLoginIdMyself}}</p>
+    <p>Vs.</p>
+    <p>{{userLoginIdOpponent}}</p>
+</div>
+{{/if}}

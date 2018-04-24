@@ -7,11 +7,11 @@ public class MainExtension extends SFSExtension {
 
 	@Override
 	public void init() {
-		trace("Hello, this is my first SFS2X Extension!");
+		trace("Hello, this is GameOfHands extension!");
 
 		addEventHandler(SFSEventType.USER_LOGIN, LoginEventHandler.class);
 		// Add a new Request Handler
-		addRequestHandler(AppRequests.JOIN_ME.toString(), AutoJoinHandler.class);
+		addRequestHandler(ExtensionRequests.JOIN_ME, AutoJoinHandler.class);
 	}
 
 	
