@@ -15,10 +15,10 @@ import com.smartfoxserver.v2.entities.Zone;
 import com.smartfoxserver.v2.game.CreateSFSGameSettings;
 
 public abstract class GameFormatManager {
-	private static List<GameFormatManager> availableGameFormatManagers = Arrays
+	public static List<GameFormatManager> availableGameFormatManagers = Arrays
 			.asList(new GameFormatManager_normal_1_v_1());
 
-	private List<String> supportedGameFormats;
+	public List<String> supportedGameFormats;
 	private String extensionName;
 
 	public boolean isGameFormatSupported(String gameFormat) {
@@ -29,7 +29,8 @@ public abstract class GameFormatManager {
 		this.supportedGameFormats = supportedGameFormats;
 		this.extensionName = extensionName;
 	}
-
+	
+	
 	public Room createGameRoom(String gameFormat) throws Exception {
 		if (!this.isGameFormatSupported(gameFormat)) {
 			throw new Exception("provided game format:" + gameFormat + "is not supported by this game format manager");
@@ -56,6 +57,14 @@ public abstract class GameFormatManager {
 		Room gameRoom = this.createGameRoom(gameFormat);
 		ISFSApi gameApi = SmartFoxServer.getInstance().getAPIManager().getSFSApi();
 		gameApi.joinRoom(firstUser, gameRoom);
+	}
+	
+	public void createGameRoomAndAddUsers(List<User> userList, String gameFormat) throws Exception {
+		Room gameRoom = this.createGameRoom(gameFormat);
+		ISFSApi gameApi = SmartFoxServer.getInstance().getAPIManager().getSFSApi();
+		for(User user : userList) {
+			gameApi.joinRoom(user, gameRoom);
+		}
 	}
 
 	public static GameFormatManager getGameFormatManager(String gameFormat) throws Exception {
