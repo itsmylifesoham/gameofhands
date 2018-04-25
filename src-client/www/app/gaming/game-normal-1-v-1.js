@@ -30,6 +30,8 @@ define(function (require) {
         globals.app.sfs.send(new SFS2X.ExtensionRequest(extensionRequests.JOIN_ME, params));
     };
 
+
+
     Game.prototype.gameLoaded = function () {
         globals.app.sfs.send(new SFS2X.ExtensionRequest(extensionRequests.GAME_LOADED, null));
     };
@@ -63,7 +65,16 @@ define(function (require) {
 
 
     Game.prototype.destroy = function () {
+        try{
+            if (globals.app.sfs.isConnected && globals.app.sfs.mySelf)
+                globals.app.sfs.send(new SFS2X.ExtensionRequest(extensionRequests.UNJOIN_ME, null));
+        }
+        catch(e){
+            console.log("warning while unjoining: " + e);
+        }
+
         globals.app.sfs.removeEventListener(SFS2X.EXTENSION_RESPONSE, handleGameExtensionResponse);
+        delete globals.app.game;
     };
     Game.prototype.constructor = Game;
 

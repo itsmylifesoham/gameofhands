@@ -21,7 +21,8 @@
     "animejs": "^2.2.0",
     "jquery": "^3.3.1",
     "bootstrap": "^4.0.0",
-    "backbone.radio": "^2.0.0"
+    "backbone.radio": "^2.0.0",
+    "bluebird": "^3.5.1"
   },
   "devDependencies": {
     "r.js": "^2.3.5"

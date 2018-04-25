@@ -13,6 +13,13 @@ define(function (require) {
             var view = this;
             this.listenTo(game, extensionResponses.DISPLAY_MATCH, _.bind(view.handleDisplayMatch, view));
         },
+        events:{
+            'click #leave': 'onLeave',
+        },
+        onLeave: function(){
+            globals.app.game.destroy();
+            remote.invokeControllerMethod('home','displayHomeView');
+        },
         handleDisplayMatch: function (myData, opponentData) {
             this.presenter = {
                 userLoginIdMyself: myData.userLoginId,

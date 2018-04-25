@@ -29,8 +29,12 @@ define(function (require, exports, module) {
             this._initNetworkMonitoring();
             this._initControllers();
             this._initDeviceEventHandlers();
+            this._initApp();
+        },
+        _initApp: function(){
             this.router = router;
             this.error = false;
+            this.mode = 'online';
         },
         _initDeviceEventHandlers: function(){
             var app = this;
@@ -62,8 +66,8 @@ define(function (require, exports, module) {
         },
         _initSFS: function () {
             this.sfs = new sfs.SmartFox(globals.sfsConfig);
+            this.sfs.setClientDetails(cordova.platformId, globals.gameClientVersion + "");
             this._initSFSConnectionLostHandler();
-
         },
 
         _initSFSConnectionLostHandler: function () {

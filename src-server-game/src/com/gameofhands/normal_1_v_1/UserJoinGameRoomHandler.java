@@ -18,7 +18,8 @@ public class UserJoinGameRoomHandler extends BaseServerEventHandler {
 	@Override
 	public void handleServerEvent(ISFSEvent event) throws SFSException {
 		SFSGame gameRoom = (SFSGame)getParentExtension().getParentRoom();
-		List<User> usersInRoom = gameRoom.getUserList();
+		List<User> usersInRoom = gameRoom.getUserList();	
+		
 		if (gameRoom.getMinPlayersToStartGame() == usersInRoom.size()) {
 			
 			ISFSObject matchData1 = new SFSObject();

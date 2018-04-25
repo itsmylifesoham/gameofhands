@@ -10,6 +10,7 @@ define(function (require) {
             useSSL: false,
             debug: false
         },
+        gameClientVersion: 1.0,
 
 
     };

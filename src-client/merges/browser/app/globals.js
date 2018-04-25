@@ -9,6 +9,7 @@ define(function (require) {
             zone: 'GameOfHands',
             useSSL: false,
             debug: false
-        }
+        },
+        gameClientVersion: 1.0,
 };
 });

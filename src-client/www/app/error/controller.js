@@ -27,10 +27,8 @@ define(function (require) {
 
             //destroy any game if its thr
             if (globals.app.game)
-            {
                 globals.app.game.destroy();
-                delete globals.app.game;
-            }
+
 
             if (appError.errorType === errors.errorTypes.INTERNET_DISCONNECTED
                 || appError.errorType === errors.errorTypes.SFS_CONNECTION_ERROR

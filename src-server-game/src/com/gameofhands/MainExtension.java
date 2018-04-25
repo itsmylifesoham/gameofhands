@@ -12,6 +12,7 @@ public class MainExtension extends SFSExtension {
 		addEventHandler(SFSEventType.USER_LOGIN, LoginEventHandler.class);
 		// Add a new Request Handler
 		addRequestHandler(ExtensionRequests.JOIN_ME, AutoJoinHandler.class);
+		addRequestHandler(ExtensionRequests.UNJOIN_ME, UnJoinHandler.class);
 	}
 
 	

@@ -22,14 +22,6 @@ define(function(require){
             return this;
         },
         onPlayNormal: function(){
-            // sfsCommunication.quickJoinGame(sfsCommunication.gameFormats.NORMAL_2_OVERS_1_WICKET)
-            //     .then(function(){
-            //         alert("game started!");
-            //     })
-            //     .catch(function(){
-            //         alert("game stopped!");
-            //     });
-
             this.startNewGame(new Game_normal_1_v_1(sfsObjectValues.NORMAL_1_V_1_OVERS_2_WICKETS_2));
             remote.invokeControllerMethod('game-normal-1-v-1/match', 'displayMatchView');
         },
