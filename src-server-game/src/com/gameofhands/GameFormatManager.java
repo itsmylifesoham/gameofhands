@@ -1,9 +1,12 @@
 package com.gameofhands;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import com.gameofhands.normal_1_v_1.GameFormatManager_normal_1_v_1;
 import com.smartfoxserver.v2.SmartFoxServer;
 import com.smartfoxserver.v2.api.CreateRoomSettings.RoomExtensionSettings;
 import com.smartfoxserver.v2.api.ISFSApi;
@@ -12,30 +15,30 @@ import com.smartfoxserver.v2.entities.Room;
 import com.smartfoxserver.v2.entities.SFSRoomRemoveMode;
 import com.smartfoxserver.v2.entities.User;
 import com.smartfoxserver.v2.entities.Zone;
+import com.smartfoxserver.v2.exceptions.SFSJoinRoomException;
 import com.smartfoxserver.v2.game.CreateSFSGameSettings;
 
 public abstract class GameFormatManager {
 	public static List<GameFormatManager> availableGameFormatManagers = Arrays
 			.asList(new GameFormatManager_normal_1_v_1());
 
+	private static Zone currentZone = SmartFoxServer.getInstance().getZoneManager().getZoneByName(Constants.ZONE_NAME);
+	private static ISFSGameApi gameApi = SmartFoxServer.getInstance().getAPIManager().getGameApi();
+	private static ISFSApi sfsApi = SmartFoxServer.getInstance().getAPIManager().getSFSApi();
+	
 	public List<String> supportedGameFormats;
 	private String extensionName;
+	private MatchEngine matchEngine;	
 
-	public boolean isGameFormatSupported(String gameFormat) {
-		return supportedGameFormats.indexOf(gameFormat) != -1;
-	}
-
-	public GameFormatManager(List<String> supportedGameFormats, String extensionName) {
+	public GameFormatManager(List<String> supportedGameFormats, String extensionName, MatchEngine matchEngine) {
 		this.supportedGameFormats = supportedGameFormats;
 		this.extensionName = extensionName;
-	}
+		this.matchEngine = matchEngine;
+	}	
 	
-	
-	public Room createGameRoom(String gameFormat) throws Exception {
-		if (!this.isGameFormatSupported(gameFormat)) {
-			throw new Exception("provided game format:" + gameFormat + "is not supported by this game format manager");
-		}
-
+	private void createGameRoom(RoomConfiguration roomConfiguration) throws Exception {		
+		
+		// create basic sfs game settings
 		CreateSFSGameSettings gameSettings = new CreateSFSGameSettings();
 		gameSettings.setName(UUID.randomUUID().toString());
 		gameSettings.setAutoRemoveMode(SFSRoomRemoveMode.WHEN_EMPTY);
@@ -43,27 +46,38 @@ public abstract class GameFormatManager {
 		gameSettings.setDynamic(true);
 		gameSettings.setMaxSpectators(10);
 		gameSettings.setMaxVariablesAllowed(50);
-		gameSettings.setGroupId(gameFormat);
+		gameSettings.setGroupId(roomConfiguration.groupId);
 		gameSettings.setExtension(new RoomExtensionSettings(Constants.ZONE_NAME, this.extensionName));
 
-		this.setCustomCreateSFSGameSettings(gameSettings, gameFormat);
-
-		ISFSGameApi gameApi = SmartFoxServer.getInstance().getAPIManager().getGameApi();
-		Zone currentZone = SmartFoxServer.getInstance().getZoneManager().getZoneByName(Constants.ZONE_NAME);
-		return gameApi.createGame(currentZone, gameSettings, null);
-	}
-
-	public void createGameRoomAndAddUser(User firstUser, String gameFormat) throws Exception {
-		Room gameRoom = this.createGameRoom(gameFormat);
-		ISFSApi gameApi = SmartFoxServer.getInstance().getAPIManager().getSFSApi();
-		gameApi.joinRoom(firstUser, gameRoom);
-	}
+		this.setCustomCreateSFSGameSettings(gameSettings);
+		
+		// set room properties to pass the room configuration for room extension to interprete.
+		Map<Object, Object> roomProperties = new HashMap<>();
+		roomProperties.put(Constants.ROOM_CONFIGURATION, roomConfiguration);
+		gameSettings.setRoomProperties(roomProperties);
+		
+		// create the room			
+		Room gameRoom = gameApi.createGame(currentZone, gameSettings, null);		
+		
+		
+		// join them in the new room
+		roomConfiguration.matchConfig.usersMatched.forEach((user)-> {
+			try {
+				sfsApi.joinRoom(user, gameRoom, null, false, user.getLastJoinedRoom());
+			} catch (SFSJoinRoomException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
+	}	
 	
-	public void createGameRoomAndAddUsers(List<User> userList, String gameFormat) throws Exception {
-		Room gameRoom = this.createGameRoom(gameFormat);
-		ISFSApi gameApi = SmartFoxServer.getInstance().getAPIManager().getSFSApi();
-		for(User user : userList) {
-			gameApi.joinRoom(user, gameRoom);
+	public void initiateGames() {
+		for(String gf : this.supportedGameFormats) {
+			List<User> usersToMatch = currentZone.getRoomByName("JOIN_ME_" + gf).getUserList();
+			List<MatchConfiguration> matchConfigs = this.matchEngine.match(usersToMatch);
+			
+			
+			
 		}
 	}
 
@@ -78,5 +92,5 @@ public abstract class GameFormatManager {
 		throw new Exception("No GameFormatManager available for :" + gameFormat);
 	}
 
-	protected abstract void setCustomCreateSFSGameSettings(CreateSFSGameSettings gameSettings, String gameFormat);
+	protected abstract void setCustomCreateSFSGameSettings(CreateSFSGameSettings gameSettings);
 }

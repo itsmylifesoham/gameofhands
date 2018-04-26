@@ -10,7 +10,7 @@ import com.smartfoxserver.v2.SmartFoxServer;
 import com.smartfoxserver.v2.entities.User;
 import com.smartfoxserver.v2.extensions.SFSExtension;
 
-public class MatchingEngine {
+public class MatchingEngineTemp {
 	private class MatchTaskRunner implements Runnable {
 		private int runningCycles = 0;
 
@@ -45,7 +45,7 @@ public class MatchingEngine {
 			.getZoneByName(Constants.ZONE_NAME).getExtension();
 	private List<String> allSupportedGameFormats;
 
-	public MatchingEngine(List<String> allSupportedGameFormats) {
+	public MatchingEngineTemp(List<String> allSupportedGameFormats) {
 		this.allSupportedGameFormats = allSupportedGameFormats;
 	}
 

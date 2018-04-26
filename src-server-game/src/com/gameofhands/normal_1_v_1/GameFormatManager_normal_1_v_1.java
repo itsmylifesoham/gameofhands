@@ -1,9 +1,11 @@
-package com.gameofhands;
+package com.gameofhands.normal_1_v_1;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.gameofhands.GameFormatManager;
+import com.gameofhands.SfsObjectValues;
 import com.smartfoxserver.v2.game.CreateSFSGameSettings;
 
 public class GameFormatManager_normal_1_v_1 extends GameFormatManager {
