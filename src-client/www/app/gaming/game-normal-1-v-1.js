@@ -12,9 +12,9 @@ define(function (require) {
     }
 
 
-    var Game = function (gameFormat) {
+    var Game = function (gameFormatSubCategory) {
         _.extend(this, Backbone.Events);
-        this.gameFormat = gameFormat;
+        this.gameFormatSubCategory = gameFormatSubCategory;
     };
 
     Game.prototype.init = function () {
@@ -25,7 +25,7 @@ define(function (require) {
     Game.prototype.join = function () {
 
         var params = new SFS2X.SFSObject();
-        params.putUtfString(sfsObjectKeys.GAME_FORMAT, this.gameFormat);
+        params.putUtfString(sfsObjectKeys.GAME_FORMAT_SUBCATEGORY, this.gameFormatSubCategory);
 
         globals.app.sfs.send(new SFS2X.ExtensionRequest(extensionRequests.JOIN_ME, params));
     };

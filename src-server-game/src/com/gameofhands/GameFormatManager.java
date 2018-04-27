@@ -1,44 +1,118 @@
 package com.gameofhands;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.gameofhands.normal_1_v_1.GameFormatManager_normal_1_v_1;
 import com.smartfoxserver.v2.SmartFoxServer;
 import com.smartfoxserver.v2.api.CreateRoomSettings.RoomExtensionSettings;
 import com.smartfoxserver.v2.api.ISFSApi;
-import com.smartfoxserver.v2.api.ISFSGameApi;
 import com.smartfoxserver.v2.entities.Room;
 import com.smartfoxserver.v2.entities.SFSRoomRemoveMode;
 import com.smartfoxserver.v2.entities.User;
 import com.smartfoxserver.v2.entities.Zone;
+import com.smartfoxserver.v2.exceptions.SFSCreateRoomException;
 import com.smartfoxserver.v2.exceptions.SFSJoinRoomException;
 import com.smartfoxserver.v2.game.CreateSFSGameSettings;
 
 public abstract class GameFormatManager {
-	public static List<GameFormatManager> availableGameFormatManagers = Arrays
-			.asList(new GameFormatManager_normal_1_v_1());
 
-	private static Zone currentZone = SmartFoxServer.getInstance().getZoneManager().getZoneByName(Constants.ZONE_NAME);
-	private static ISFSGameApi gameApi = SmartFoxServer.getInstance().getAPIManager().getGameApi();
-	private static ISFSApi sfsApi = SmartFoxServer.getInstance().getAPIManager().getSFSApi();
-	
-	public List<String> supportedGameFormats;
+	// data required to initiate games
+	private List<String> supportedGameFormatSubCategories = new ArrayList<>();
 	private String extensionName;
-	private MatchEngine matchEngine;	
+	private MatchEngine matchEngine;
+	private Map<String, Map<String, Object>> gameFormatSubCategoryToGameDataMap;
 
-	public GameFormatManager(List<String> supportedGameFormats, String extensionName, MatchEngine matchEngine) {
-		this.supportedGameFormats = supportedGameFormats;
+	public GameFormatManager(Map<String, Map<String, Object>> gameFormatSubCategoryToGameDataMap, String extensionName,
+			MatchEngine matchEngine) {
+
+		this.gameFormatSubCategoryToGameDataMap = gameFormatSubCategoryToGameDataMap;
 		this.extensionName = extensionName;
 		this.matchEngine = matchEngine;
-	}	
-	
-	private void createGameRoom(RoomConfiguration roomConfiguration) throws Exception {		
-		
-		// create basic sfs game settings
+
+		populateSupportedGameSubCategories();
+	}
+
+	public void EnsureJoinRoomsAreInitialized() throws Exception {
+		Zone currentZone = SmartFoxServer.getInstance().getZoneManager().getZoneByName(Constants.ZONE_NAME);
+		for (String gfSubCateogry : this.supportedGameFormatSubCategories) {
+			if (currentZone.getRoomByName("JOIN_ME_" + gfSubCateogry) == null) {
+				throw new Exception("There is no join me room for game format : " + gfSubCateogry);
+			}
+		}
+	}
+
+	protected abstract void setCustomCreateSFSGameSettings(CreateSFSGameSettings gameSettings);
+
+	public void initiateGames() {
+		ISFSApi sfsApi = SmartFoxServer.getInstance().getAPIManager().getSFSApi();
+		for (String gfSubCategory : this.supportedGameFormatSubCategories) {
+			Zone currentZone = SmartFoxServer.getInstance().getZoneManager().getZoneByName(Constants.ZONE_NAME);
+			Room currentJoinRoom = currentZone.getRoomByName("JOIN_ME_" + gfSubCategory);
+			List<User> usersToMatch = currentJoinRoom.getUserList();
+			List<MatchConfiguration> matchConfigurations = this.matchEngine.match(usersToMatch);
+
+			for (MatchConfiguration matchConfiguration : matchConfigurations) {
+
+				CreateSFSGameSettings gameSettings = createGameSettings(gfSubCategory, matchConfiguration);
+				Room gameRoom = null;
+				try {
+					gameRoom = createGameRoom(gameSettings);
+					launchUsersInGameRoom(matchConfiguration.usersMatched, gameRoom, currentJoinRoom);
+				} catch (Exception e) {
+					notifyUsersUnableToJoinGame(matchConfiguration.usersMatched, currentJoinRoom);
+
+					// remove any users who might have been joined into the room
+					if (gameRoom != null) {
+						sfsApi.removeRoom(gameRoom);
+					}
+
+					continue;
+				}
+			}
+		}
+	}
+
+	private void launchUsersInGameRoom(List<User> usersMatched, Room gameRoom, Room joinRoom)
+			throws SFSJoinRoomException {
+		ISFSApi sfsApi = SmartFoxServer.getInstance().getAPIManager().getSFSApi();
+		for (User user : usersMatched) {
+			sfsApi.joinRoom(user, gameRoom, null, false, joinRoom);
+		}
+	}
+
+	private void notifyUsersUnableToJoinGame(List<User> users, Room room) {
+		ISFSApi sfsApi = SmartFoxServer.getInstance().getAPIManager().getSFSApi();
+		sfsApi.sendExtensionResponse(ExtensionReponses.UNABLE_TO_JOIN, null, users, room, false);
+	}
+
+	private CreateSFSGameSettings createGameSettings(String gfSubCategory, MatchConfiguration matchConfiguration) {
+		CreateSFSGameSettings basicGameSettings = createBasicRoomSettings();
+		basicGameSettings.setGroupId(gfSubCategory);
+		this.setCustomCreateSFSGameSettings(basicGameSettings);
+
+		RoomConfiguration roomConfiguration = new RoomConfiguration();
+		roomConfiguration.gameConfigData = this.gameFormatSubCategoryToGameDataMap.get(gfSubCategory);
+		roomConfiguration.matchConfiguration = matchConfiguration;
+		roomConfiguration.gameFormatSubCategory = gfSubCategory;
+		Map<Object, Object> roomPropertyMap = new HashMap<>();
+		roomPropertyMap.put("ROOM_CONFIGURATION", roomConfiguration);
+
+		basicGameSettings.setRoomProperties(roomPropertyMap);
+
+		return basicGameSettings;
+
+	}
+
+	private Room createGameRoom(CreateSFSGameSettings gameSettings) throws SFSCreateRoomException {
+		Zone currentZone = SmartFoxServer.getInstance().getZoneManager().getZoneByName(Constants.ZONE_NAME);
+		return SmartFoxServer.getInstance().getAPIManager().getGameApi().createGame(currentZone, gameSettings, null);
+	}
+
+	private CreateSFSGameSettings createBasicRoomSettings() {
+
 		CreateSFSGameSettings gameSettings = new CreateSFSGameSettings();
 		gameSettings.setName(UUID.randomUUID().toString());
 		gameSettings.setAutoRemoveMode(SFSRoomRemoveMode.WHEN_EMPTY);
@@ -46,51 +120,14 @@ public abstract class GameFormatManager {
 		gameSettings.setDynamic(true);
 		gameSettings.setMaxSpectators(10);
 		gameSettings.setMaxVariablesAllowed(50);
-		gameSettings.setGroupId(roomConfiguration.groupId);
 		gameSettings.setExtension(new RoomExtensionSettings(Constants.ZONE_NAME, this.extensionName));
+		return gameSettings;
+	}
 
-		this.setCustomCreateSFSGameSettings(gameSettings);
-		
-		// set room properties to pass the room configuration for room extension to interprete.
-		Map<Object, Object> roomProperties = new HashMap<>();
-		roomProperties.put(Constants.ROOM_CONFIGURATION, roomConfiguration);
-		gameSettings.setRoomProperties(roomProperties);
-		
-		// create the room			
-		Room gameRoom = gameApi.createGame(currentZone, gameSettings, null);		
-		
-		
-		// join them in the new room
-		roomConfiguration.matchConfig.usersMatched.forEach((user)-> {
-			try {
-				sfsApi.joinRoom(user, gameRoom, null, false, user.getLastJoinedRoom());
-			} catch (SFSJoinRoomException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		});
-	}	
-	
-	public void initiateGames() {
-		for(String gf : this.supportedGameFormats) {
-			List<User> usersToMatch = currentZone.getRoomByName("JOIN_ME_" + gf).getUserList();
-			List<MatchConfiguration> matchConfigs = this.matchEngine.match(usersToMatch);
-			
-			
-			
+	private void populateSupportedGameSubCategories() {
+		for (String key : gameFormatSubCategoryToGameDataMap.keySet()) {
+			supportedGameFormatSubCategories.add(key);
 		}
 	}
 
-	public static GameFormatManager getGameFormatManager(String gameFormat) throws Exception {
-		
-		for (GameFormatManager gameFormatManager : availableGameFormatManagers) {
-			if (gameFormatManager.isGameFormatSupported(gameFormat)) {
-				return gameFormatManager;
-			}
-		}
-
-		throw new Exception("No GameFormatManager available for :" + gameFormat);
-	}
-
-	protected abstract void setCustomCreateSFSGameSettings(CreateSFSGameSettings gameSettings);
 }

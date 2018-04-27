@@ -1,6 +1,7 @@
 package com.gameofhands.normal_1_v_1;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class MatchEngine_normal_1_v_1 implements MatchEngine {
 			data.put("player1", usersToMatch.get(i));
 			data.put("player2", usersToMatch.get(i+1));
 			
-			result.add(new MatchConfiguration(data));
+			result.add(new MatchConfiguration(data, Arrays.asList(usersToMatch.get(i), usersToMatch.get(i+1))));
 		}
 		
 		return result;		
