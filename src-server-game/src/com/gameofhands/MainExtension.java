@@ -11,30 +11,25 @@ public class MainExtension extends SFSExtension {
 
 	MatchingTaskManager matchingTaskManager;
 	private List<GameFormatManager> availableGameFormatManagers = Arrays.asList(new GameFormatManager_normal_1_v_1());
-	
+
 	@Override
 	public void init() {
 		trace("Hello, this is GameOfHands extension!");
-
-		addEventHandler(SFSEventType.USER_LOGIN, LoginEventHandler.class);		
-		//addRequestHandler(ExtensionRequests.UNJOIN_ME, UnJoinHandler.class);		
-		
+		addEventHandler(SFSEventType.USER_LOGIN, LoginEventHandler.class);
 		initMatchingTask();
-	}	
-
-	
+	}
 
 	private void initMatchingTask() {
 		matchingTaskManager = new MatchingTaskManager();
 		matchingTaskManager.start();
 	}
-	
-	public void initiateAllGames() {		
+
+	public void initiateAllGames() {
 		availableGameFormatManagers.forEach((gfManager) -> gfManager.initiateGames());
 	}
-	
-	public void EnsureAllJoinRoomsAreInitialized() throws Exception {	
-		
+
+	public void EnsureAllJoinRoomsAreInitialized() throws Exception {
+
 		for (GameFormatManager gameFormatManager : availableGameFormatManagers) {
 			gameFormatManager.EnsureJoinRoomsAreInitialized();
 		}
