@@ -126,3 +126,8 @@ sfs2x very important coding practice
 -------------------------------------
 
 From Zone's init never call any code that tries to access the zone via SmartFoxServer.getInstance();
+
+sfs2x overriding methods like destroy
+---------------------------------------
+
+dont forget to call super.destroy() ! as the first line.

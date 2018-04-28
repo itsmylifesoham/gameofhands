@@ -42,6 +42,7 @@ public class MainExtension extends SFSExtension {
 
 	@Override
 	public void destroy() {
+		super.destroy();
 		matchingTaskManager.stop();
 	}
 
