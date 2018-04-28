@@ -2,34 +2,48 @@ define(function (require) {
 
     var globals = require('app/globals');
     var extensionRequests = require('app/gaming/extension-requests');
-    var sfsObjectKeys = require('app/gaming/sfs-object-keys');
     var extensionResponses = require('app/gaming/extension-responses');
+    var sfsObjectKeys = require('app/gaming/sfs-object-keys');
 
     function handleGameExtensionResponse(evtParams) {
-        if (evtParams.cmd === extensionResponses.DISPLAY_MATCH) {
-            this.handleDisplayMatch(evtParams);
+        switch (evtParams.cmd) {
+            case extensionResponses.DISPLAY_MATCH:
+                handleDisplayMatch.call(this, evtParams);
+                break;
+            default:
+                this.trigger(evtParams.cmd, evtParams);
+
         }
     }
 
+    function handleDisplayMatch(evtParams) {
+        var opponentUserLoginId = evtParams.params.getUtfString(sfsObjectKeys.USER_LOGIN_ID);
+
+        this.trigger(extensionResponses.DISPLAY_MATCH, {
+            userLoginId: globals.app.sfs.mySelf.name
+        }, {
+            userLoginId: opponentUserLoginId
+        })
+    }
+
+
     function handleJoinMeRoomJoinError(evtParams) {
-        //TODO: show a message here which is not an error screen
-        alert("could not join room :" + evtParams.errorMessage);
-        globals.app.sfs.removeEventListener(SFS2X.SFSEvent.ROOM_JOIN_ERROR, handleJoinMeRoomJoinError);
+        this.trigger(extensionResponses.UnableToJoinError);
     }
 
 
     var Game = function (gameFormatSubCategory) {
         _.extend(this, Backbone.Events);
         this.gameFormatSubCategory = gameFormatSubCategory;
+
+        var gameInstance = this;
+        // init eventhandlers
+        globals.app.sfs.addEventListener(SFS2X.SFSEvent.ROOM_JOIN_ERROR, handleJoinMeRoomJoinError, gameInstance);
+        globals.app.sfs.addEventListener(SFS2X.SFSEvent.EXTENSION_RESPONSE, handleGameExtensionResponse, gameInstance);
     };
 
-    Game.prototype.init = function () {
-        var gameInstance = this;
-        globals.app.sfs.addEventListener(SFS2X.SFSEvent.EXTENSION_RESPONSE, handleGameExtensionResponse, gameInstance);
-    }
 
     Game.prototype.join = function () {
-        globals.app.sfs.addEventListener(SFS2X.SFSEvent.ROOM_JOIN_ERROR, handleJoinMeRoomJoinError);
         globals.app.sfs.send(new SFS2X.JoinRoomRequest('JOIN_ME_' + this.gameFormatSubCategory));
     };
 
@@ -54,29 +68,20 @@ define(function (require) {
         globals.app.sfs.send(new SFS2X.ExtensionRequest(extensionRequests.INPUT, params));
     };
 
-    Game.prototype.handleDisplayMatch = function (evtParams) {
-
-        var opponentUserLoginId = evtParams.params.getUtfString(sfsObjectKeys.USER_LOGIN_ID);
-
-        this.trigger(extensionResponses.DISPLAY_MATCH, {
-            userLoginId: globals.app.sfs.mySelf.name
-        }, {
-            userLoginId: opponentUserLoginId
-        })
-    };
-
 
     Game.prototype.destroy = function () {
         if (globals.app.sfs.isConnected && globals.app.sfs.mySelf) {
             // leave the user from all jon me or game rooms
-            var roomsJoined  = globals.app.sfs.getJoinedRooms();
-            for(var room in roomsJoined){
-                if (room.groupId === this.gameFormatSubCategory || room.groupId === "JOIN_ME_" + this.gameFormatSubCategory)
-                    globals.app.sfs.send(new SFS2X.LeaveRoomRequest(joinRoom));
+            var roomsJoined = globals.app.sfs.getJoinedRooms();
+            for (var i in roomsJoined) {
+                if (roomsJoined[i].groupId === this.gameFormatSubCategory || roomsJoined[i].name === "JOIN_ME_" + this.gameFormatSubCategory)
+                    globals.app.sfs.send(new SFS2X.LeaveRoomRequest(roomsJoined[i]));
             }
         }
 
-        globals.app.sfs.removeEventListener(SFS2X.EXTENSION_RESPONSE, handleGameExtensionResponse);
+        // remove all event handlers assigned for gameplay or game joining
+        globals.app.sfs.removeEventListener(SFS2X.SFSEvent.ROOM_JOIN_ERROR, handleJoinMeRoomJoinError);
+        globals.app.sfs.removeEventListener(SFS2X.SFSEvent.EXTENSION_RESPONSE, handleGameExtensionResponse);
         delete globals.app.game;
     };
     Game.prototype.constructor = Game;

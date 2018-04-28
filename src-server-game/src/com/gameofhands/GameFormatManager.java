@@ -1,6 +1,7 @@
 package com.gameofhands;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,28 +59,42 @@ public abstract class GameFormatManager {
 
 				CreateSFSGameSettings gameSettings = createGameSettings(gfSubCategory, matchConfiguration);
 				Room gameRoom = null;
+
 				try {
 					gameRoom = createGameRoom(gameSettings);
 					launchUsersInGameRoom(matchConfiguration.usersMatched, gameRoom, currentJoinRoom);
 				} catch (Exception e) {
-					notifyUsersUnableToJoinGame(matchConfiguration.usersMatched, currentJoinRoom);
-
-					// remove any users who might have been joined into the room
 					if (gameRoom != null) {
 						sfsApi.removeRoom(gameRoom);
 					}
-
-					continue;
 				}
+
 			}
 		}
 	}
 
-	private void launchUsersInGameRoom(List<User> usersMatched, Room gameRoom, Room joinRoom)
-			throws SFSJoinRoomException {
+	private void launchUsersInGameRoom(List<User> usersMatched, Room gameRoom, Room joinRoom) throws Exception {
 		ISFSApi sfsApi = SmartFoxServer.getInstance().getAPIManager().getSFSApi();
 		for (User user : usersMatched) {
-			sfsApi.joinRoom(user, gameRoom, null, false, joinRoom);
+			sfsApi.leaveRoom(user, joinRoom, false, false);
+			try {				
+				sfsApi.joinRoom(user, gameRoom, null, false, null, false, true);
+			} catch (SFSJoinRoomException e) {
+				notifyUsersUnableToJoinGame(Arrays.asList(user), joinRoom);
+
+				// put these users back into the joinRoom without any sideeffect. so not firing
+				// any events.
+				gameRoom.getUserList().forEach((addedUser) -> {
+					sfsApi.leaveRoom(addedUser, gameRoom, false, false);
+					try {
+						sfsApi.joinRoom(addedUser, joinRoom, null, false, null, false, false);
+					} catch (SFSJoinRoomException e1) {
+						notifyUsersUnableToJoinGame(Arrays.asList(addedUser), joinRoom);
+					}
+				});
+
+				throw new Exception("One of the matched users was unable to join the game room");
+			}
 		}
 	}
 

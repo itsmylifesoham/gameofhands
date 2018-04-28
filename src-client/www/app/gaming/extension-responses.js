@@ -1,4 +1,4 @@
-define(function(require){
+define(function (require) {
 
     return {
 
@@ -8,5 +8,7 @@ define(function(require){
 
 
         UNABLE_TO_JOIN: "UNABLE_TO_JOIN",
+        PAUSE: "PAUSE",
+        RESUME: "RESUME",
     }
 });

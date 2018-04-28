@@ -8,6 +8,7 @@ define(function(require){
         SFS_LOGIN_ERROR: "SFS_LOGIN_ERROR",
         REQUEST_TIMEOUT_ERROR: "REQUEST_TIMEOUT_ERROR",
         UNKNOWN_ERROR: "UNKNOWN_ERROR",
+        UNABLE_TO_JOIN: "UNABLE_TO_JOIN",
     };
 
     var AppError = function(errorType, displayMessage, data){
@@ -62,6 +63,12 @@ define(function(require){
         }
     });
 
+    var UnableToJoinError = AppError.extend({
+        constructor: function(data){
+            AppError.call(this, errorTypes.UNABLE_TO_JOIN, "Unable to join a game. Lets try reconnecting again.", data);
+        }
+    });
+
 
     return {
         UnknownError: UnknownError,
@@ -71,6 +78,7 @@ define(function(require){
         SFSConnectionError: SFSConnectionError,
         SFSLoginError: SFSLoginError,
         RequestTimeoutError: RequestTimeoutError,
+        UnableToJoinError: UnableToJoinError,
         errorTypes: errorTypes,
     }
 

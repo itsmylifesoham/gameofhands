@@ -5,6 +5,7 @@ define(function (require) {
     var globals = require('app/globals');
     var remote = require('app/remote');
     var extensionResponses = require('app/gaming/extension-responses');
+    var errors = require('app/errors');
 
     var MatchView = Backbone.View.extend({
         className: 'd-flex justify-content-center align-middle align-items-center flex-column h-100 w-100',
@@ -12,6 +13,7 @@ define(function (require) {
             var game = globals.app.game;
             var view = this;
             this.listenTo(game, extensionResponses.DISPLAY_MATCH, _.bind(view.handleDisplayMatch, view));
+            this.listenTo(game, extensionResponses.UNABLE_TO_JOIN, _.bind(view.handleUnableToJoin, view));
         },
         events:{
             'click #leave': 'onLeave',
@@ -19,6 +21,10 @@ define(function (require) {
         onLeave: function(){
             globals.app.game.destroy();
             remote.invokeControllerMethod('home','displayHomeView');
+        },
+        handleUnableToJoin: function(){
+            globals.app.game.destroy();
+            remote.invokeControllerMethod('error','displayErrorView',new errors.UnableToJoinError());
         },
         handleDisplayMatch: function (myData, opponentData) {
             this.presenter = {

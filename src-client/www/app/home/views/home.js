@@ -27,7 +27,6 @@ define(function(require){
         },
         startNewGame: function(game){
             globals.app.game = game;
-            globals.app.game.init();
             globals.app.game.join();
         },
         onPlayFixedWickets: function(){
