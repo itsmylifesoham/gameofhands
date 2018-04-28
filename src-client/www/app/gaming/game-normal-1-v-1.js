@@ -11,6 +11,12 @@ define(function (require) {
         }
     }
 
+    function handleJoinMeRoomJoinError(evtParams) {
+        //TODO: show a message here which is not an error screen
+        alert("could not join room :" + evtParams.errorMessage);
+        globals.app.sfs.removeEventListener(SFS2X.SFSEvent.ROOM_JOIN_ERROR, handleJoinMeRoomJoinError);
+    }
+
 
     var Game = function (gameFormatSubCategory) {
         _.extend(this, Backbone.Events);
@@ -23,13 +29,9 @@ define(function (require) {
     }
 
     Game.prototype.join = function () {
-
-        var params = new SFS2X.SFSObject();
-        params.putUtfString(sfsObjectKeys.GAME_FORMAT_SUBCATEGORY, this.gameFormatSubCategory);
-
-        globals.app.sfs.send(new SFS2X.ExtensionRequest(extensionRequests.JOIN_ME, params));
+        globals.app.sfs.addEventListener(SFS2X.SFSEvent.ROOM_JOIN_ERROR, handleJoinMeRoomJoinError);
+        globals.app.sfs.send(new SFS2X.JoinRoomRequest('JOIN_ME_' + this.gameFormatSubCategory));
     };
-
 
 
     Game.prototype.gameLoaded = function () {
@@ -65,12 +67,13 @@ define(function (require) {
 
 
     Game.prototype.destroy = function () {
-        try{
-            if (globals.app.sfs.isConnected && globals.app.sfs.mySelf)
-                globals.app.sfs.send(new SFS2X.ExtensionRequest(extensionRequests.UNJOIN_ME, null));
-        }
-        catch(e){
-            console.log("warning while unjoining: " + e);
+        if (globals.app.sfs.isConnected && globals.app.sfs.mySelf) {
+            // leave the user from all jon me or game rooms
+            var roomsJoined  = globals.app.sfs.getJoinedRooms();
+            for(var room in roomsJoined){
+                if (room.groupId === this.gameFormatSubCategory || room.groupId === "JOIN_ME_" + this.gameFormatSubCategory)
+                    globals.app.sfs.send(new SFS2X.LeaveRoomRequest(joinRoom));
+            }
         }
 
         globals.app.sfs.removeEventListener(SFS2X.EXTENSION_RESPONSE, handleGameExtensionResponse);

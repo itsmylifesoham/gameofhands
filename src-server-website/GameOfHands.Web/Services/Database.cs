@@ -31,7 +31,7 @@ namespace GameOfHands.Web.Services
 
                 if (!foundUser)
                     return null;
-
+               
                 return User.CreateUserFromReadRow(reader);
             }
         }
@@ -48,7 +48,7 @@ namespace GameOfHands.Web.Services
                 }
                 else
                 {
-                    cmdText = $"UPDATE users SET country=@country, email_id=@emailId, profile_pic_url=@profilePicUrl, display_name=@displayName, user_access_token=@userAccessToken, info_updated_date=@info_updated_date WHERE user_login_id = @userLoginId";
+                    cmdText = $"UPDATE users SET country = @country, email_id = @emailId, profile_pic_url = @profilePicUrl, display_name = @displayName, user_access_token = @userAccessToken, info_updated_date = @infoUpdatedDate WHERE user_login_id = @userLoginId";
                 }
 
                 var cmd = new MySqlCommand(cmdText, connection);
@@ -59,7 +59,7 @@ namespace GameOfHands.Web.Services
                 cmd.Parameters.AddWithValue("@displayName", basicUserInfo.DisplayName);
                 cmd.Parameters.AddWithValue("@userAccessToken", userAccessToken);
                 cmd.Parameters.AddWithValue("@infoUpdatedDate", Utilities.GetSQLFormattedDateTime(DateTime.Now));
-
+               
 
                 var affectedRows = await cmd.ExecuteNonQueryAsync();
                 if (affectedRows == 0)

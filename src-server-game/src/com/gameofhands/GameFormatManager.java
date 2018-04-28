@@ -48,8 +48,8 @@ public abstract class GameFormatManager {
 
 	public void initiateGames() {
 		ISFSApi sfsApi = SmartFoxServer.getInstance().getAPIManager().getSFSApi();
+		Zone currentZone = SmartFoxServer.getInstance().getZoneManager().getZoneByName(Constants.ZONE_NAME);
 		for (String gfSubCategory : this.supportedGameFormatSubCategories) {
-			Zone currentZone = SmartFoxServer.getInstance().getZoneManager().getZoneByName(Constants.ZONE_NAME);
 			Room currentJoinRoom = currentZone.getRoomByName("JOIN_ME_" + gfSubCategory);
 			List<User> usersToMatch = currentJoinRoom.getUserList();
 			List<MatchConfiguration> matchConfigurations = this.matchEngine.match(usersToMatch);

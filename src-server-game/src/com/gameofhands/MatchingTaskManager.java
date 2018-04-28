@@ -31,7 +31,7 @@ public class MatchingTaskManager {
 		SmartFoxServer sfs = SmartFoxServer.getInstance();
 
 		// Schedule the task to run every second, with no initial delay
-		taskHandle = sfs.getTaskScheduler().scheduleAtFixedRate(new MatchTaskRunner(), 30, 10, TimeUnit.SECONDS);
+		taskHandle = sfs.getTaskScheduler().scheduleAtFixedRate(new MatchTaskRunner(), 10, 10, TimeUnit.SECONDS);
 	}
 
 	public void stop() {

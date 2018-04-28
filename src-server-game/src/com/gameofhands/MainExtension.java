@@ -16,10 +16,8 @@ public class MainExtension extends SFSExtension {
 	public void init() {
 		trace("Hello, this is GameOfHands extension!");
 
-		addEventHandler(SFSEventType.USER_LOGIN, LoginEventHandler.class);
-		addRequestHandler(ExtensionRequests.JOIN_ME, AutoJoinHandler.class);
-		addRequestHandler(ExtensionRequests.UNJOIN_ME, UnJoinHandler.class);
-		
+		addEventHandler(SFSEventType.USER_LOGIN, LoginEventHandler.class);		
+		//addRequestHandler(ExtensionRequests.UNJOIN_ME, UnJoinHandler.class);		
 		
 		initMatchingTask();
 	}	
