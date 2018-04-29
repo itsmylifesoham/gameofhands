@@ -9,7 +9,7 @@ public class RollCheckHandler extends BaseClientRequestHandler {
 	@Override
 	public void handleClientRequest(User sender, ISFSObject params) {
 		RoomExtension gameExtension = (RoomExtension) getParentExtension();
-		gameExtension.gameStateMachine.onSingleRollCheck();
+		gameExtension.gameStateMachine.onRollCheck(sender);;
 	}
 
 }

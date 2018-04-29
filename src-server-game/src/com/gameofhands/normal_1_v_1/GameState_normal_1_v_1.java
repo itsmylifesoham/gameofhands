@@ -7,4 +7,6 @@ public abstract class GameState_normal_1_v_1 extends GameState<GameStateMachine_
 	public GameState_normal_1_v_1(GameStateMachine_normal_1_v_1 gameStateMachine) {
 		super(gameStateMachine);
 	}	
+	
+	
 }

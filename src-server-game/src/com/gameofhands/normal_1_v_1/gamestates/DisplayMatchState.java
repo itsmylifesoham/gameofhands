@@ -1,8 +1,11 @@
 package com.gameofhands.normal_1_v_1.gamestates;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.gameofhands.ExtensionReponses;
+import com.gameofhands.PlayerRole;
 import com.gameofhands.SfsObjectKeys;
 import com.gameofhands.normal_1_v_1.GameStateMachine_normal_1_v_1;
 import com.gameofhands.normal_1_v_1.GameState_normal_1_v_1;
@@ -19,19 +22,13 @@ public class DisplayMatchState extends GameState_normal_1_v_1 {
 		// TODO Auto-generated constructor stub
 	}
 
-	private int rollCheckedUserCount = 0;
+	private Set<String> uniqueRollCheckedUserLoginIds = new HashSet<>();
 
 	@Override
-	public void onPlayerJoin() {
-		// TODO Auto-generated method stub
+	public void onRollCheck(User user) {
 
-	}
-
-	@Override
-	public void onSingleRollCheck() {
-
-		rollCheckedUserCount++;
-		if (rollCheckedUserCount == gameStateMachine.gameExtension.getParentRoom().getMaxUsers()) {
+		uniqueRollCheckedUserLoginIds.add(user.getName());
+		if (uniqueRollCheckedUserLoginIds.size() == gameStateMachine.gameExtension.getParentRoom().getMaxUsers()) {
 			changeState(new RollCheckSuccess(gameStateMachine));
 		}
 
@@ -67,6 +64,108 @@ public class DisplayMatchState extends GameState_normal_1_v_1 {
 	@Override
 	public void destroy() {
 		rollChecktimeout.cancel();
+	}
+
+	@Override
+	public void onDisconnected(User user) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onQuit(User user) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onUserUnresponsive(User user) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onPause(User user) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onPauseExpired() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onResume(User user) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onPlayerJoin(User user) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onGameLoaded(User user) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onGameLoadTimeout() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onGameStart(User user) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onGameStartTimeout() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onTossInput(User user, int n) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onTossInputTimeout() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onSelectRole(User user, PlayerRole role) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onSelectRoleTimeout() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onInput(User user, int num) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onInputTimeout() {
+		// TODO Auto-generated method stub
+
 	}
 
 }
