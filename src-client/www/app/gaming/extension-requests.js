@@ -6,5 +6,7 @@ define(function(require){
         GAME_LOADED: "GAME_LOADED",
         TOSS_SELECT: "TOSS_SELECT",
         INPUT: "INPUT",
+        M_HERE: "M_HERE",
+        ROLL_CHECK : "ROLL_CHECK",
     }
 });

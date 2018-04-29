@@ -1,13 +1,6 @@
 package com.gameofhands.normal_1_v_1;
 
-import java.util.List;
-
-import com.gameofhands.ExtensionReponses;
-import com.gameofhands.SfsObjectKeys;
 import com.smartfoxserver.v2.core.ISFSEvent;
-import com.smartfoxserver.v2.entities.User;
-import com.smartfoxserver.v2.entities.data.ISFSObject;
-import com.smartfoxserver.v2.entities.data.SFSObject;
 import com.smartfoxserver.v2.exceptions.SFSException;
 import com.smartfoxserver.v2.extensions.BaseServerEventHandler;
 import com.smartfoxserver.v2.game.SFSGame;
@@ -17,21 +10,14 @@ public class UserJoinGameRoomHandler extends BaseServerEventHandler {
 
 	@Override
 	public void handleServerEvent(ISFSEvent event) throws SFSException {
-		SFSGame gameRoom = (SFSGame)getParentExtension().getParentRoom();
-		List<User> usersInRoom = gameRoom.getUserList();	
+		RoomExtension gameExtension = (RoomExtension)getParentExtension();
+		SFSGame gameRoom = (SFSGame)gameExtension.getParentRoom();
 		
-		if (gameRoom.getMinPlayersToStartGame() == usersInRoom.size()) {
+		if (gameRoom.getMinPlayersToStartGame() == gameRoom.getPlayersList().size()) {			
+			gameExtension.setGameState(GameState.FILLED);
 			
-			ISFSObject matchData1 = new SFSObject();
-			matchData1.putUtfString(SfsObjectKeys.USER_LOGIN_ID, usersInRoom.get(0).getName());
-			
-			send(ExtensionReponses.DISPLAY_MATCH, matchData1, usersInRoom.get(1));
-			
-			ISFSObject matchData2 = new SFSObject();
-			matchData2.putUtfString(SfsObjectKeys.USER_LOGIN_ID, usersInRoom.get(1).getName());
-			
-			send(ExtensionReponses.DISPLAY_MATCH, matchData2, usersInRoom.get(0));
 		}	
 	}
+
 	
 }

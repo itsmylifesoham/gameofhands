@@ -31,6 +31,7 @@ public class GameFormatManager_normal_1_v_1 extends GameFormatManager {
 
 	@Override
 	protected void setCustomCreateSFSGameSettings(CreateSFSGameSettings gameSettings) {
+		// in case of game rooms this is the max num of players, so we can still have spectators
 		gameSettings.setMaxUsers(2);
 		gameSettings.setMinPlayersToStartGame(2);
 	}

@@ -10,14 +10,30 @@ define(function (require) {
             case extensionResponses.DISPLAY_MATCH:
                 handleDisplayMatch.call(this, evtParams);
                 break;
+            case extensionResponses.ROLL_CHECK:
+                handleRollCheck.call(this);
             default:
                 this.trigger(evtParams.cmd, evtParams);
 
         }
     }
 
+    function handleRollCheck(){
+        if (globals.app.sfs.isConnected && globals.app.sfs.mySelf){
+            var gameRoom = globals.app.sfs.roomManager.getRoomListFromGroup(this.gameFormatSubCategory)[0];
+            try{
+                globals.app.sfs.send(new SFS2X.ExtensionRequest(extensionRequests.ROLL_CHECK, null, gameRoom));
+            }
+            catch (e) {
+                // do nothing coz the net cord might be pulled out at this point and server wont receive this message anyway
+            }
+        }
+
+    }
+
     function handleDisplayMatch(evtParams) {
         var opponentUserLoginId = evtParams.params.getUtfString(sfsObjectKeys.USER_LOGIN_ID);
+
 
         this.trigger(extensionResponses.DISPLAY_MATCH, {
             userLoginId: globals.app.sfs.mySelf.name

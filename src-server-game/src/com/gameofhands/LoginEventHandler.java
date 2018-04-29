@@ -14,6 +14,7 @@ import com.smartfoxserver.v2.exceptions.SFSErrorData;
 import com.smartfoxserver.v2.exceptions.SFSException;
 import com.smartfoxserver.v2.exceptions.SFSLoginException;
 import com.smartfoxserver.v2.extensions.BaseServerEventHandler;
+import com.smartfoxserver.v2.extensions.ExtensionLogLevel;
 
 public class LoginEventHandler extends BaseServerEventHandler {
 
@@ -30,9 +31,11 @@ public class LoginEventHandler extends BaseServerEventHandler {
 		if (!foundToken) {
 			SFSErrorData errData = new SFSErrorData(SFSErrorCode.LOGIN_BAD_PASSWORD);
 			errData.addParameter("session token not valid");
-			throw new SFSLoginException("Gonzo and Kermit are not allowed in this Zone!", errData);
+			throw new SFSLoginException("Could not find a matching session token. Please login again.", errData);
 		}
-
+		else {			
+			deleteFoundToken(userLoginId, sessionToken, ipAddress);
+		}
 		ISFSObject user = getUser(userLoginId);
 
 		ISFSObject outData = (ISFSObject) event.getParameter(SFSEventParam.LOGIN_OUT_DATA);
@@ -53,7 +56,22 @@ public class LoginEventHandler extends BaseServerEventHandler {
 			throw new SFSLoginException("Could not fetch user from database");
 		}
 	}
-
+	
+	private void deleteFoundToken(String userLoginId, String sessionToken, String ipAddress) {
+		IDBManager dbManager = getParentExtension().getParentZone().getDBManager();
+		String sql = "DELETE FROM user_sessions WHERE user_login_id = ? AND session_token = ? AND ip_address = ?";
+		
+		try {
+			// Obtain a resultset
+			dbManager.executeUpdate(sql, new Object[] { userLoginId, sessionToken, ipAddress });			
+			
+		} catch (SQLException e) {
+			// do nothing we will clear up this token later by cleansing job
+			trace(ExtensionLogLevel.WARN, "Unable to delete Session Token :" + sessionToken);
+		}		
+		
+	}
+	
 	private boolean tryFindToken(String userLoginId, String sessionToken, String ipAddress) {
 
 		IDBManager dbManager = getParentExtension().getParentZone().getDBManager();
@@ -68,8 +86,8 @@ public class LoginEventHandler extends BaseServerEventHandler {
 			
 		} catch (SQLException e) {
 			return false;
-		}
-
+		}		
+		
 		return true;
 	}
 

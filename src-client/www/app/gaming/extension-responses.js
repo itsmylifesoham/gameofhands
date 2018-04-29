@@ -10,5 +10,7 @@ define(function (require) {
         UNABLE_TO_JOIN: "UNABLE_TO_JOIN",
         PAUSE: "PAUSE",
         RESUME: "RESUME",
+        U_THERE: "U_THERE",
+        ROLL_CHECK : "ROLL_CHECK",
     }
 });

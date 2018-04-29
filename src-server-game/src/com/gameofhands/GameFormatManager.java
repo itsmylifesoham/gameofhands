@@ -1,7 +1,6 @@
 package com.gameofhands;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +15,7 @@ import com.smartfoxserver.v2.entities.User;
 import com.smartfoxserver.v2.entities.Zone;
 import com.smartfoxserver.v2.exceptions.SFSCreateRoomException;
 import com.smartfoxserver.v2.exceptions.SFSJoinRoomException;
+import com.smartfoxserver.v2.extensions.ISFSExtension;
 import com.smartfoxserver.v2.game.CreateSFSGameSettings;
 
 public abstract class GameFormatManager {
@@ -75,21 +75,21 @@ public abstract class GameFormatManager {
 
 	private void launchUsersInGameRoom(List<User> usersMatched, Room gameRoom, Room joinRoom) throws Exception {
 		ISFSApi sfsApi = SmartFoxServer.getInstance().getAPIManager().getSFSApi();
+		ISFSExtension zoneExtension = SmartFoxServer.getInstance().getZoneManager().getZoneByName(Constants.ZONE_NAME).getExtension();
 		for (User user : usersMatched) {
-			sfsApi.leaveRoom(user, joinRoom, false, false);
+			sfsApi.leaveRoom(user, joinRoom);
 			try {				
-				sfsApi.joinRoom(user, gameRoom, null, false, null, false, true);
+				sfsApi.joinRoom(user, gameRoom, null, false, null);
 			} catch (SFSJoinRoomException e) {
-				notifyUsersUnableToJoinGame(Arrays.asList(user), joinRoom);
+				notifyUserUnableToJoinGame(zoneExtension, user);
 
-				// put these users back into the joinRoom without any sideeffect. so not firing
-				// any events.
+				// put users in game room back into join room
 				gameRoom.getUserList().forEach((addedUser) -> {
-					sfsApi.leaveRoom(addedUser, gameRoom, false, false);
+					sfsApi.leaveRoom(addedUser, gameRoom);
 					try {
-						sfsApi.joinRoom(addedUser, joinRoom, null, false, null, false, false);
+						sfsApi.joinRoom(addedUser, joinRoom, null, false, null);
 					} catch (SFSJoinRoomException e1) {
-						notifyUsersUnableToJoinGame(Arrays.asList(addedUser), joinRoom);
+						notifyUserUnableToJoinGame(zoneExtension, addedUser);
 					}
 				});
 
@@ -98,9 +98,8 @@ public abstract class GameFormatManager {
 		}
 	}
 
-	private void notifyUsersUnableToJoinGame(List<User> users, Room room) {
-		ISFSApi sfsApi = SmartFoxServer.getInstance().getAPIManager().getSFSApi();
-		sfsApi.sendExtensionResponse(ExtensionReponses.UNABLE_TO_JOIN, null, users, room, false);
+	private void notifyUserUnableToJoinGame(ISFSExtension zoneExtension, User user) {		
+		zoneExtension.send(ExtensionReponses.UNABLE_TO_JOIN, null, user);
 	}
 
 	private CreateSFSGameSettings createGameSettings(String gfSubCategory, MatchConfiguration matchConfiguration) {
