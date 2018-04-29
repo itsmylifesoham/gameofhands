@@ -9,12 +9,7 @@ public class RollCheckHandler extends BaseClientRequestHandler {
 	@Override
 	public void handleClientRequest(User sender, ISFSObject params) {
 		RoomExtension gameExtension = (RoomExtension) getParentExtension();
-		gameExtension.rollCheckSuccessUsers.add(sender);
-
-		if (gameExtension.rollCheckSuccessUsers.size() == gameExtension.getParentRoom().getMaxUsers()) {
-			trace("found rollCheckSize same as 2!");
-			gameExtension.setGameState(GameState.ROLL_CHECK_SUCCESS);
-		}
+		gameExtension.gameStateMachine.onSingleRollCheck();
 	}
 
 }
