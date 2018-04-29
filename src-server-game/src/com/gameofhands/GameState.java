@@ -1,20 +1,21 @@
 package com.gameofhands;
 
-public abstract class GameState<TGameStateMachine extends GameStateMachine> {
+public abstract class GameState<TGameStateMachine extends GameStateMachine<TGameStateMachine, TGameState>, TGameState extends GameState<TGameStateMachine, TGameState>> {
 
 	public TGameStateMachine gameStateMachine;
 
-	protected GameState(TGameStateMachine gameStateMachine) {
+	public GameState(TGameStateMachine gameStateMachine) {
 		this.gameStateMachine = gameStateMachine;
 		initialize();
 	}
 
-	public abstract void destroy();
 
-	protected void changeState(GameState<TGameStateMachine> newState) {
+	protected void changeState(TGameState newState) {
 		this.gameStateMachine.currentState = newState;
 		this.destroy();
 	}
+
+	public abstract void destroy();
 
 	public abstract void initialize();
 

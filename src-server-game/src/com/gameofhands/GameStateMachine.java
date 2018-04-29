@@ -2,18 +2,18 @@ package com.gameofhands;
 
 import com.smartfoxserver.v2.extensions.SFSExtension;
 
-public abstract class GameStateMachine<TGameState extends GameState, TGameExtension extends SFSExtension> {
-	public TGameState currentState;	
-	public final TGameExtension gameExtension;
-	
-	protected GameStateMachine(TGameExtension gameExtension) {
-		this.gameExtension = gameExtension;		
+public abstract class GameStateMachine<TGameStateMachine extends GameStateMachine<TGameStateMachine, TGameState>, TGameState extends GameState<TGameStateMachine, TGameState>> {
+	public TGameState currentState;
+	public final SFSExtension gameExtension;
+
+	protected GameStateMachine(SFSExtension gameExtension) {
+		this.gameExtension = gameExtension;
 		this.setInitialState();
 	}
-	
-	public void destroy() {
+
+	public synchronized void destroy() {
 		this.currentState.destroy();
 	}
-	
+
 	protected abstract void setInitialState();
-}	
+}

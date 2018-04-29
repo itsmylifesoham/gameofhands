@@ -3,9 +3,9 @@ package com.gameofhands.normal_1_v_1.gamestates;
 import com.gameofhands.normal_1_v_1.GameStateMachine_normal_1_v_1;
 import com.gameofhands.normal_1_v_1.GameState_normal_1_v_1;
 
-public class RollCheckFailed extends GameState_normal_1_v_1 {
+public class DestroyedState extends GameState_normal_1_v_1 {
 
-	protected RollCheckFailed(GameStateMachine_normal_1_v_1 gameStateMachine) {
+	public DestroyedState(GameStateMachine_normal_1_v_1 gameStateMachine) {
 		super(gameStateMachine);
 		// TODO Auto-generated constructor stub
 	}
@@ -29,12 +29,13 @@ public class RollCheckFailed extends GameState_normal_1_v_1 {
 	}
 
 	@Override
-	public void initialize() {
-		gameStateMachine.gameExtension.trace("Roll check failed!");
+	public void destroy() {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
-	public void destroy() {
+	public void initialize() {
 		// TODO Auto-generated method stub
 
 	}

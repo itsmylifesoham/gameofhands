@@ -2,9 +2,7 @@ package com.gameofhands.normal_1_v_1.gamestates;
 
 import java.util.List;
 
-import com.gameofhands.Constants;
 import com.gameofhands.ExtensionReponses;
-import com.gameofhands.GameTimeout;
 import com.gameofhands.SfsObjectKeys;
 import com.gameofhands.normal_1_v_1.GameStateMachine_normal_1_v_1;
 import com.gameofhands.normal_1_v_1.GameState_normal_1_v_1;
@@ -14,7 +12,7 @@ import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
 public class DisplayMatchState extends GameState_normal_1_v_1 {
-	GameTimeout<GameStateMachine_normal_1_v_1> rollChecktimeout;
+	RollCheckTimeout rollChecktimeout;
 
 	protected DisplayMatchState(GameStateMachine_normal_1_v_1 gameStateMachine) {
 		super(gameStateMachine);

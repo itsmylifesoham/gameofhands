@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.smartfoxserver.v2.SmartFoxServer;
 
-public abstract class GameTimeout<TGameStateMachine extends GameStateMachine> {
+public abstract class GameTimeout<TGameStateMachine extends GameStateMachine<TGameStateMachine, TGameState>, TGameState extends GameState<TGameStateMachine, TGameState>> {
 	// Keeps a reference to the task execution
 	public ScheduledFuture<?> timeoutTaskHandle;
 	protected TGameStateMachine gameStateMachine;
