@@ -8,4 +8,5 @@ public class ExtensionRequests {
 	public static String INPUT = "INPUT";
 	public static String M_HERE = "M_HERE";
 	public static String ROLL_CHECK = "ROLL_CHECK";
+	public static String GAME_DISPLAYED = "GAME_DISPLAYED";
 }

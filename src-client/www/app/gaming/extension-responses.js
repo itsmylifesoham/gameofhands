@@ -3,7 +3,7 @@ define(function (require) {
     return {
 
         DISPLAY_MATCH: "DISPLAY_MATCH",
-        START_AND_TOSS: "START_AND_TOSS",
+        TOSS_START: "TOSS_START",
         TOSS_RESULT: "TOSS_RESULT",
 
 
@@ -11,6 +11,8 @@ define(function (require) {
         PAUSE: "PAUSE",
         RESUME: "RESUME",
         U_THERE: "U_THERE",
-        ROLL_CHECK : "ROLL_CHECK",
+        ROLL_CHECK: "ROLL_CHECK",
+        LOAD_GAME: "LOAD_GAME",
+        DISPLAY_GAME: "DISPLAY_GAME",
     }
 });

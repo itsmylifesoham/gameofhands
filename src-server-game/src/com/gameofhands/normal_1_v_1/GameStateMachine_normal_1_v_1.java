@@ -81,13 +81,13 @@ public class GameStateMachine_normal_1_v_1 extends
 	}
 
 	@Override
-	public synchronized void onGameStart(User user) {
-		this.currentState.onGameStart(user);
+	public synchronized void onGameDisplay(User user) {
+		this.currentState.onGameDisplay(user);
 	}
 
 	@Override
-	public synchronized void onGameStartTimeout() {
-		this.currentState.onGameStartTimeout();
+	public synchronized void onGameDisplayTimeout() {
+		this.currentState.onGameDisplayTimeout();
 	}
 
 	@Override

@@ -8,30 +8,19 @@ import com.gameofhands.ExtensionReponses;
 import com.gameofhands.PlayerRole;
 import com.gameofhands.normal_1_v_1.GameStateMachine_normal_1_v_1;
 import com.gameofhands.normal_1_v_1.GameState_normal_1_v_1;
-import com.gameofhands.normal_1_v_1.timeouts.GameLoadTimeout;
 import com.smartfoxserver.v2.entities.User;
 
-public class RollCheckSuccess extends GameState_normal_1_v_1 {
+public class DisplayGameState extends GameState_normal_1_v_1 {
 	
-	GameLoadTimeout gameLoadTimeout;
-	Set<String> gameLoadedUniquePlayers = new HashSet<>();
+	Set<String> uniqueGameDisplayedPlayers = new HashSet<>();
 	
-	protected RollCheckSuccess(GameStateMachine_normal_1_v_1 gameStateMachine) {
+	public DisplayGameState(GameStateMachine_normal_1_v_1 gameStateMachine) {
 		super(gameStateMachine);
-		// TODO Auto-generated constructor stub
 	}
 
-	private void sendLoadGameCommand() {
+	private void sendDisplayGameCommand() {
 		List<User> players = gameStateMachine.gameExtension.getParentRoom().getPlayersList();
-		gameStateMachine.gameExtension.send(ExtensionReponses.LOAD_GAME, null, players);
-	}
-
-	@Override
-	public void initialize() {
-		gameStateMachine.gameExtension.trace("Roll check Success!");
-		sendLoadGameCommand();
-		gameLoadTimeout = new GameLoadTimeout(gameStateMachine);
-		gameLoadTimeout.start();
+		gameStateMachine.gameExtension.send(ExtensionReponses.DISPLAY_GAME, null, players);
 	}
 
 	@Override
@@ -90,9 +79,8 @@ public class RollCheckSuccess extends GameState_normal_1_v_1 {
 
 	@Override
 	public void onGameLoaded(User user) {
-		gameLoadedUniquePlayers.add(user.getName());
-		if(gameLoadedUniquePlayers.size() == gameStateMachine.gameExtension.getParentRoom().getMaxUsers())
-			changeState(new DisplayGameState(gameStateMachine));
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
@@ -103,8 +91,10 @@ public class RollCheckSuccess extends GameState_normal_1_v_1 {
 
 	@Override
 	public void onGameDisplay(User user) {
-		// TODO Auto-generated method stub
-
+		uniqueGameDisplayedPlayers.add(user.getName());
+		if (uniqueGameDisplayedPlayers.size() == gameStateMachine.gameExtension.getParentRoom().getMaxUsers() ) {
+			changeState(new GameTossState(gameStateMachine));			
+		}
 	}
 
 	@Override
@@ -151,7 +141,13 @@ public class RollCheckSuccess extends GameState_normal_1_v_1 {
 
 	@Override
 	public void destroy() {
-		gameLoadTimeout.cancel();
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void initialize() {
+		sendDisplayGameCommand();
 	}
 
 }

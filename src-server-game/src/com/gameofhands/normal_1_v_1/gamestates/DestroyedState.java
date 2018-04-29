@@ -80,13 +80,13 @@ public class DestroyedState extends GameState_normal_1_v_1 {
 	}
 
 	@Override
-	public void onGameStart(User user) {
+	public void onGameDisplay(User user) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void onGameStartTimeout() {
+	public void onGameDisplayTimeout() {
 		// TODO Auto-generated method stub
 		
 	}

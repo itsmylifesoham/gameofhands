@@ -11,7 +11,7 @@ public abstract class GameTimeout<TGameStateMachine extends GameStateMachine<TGa
 	protected TGameStateMachine gameStateMachine;
 	private int timeoutDuration;
 	
-	protected GameTimeout(TGameStateMachine gameStateMachine, int timeoutDuration) {
+	public GameTimeout(TGameStateMachine gameStateMachine, int timeoutDuration) {
 		this.gameStateMachine = gameStateMachine;
 		this.timeoutDuration = timeoutDuration;
 	}

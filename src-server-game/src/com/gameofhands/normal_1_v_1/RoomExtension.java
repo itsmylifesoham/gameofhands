@@ -15,6 +15,7 @@ public class RoomExtension extends SFSExtension {
 		gameStateMachine = new GameStateMachine_normal_1_v_1(this);
 		addEventHandler(SFSEventType.USER_JOIN_ROOM, UserJoinGameRoomHandler.class);
 		addRequestHandler(ExtensionRequests.ROLL_CHECK, RollCheckHandler.class);
+		addRequestHandler(ExtensionRequests.GAME_LOADED, GameLoadedHandler.class);
 
 	}
 

@@ -4,12 +4,12 @@ import com.smartfoxserver.v2.entities.User;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.extensions.BaseClientRequestHandler;
 
-public class RollCheckHandler extends BaseClientRequestHandler {
+public class GameLoadedHandler extends BaseClientRequestHandler {
 
 	@Override
 	public void handleClientRequest(User sender, ISFSObject params) {
 		RoomExtension gameExtension = (RoomExtension) getParentExtension();
-		gameExtension.gameStateMachine.onRollCheck(sender);
+		gameExtension.gameStateMachine.onGameLoaded(sender);
 	}
 
 }

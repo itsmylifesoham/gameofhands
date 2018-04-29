@@ -10,6 +10,8 @@ define(function (require) {
             case extensionResponses.DISPLAY_MATCH:
                 handleDisplayMatch.call(this, evtParams);
                 break;
+            case extensionResponses.LOAD_GAME:
+                handleLoadGame.call(this, evtParams);
             default:
                 this.trigger(evtParams.cmd, evtParams);
 
@@ -17,12 +19,17 @@ define(function (require) {
     }
 
 
+    function handleLoadGame(evtParams){
+        // typically load game assets here based on incoming data in evtParams eg. textures from some url n stuff.
+        // then reply game is loaded.
+        globals.app.sfs.send(new SFS2X.ExtensionRequest(extensionRequests.GAME_LOADED, null, this.getGameRoom()));
+    }
     function handleDisplayMatch(evtParams) {
         var opponentUserLoginId = evtParams.params.getUtfString(sfsObjectKeys.USER_LOGIN_ID);
 
-        var gameRoom = globals.app.sfs.roomManager.getRoomListFromGroup(this.gameFormatSubCategory)[0];
+
         try{
-            globals.app.sfs.send(new SFS2X.ExtensionRequest(extensionRequests.ROLL_CHECK, null, gameRoom));
+            globals.app.sfs.send(new SFS2X.ExtensionRequest(extensionRequests.ROLL_CHECK, null, this.getGameRoom()));
         }
         catch (e) {
             // do nothing coz the net cord might be pulled out at this point and server wont receive this message anyway
@@ -51,6 +58,9 @@ define(function (require) {
         globals.app.sfs.addEventListener(SFS2X.SFSEvent.EXTENSION_RESPONSE, handleGameExtensionResponse, gameInstance);
     };
 
+    Game.prototype.getGameRoom = function(){
+        return globals.app.sfs.roomManager.getRoomListFromGroup(this.gameFormatSubCategory)[0];
+    }
 
     Game.prototype.join = function () {
         globals.app.sfs.send(new SFS2X.JoinRoomRequest('JOIN_ME_' + this.gameFormatSubCategory));

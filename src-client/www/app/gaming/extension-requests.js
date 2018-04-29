@@ -8,5 +8,6 @@ define(function(require){
         INPUT: "INPUT",
         M_HERE: "M_HERE",
         ROLL_CHECK : "ROLL_CHECK",
+        GAME_DISPLAYED: "GAME_DISPLAYED",
     }
 });

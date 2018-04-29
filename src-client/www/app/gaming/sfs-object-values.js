@@ -1,4 +1,4 @@
-define(function(require){
+define(function (require) {
 
     return {
         NORMAL_1_V_1_OVERS_2_WICKETS_2: 'NORMAL_1_V_1_OVERS_2_WICKETS_2',
@@ -17,6 +17,8 @@ define(function(require){
         UNLIMITED_1_V_1_OVERS_5: 'UNLIMITED_1_V_1_OVERS_5',
         UNLIMITED_1_V_1_OVERS_7: 'UNLIMITED_1_V_1_OVERS_7',
         UNLIMITED_1_V_1_OVERS_10: 'UNLIMITED_1_V_1_OVERS_10',
+        ODD: "ODD",
+        EVEN: "EVEN",
 
     }
 });

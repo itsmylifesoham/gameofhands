@@ -27,9 +27,9 @@ public interface IEvents_normal_1_v_1 {
 
 	public void onGameLoadTimeout();
 	
-	public void onGameStart(User user);
+	public void onGameDisplay(User user);
 	
-	public void onGameStartTimeout();
+	public void onGameDisplayTimeout();
 	
 	public void onTossInput(User user, int n);
 	
