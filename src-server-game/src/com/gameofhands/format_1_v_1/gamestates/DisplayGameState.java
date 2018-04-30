@@ -1,20 +1,21 @@
-package com.gameofhands.normal_1_v_1.gamestates;
+package com.gameofhands.format_1_v_1.gamestates;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import com.gameofhands.ExtensionReponses;
-import com.gameofhands.PlayerRole;
-import com.gameofhands.normal_1_v_1.GameStateMachine_normal_1_v_1;
-import com.gameofhands.normal_1_v_1.GameState_normal_1_v_1;
+import com.gameofhands.format_1_v_1.GameStateMachine_format_1_v_1;
+import com.gameofhands.format_1_v_1.GameState_format_1_v_1;
+import com.gameofhands.format_1_v_1.timeouts.DisplayGameTimeout;
 import com.smartfoxserver.v2.entities.User;
 
-public class DisplayGameState extends GameState_normal_1_v_1 {
+public class DisplayGameState extends GameState_format_1_v_1 {
 	
 	Set<String> uniqueGameDisplayedPlayers = new HashSet<>();
+	private DisplayGameTimeout displayGameTimeout;
 	
-	public DisplayGameState(GameStateMachine_normal_1_v_1 gameStateMachine) {
+	public DisplayGameState(GameStateMachine_format_1_v_1 gameStateMachine) {
 		super(gameStateMachine);
 	}
 
@@ -116,7 +117,7 @@ public class DisplayGameState extends GameState_normal_1_v_1 {
 	}
 
 	@Override
-	public void onSelectRole(User user, PlayerRole role) {
+	public void onSelectRole(User user, String role) {
 		// TODO Auto-generated method stub
 
 	}
@@ -141,13 +142,28 @@ public class DisplayGameState extends GameState_normal_1_v_1 {
 
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
-
+		displayGameTimeout.cancel();
 	}
 
 	@Override
 	public void initialize() {
 		sendDisplayGameCommand();
+		displayGameTimeout = new DisplayGameTimeout(gameStateMachine);
+		displayGameTimeout.start();
 	}
+
+	@Override
+	public void onGameBegin(User user) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onGameBeginTimeout() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 
 }

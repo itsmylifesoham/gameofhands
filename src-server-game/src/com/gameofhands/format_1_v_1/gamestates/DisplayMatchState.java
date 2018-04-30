@@ -1,23 +1,22 @@
-package com.gameofhands.normal_1_v_1.gamestates;
+package com.gameofhands.format_1_v_1.gamestates;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import com.gameofhands.ExtensionReponses;
-import com.gameofhands.PlayerRole;
 import com.gameofhands.SfsObjectKeys;
-import com.gameofhands.normal_1_v_1.GameStateMachine_normal_1_v_1;
-import com.gameofhands.normal_1_v_1.GameState_normal_1_v_1;
-import com.gameofhands.normal_1_v_1.timeouts.RollCheckTimeout;
+import com.gameofhands.format_1_v_1.GameStateMachine_format_1_v_1;
+import com.gameofhands.format_1_v_1.GameState_format_1_v_1;
+import com.gameofhands.format_1_v_1.timeouts.RollCheckTimeout;
 import com.smartfoxserver.v2.entities.User;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
-public class DisplayMatchState extends GameState_normal_1_v_1 {
+public class DisplayMatchState extends GameState_format_1_v_1 {
 	RollCheckTimeout rollChecktimeout;
 
-	protected DisplayMatchState(GameStateMachine_normal_1_v_1 gameStateMachine) {
+	protected DisplayMatchState(GameStateMachine_format_1_v_1 gameStateMachine) {
 		super(gameStateMachine);
 		// TODO Auto-generated constructor stub
 	}
@@ -145,7 +144,7 @@ public class DisplayMatchState extends GameState_normal_1_v_1 {
 	}
 
 	@Override
-	public void onSelectRole(User user, PlayerRole role) {
+	public void onSelectRole(User user, String role) {
 		// TODO Auto-generated method stub
 
 	}
@@ -167,5 +166,19 @@ public class DisplayMatchState extends GameState_normal_1_v_1 {
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public void onGameBegin(User user) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onGameBeginTimeout() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 
 }

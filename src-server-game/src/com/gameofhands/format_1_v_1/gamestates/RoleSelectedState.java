@@ -1,37 +1,28 @@
-package com.gameofhands.normal_1_v_1.gamestates;
+package com.gameofhands.format_1_v_1.gamestates;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import com.gameofhands.ExtensionReponses;
-import com.gameofhands.PlayerRole;
-import com.gameofhands.normal_1_v_1.GameStateMachine_normal_1_v_1;
-import com.gameofhands.normal_1_v_1.GameState_normal_1_v_1;
-import com.gameofhands.normal_1_v_1.timeouts.GameLoadTimeout;
+import com.gameofhands.SfsObjectKeys;
+import com.gameofhands.format_1_v_1.GameStateMachine_format_1_v_1;
+import com.gameofhands.format_1_v_1.GameState_format_1_v_1;
+import com.gameofhands.format_1_v_1.timeouts.GameBeginTimeout;
 import com.smartfoxserver.v2.entities.User;
+import com.smartfoxserver.v2.entities.data.ISFSObject;
+import com.smartfoxserver.v2.entities.data.SFSObject;
 
-public class RollCheckSuccess extends GameState_normal_1_v_1 {
-	
-	GameLoadTimeout gameLoadTimeout;
-	Set<String> gameLoadedUniquePlayers = new HashSet<>();
-	
-	protected RollCheckSuccess(GameStateMachine_normal_1_v_1 gameStateMachine) {
+public class RoleSelectedState extends GameState_format_1_v_1 {
+
+	private User tossWinner;
+	private String roleSelected;
+	private GameBeginTimeout gameBeginTimeout;
+	Set<String> uniquePlayersWithGameBeginFlag = new HashSet<>();
+	public RoleSelectedState(GameStateMachine_format_1_v_1 gameStateMachine, User tossWinner, String roleSelected) {
 		super(gameStateMachine);
-		// TODO Auto-generated constructor stub
-	}
-
-	private void sendLoadGameCommand() {
-		List<User> players = gameStateMachine.gameExtension.getParentRoom().getPlayersList();
-		gameStateMachine.gameExtension.send(ExtensionReponses.LOAD_GAME, null, players);
-	}
-
-	@Override
-	public void initialize() {
-		gameStateMachine.gameExtension.trace("Roll check Success!");
-		sendLoadGameCommand();
-		gameLoadTimeout = new GameLoadTimeout(gameStateMachine);
-		gameLoadTimeout.start();
+		this.tossWinner = tossWinner;
+		this.roleSelected = roleSelected;
 	}
 
 	@Override
@@ -90,9 +81,8 @@ public class RollCheckSuccess extends GameState_normal_1_v_1 {
 
 	@Override
 	public void onGameLoaded(User user) {
-		gameLoadedUniquePlayers.add(user.getName());
-		if(gameLoadedUniquePlayers.size() == gameStateMachine.gameExtension.getParentRoom().getMaxUsers())
-			changeState(new DisplayGameState(gameStateMachine));
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
@@ -126,13 +116,28 @@ public class RollCheckSuccess extends GameState_normal_1_v_1 {
 	}
 
 	@Override
-	public void onSelectRole(User user, PlayerRole role) {
+	public void onSelectRole(User user, String role) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onSelectRoleTimeout() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onGameBegin(User user) {
+		uniquePlayersWithGameBeginFlag.add(user.getName());
+		if(uniquePlayersWithGameBeginFlag.size() == gameStateMachine.gameExtension.getParentRoom().getMaxUsers())
+		{
+			// launch into GamePlayState
+		}
+	}
+
+	@Override
+	public void onGameBeginTimeout() {
 		// TODO Auto-generated method stub
 
 	}
@@ -151,7 +156,24 @@ public class RollCheckSuccess extends GameState_normal_1_v_1 {
 
 	@Override
 	public void destroy() {
-		gameLoadTimeout.cancel();
+		gameBeginTimeout.cancel();
+	}
+
+	@Override
+	public void initialize() {
+		sendRoleSelectedNotificationToLoser();
+		gameBeginTimeout = new GameBeginTimeout(gameStateMachine);
+		gameBeginTimeout.start();
+		
+	}
+
+	private void sendRoleSelectedNotificationToLoser() {
+		List<User> players  = gameStateMachine.gameExtension.getParentRoom().getPlayersList();
+		User tossLoser = tossWinner == players.get(0)? players.get(1) : players.get(0);
+		
+		ISFSObject params = new SFSObject();
+		params.putUtfString(SfsObjectKeys.PLAYER_ROLE, roleSelected);
+		gameStateMachine.gameExtension.send(ExtensionReponses.ROLE_SELECTED	, params, tossLoser);
 	}
 
 }

@@ -5,4 +5,6 @@ public class SfsObjectKeys {
 	public static String VALUE = "VALUE";
 	public static String USER_LOGIN_ID = "USER_LOGIN_ID";
 	public static String TOSS_PARITY = "TOSS_PARITY";
+	public static String PLAYER_ROLE = "PLAYER_ROLE";
+	public static String TOSS_INPUT = "TOSS_INPUT";
 }

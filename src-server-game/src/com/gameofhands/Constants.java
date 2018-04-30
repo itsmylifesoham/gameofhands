@@ -8,4 +8,9 @@ public class Constants {
 	
 	public static int ROLL_CHECK_TASK_TIMEOUT = 3; 
 	public static int GAME_LOAD_TASK_TIMEOUT = 8; 
+	public static int DISPLAY_GAME_TASK_TIMEOUT = 5;
+	public static int TOSS_INPUT_TASK_TIMEOUT = 8;
+	public static int ROLL_SELECT_TASK_TIMEOUT = 5;
+	public static int GAME_BEGIN_TASK_TIMEOUT = 5;
+	public static int WICKET_PENALTY = 10;
 }

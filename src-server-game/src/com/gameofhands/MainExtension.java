@@ -3,14 +3,14 @@ package com.gameofhands;
 import java.util.Arrays;
 import java.util.List;
 
-import com.gameofhands.normal_1_v_1.GameFormatManager_normal_1_v_1;
+import com.gameofhands.format_1_v_1.GameFormatManager_format_1_v_1;
 import com.smartfoxserver.v2.core.SFSEventType;
 import com.smartfoxserver.v2.extensions.SFSExtension;
 
 public class MainExtension extends SFSExtension {
 
 	MatchingTaskManager matchingTaskManager;
-	private List<GameFormatManager> availableGameFormatManagers = Arrays.asList(new GameFormatManager_normal_1_v_1());
+	private List<GameFormatManager> availableGameFormatManagers = Arrays.asList(new GameFormatManager_format_1_v_1());
 
 	@Override
 	public void init() {

@@ -1,25 +1,19 @@
-package com.gameofhands.normal_1_v_1.gamestates;
+package com.gameofhands.format_1_v_1.gamestates;
 
-import com.gameofhands.PlayerRole;
-import com.gameofhands.normal_1_v_1.GameStateMachine_normal_1_v_1;
-import com.gameofhands.normal_1_v_1.GameState_normal_1_v_1;
+import com.gameofhands.format_1_v_1.GameStateMachine_format_1_v_1;
+import com.gameofhands.format_1_v_1.GameState_format_1_v_1;
 import com.smartfoxserver.v2.entities.User;
 
-public class CreatedState extends GameState_normal_1_v_1 {
+public class RollCheckFailed extends GameState_format_1_v_1 {
 
-	public CreatedState(GameStateMachine_normal_1_v_1 gameStateMachine) {
+	protected RollCheckFailed(GameStateMachine_format_1_v_1 gameStateMachine) {
 		super(gameStateMachine);
+		// TODO Auto-generated constructor stub
 	}
 
-	int playersJoined = 0;
-
 	@Override
-	public void onPlayerJoin(User user) {
-
-		playersJoined++;
-		if (playersJoined == gameStateMachine.gameExtension.getParentRoom().getMaxUsers()) {
-			changeState(new DisplayMatchState(gameStateMachine));
-		}
+	public void initialize() {
+		gameStateMachine.gameExtension.trace("Roll check failed!");
 	}
 
 	@Override
@@ -54,6 +48,12 @@ public class CreatedState extends GameState_normal_1_v_1 {
 
 	@Override
 	public void onResume(User user) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPlayerJoin(User user) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -107,7 +107,7 @@ public class CreatedState extends GameState_normal_1_v_1 {
 	}
 
 	@Override
-	public void onSelectRole(User user, PlayerRole role) {
+	public void onSelectRole(User user, String role) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -137,9 +137,17 @@ public class CreatedState extends GameState_normal_1_v_1 {
 	}
 
 	@Override
-	public void initialize() {
+	public void onGameBegin(User user) {
 		// TODO Auto-generated method stub
 		
-	}	
+	}
+
+	@Override
+	public void onGameBeginTimeout() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 
 }

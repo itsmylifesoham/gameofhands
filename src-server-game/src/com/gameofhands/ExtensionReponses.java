@@ -12,4 +12,5 @@ public class ExtensionReponses {
     public static String U_THERE = "U_THERE";
     public static String ROLL_CHECK = "ROLL_CHECK";
     public static String LOAD_GAME = "LOAD_GAME";
+    public static String ROLE_SELECTED = "ROLE_SELECTED";
 }

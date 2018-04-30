@@ -19,4 +19,6 @@ public class SfsObjectValues {
 	public static String UNLIMITED_1_V_1_OVERS_10 = "UNLIMITED_1_V_1_OVERS_10";
 	public static String ODD = "ODD";
 	public static String EVEN = "EVEN";
+	public static String BATTING = "BATTING";
+	public static String BOWLING = "BOWLING";
 }

@@ -1,16 +1,15 @@
-package com.gameofhands.normal_1_v_1;
+package com.gameofhands.format_1_v_1;
 
 import com.gameofhands.GameStateMachine;
-import com.gameofhands.PlayerRole;
-import com.gameofhands.normal_1_v_1.gamestates.CreatedState;
-import com.gameofhands.normal_1_v_1.gamestates.DestroyedState;
+import com.gameofhands.format_1_v_1.gamestates.CreatedState;
+import com.gameofhands.format_1_v_1.gamestates.DestroyedState;
 import com.smartfoxserver.v2.entities.User;
 import com.smartfoxserver.v2.extensions.SFSExtension;
 
-public class GameStateMachine_normal_1_v_1 extends
-		GameStateMachine<GameStateMachine_normal_1_v_1, GameState_normal_1_v_1> implements IEvents_normal_1_v_1 {
+public class GameStateMachine_format_1_v_1 extends
+		GameStateMachine<GameStateMachine_format_1_v_1, GameState_format_1_v_1> implements IEvents_format_1_v_1 {
 
-	public GameStateMachine_normal_1_v_1(SFSExtension gameExtension) {
+	public GameStateMachine_format_1_v_1(SFSExtension gameExtension) {
 		super(gameExtension);
 	}
 
@@ -101,7 +100,7 @@ public class GameStateMachine_normal_1_v_1 extends
 	}
 
 	@Override
-	public synchronized void onSelectRole(User user, PlayerRole role) {
+	public synchronized void onSelectRole(User user, String role) {
 		this.currentState.onSelectRole(user, role);
 	}
 
@@ -121,5 +120,16 @@ public class GameStateMachine_normal_1_v_1 extends
 		
 	}
 
+	@Override
+	public synchronized void onGameBegin(User user) {
+		this.currentState.onGameBegin(user);
+	}
+
+	@Override
+	public synchronized void onGameBeginTimeout() {
+		this.currentState.onGameBeginTimeout();
+	}
+
+	
 	
 }

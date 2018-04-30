@@ -1,4 +1,4 @@
-package com.gameofhands.normal_1_v_1;
+package com.gameofhands.format_1_v_1;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,7 +10,7 @@ import com.gameofhands.MatchConfiguration;
 import com.gameofhands.MatchEngine;
 import com.smartfoxserver.v2.entities.User;
 
-public class MatchEngine_normal_1_v_1 implements MatchEngine {
+public class MatchEngine_format_1_v_1 implements MatchEngine {
 
 	@Override
 	public List<MatchConfiguration> match(List<User> usersToMatch) {

@@ -1,5 +1,6 @@
-package com.gameofhands.normal_1_v_1;
+package com.gameofhands.format_1_v_1.handlers;
 
+import com.gameofhands.format_1_v_1.RoomExtension;
 import com.smartfoxserver.v2.core.ISFSEvent;
 import com.smartfoxserver.v2.core.SFSEventParam;
 import com.smartfoxserver.v2.entities.User;
