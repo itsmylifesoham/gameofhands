@@ -119,8 +119,14 @@ public class TossResultState extends GameState_format_1_v_1 {
 			String tossWinnerRole = SfsObjectValues.BATTING;
 			if (role.equals(SfsObjectValues.BOWLING)) {
 				tossWinnerRole = SfsObjectValues.BOWLING;
-			} 
-			
+			}
+
+			List<User> players = gameStateMachine.gameExtension.getParentRoom().getPlayersList();
+			User tossLoser = tossWinner == players.get(0) ? players.get(1) : players.get(0);
+			tossWinner.setProperty(Keys.PLAYER_ROLE, tossWinnerRole);
+			tossLoser.setProperty(Keys.PLAYER_ROLE,
+					tossWinnerRole.equals(SfsObjectValues.BATTING) ? SfsObjectValues.BOWLING : SfsObjectValues.BATTING);
+
 			changeState(new RoleSelectedState(gameStateMachine, tossWinner, tossWinnerRole));
 		}
 	}

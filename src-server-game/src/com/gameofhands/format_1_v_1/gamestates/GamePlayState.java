@@ -7,7 +7,7 @@ import com.gameofhands.format_1_v_1.GameStateMachine_format_1_v_1;
 import com.gameofhands.format_1_v_1.GameState_format_1_v_1;
 import com.smartfoxserver.v2.entities.User;
 
-public class GamePlayeState extends GameState_format_1_v_1 {
+public class GamePlayState extends GameState_format_1_v_1 {
 
 	private Map<User, String> playerRoleMap;
 	RoomConfiguration roomConfiguration;
@@ -26,7 +26,7 @@ public class GamePlayeState extends GameState_format_1_v_1 {
 			
 		}
 	}
-	public GamePlayeState(GameStateMachine_format_1_v_1 gameStateMachine, Map<User, String> playerRoleMap) {
+	public GamePlayState(GameStateMachine_format_1_v_1 gameStateMachine, Map<User, String> playerRoleMap) {
 		super(gameStateMachine);
 		this.playerRoleMap = playerRoleMap;
 		
